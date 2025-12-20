@@ -119,6 +119,16 @@
             },
             speed: 800, // 设置切换速度，让动画更丝滑
             on: {
+                // 初始化时，确保第一个 iframe 获得焦点
+                init: function () {
+                    setTimeout(() => {
+                        const activeSlide = this.slides[this.activeIndex];
+                        const iframe = activeSlide.querySelector('iframe');
+                        if (iframe && iframe.contentWindow) {
+                            iframe.contentWindow.focus();
+                        }
+                    }, 500); // 稍微延迟，等 iframe 加载完成
+                },
                 // 每当切换动画结束，自动把焦点给到当前的 iframe
                 slideChangeTransitionEnd: function () {
                     const activeSlide = this.slides[this.activeIndex];
