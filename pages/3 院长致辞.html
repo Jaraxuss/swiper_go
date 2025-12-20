@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detail Slide</title>
+  <script src="https://unpkg.com/@t-agent/cdn@0.0.1/tailwind@4.js"></script>
+  <link href="https://unpkg.com/@t-agent/cdn@0.0.1/font-awesome/all.min.css" rel="stylesheet" />
+  <link href="../lib/fonts/fonts.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans SC', sans-serif;
+    }
+
+    /* 玻璃拟态卡片优化 */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+    }
+
+    .text-gradient-primary {
+      background: linear-gradient(135deg, #1F2937 0%, #4B5563 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-gray-900">
+    <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+      <!-- 背景色 -->
+      <div id="slide-container"
+        class="w-[1280px] h-[720px] box-border flex flex-col relative overflow-hidden bg-[#F8F9FA] p-10">
+
+        <!-- 全局背景装饰 (Red Blob) -->
+        <div
+          class='absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-[#C00000]/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 z-0 pointer-events-none'>
+        </div>
+
+        <!-- Header Component -->
+        <!-- <div class="relative z-30 mb-6">
+          <div class='flex items-center gap-3'>
+            <div class='h-6 w-6 bg-red-600 rounded flex items-center justify-center text-white text-xs font-bold'>R</div>
+            <span class='text-sm font-medium text-gray-500 tracking-wide'>影刀RPA · 康健医疗数字化项目</span>
+          </div>
+        </div> -->
+
+        <!-- Title Area -->
+        <header class="relative z-20 mb-10 shrink-0 flex flex-col gap-2 items-start">
+          <h1 class="text-3xl font-bold tracking-tight text-[#1F2937] mb-2">
+            院长致辞
+          </h1>
+          <p class="text-xl text-[#4B5563] font-medium">
+            项目核心态度
+          </p>
+        </header>
+
+        <!-- Main Content Area: Balanced Split Layout -->
+        <main class="relative z-20 flex-1 min-h-0 flex flex-col items-center justify-center pb-6">
+
+          <!-- 核心标语区 (Hero Statement) -->
+          <div class="w-full max-w-[1080px] mb-12 relative">
+            <!-- 装饰性引号 -->
+            <i class="fa-solid fa-quote-left absolute -top-8 -left-12 text-8xl text-gray-200/60 z-0"></i>
+
+            <div class="relative z-10 flex flex-col gap-4 text-center">
+              <!-- 上半句：机器 -->
+              <h2 class="text-5xl font-bold text-gray-400 tracking-tight">
+                “把<span class="text-gray-600 border-b-4 border-gray-200 pb-1 mx-2">繁琐</span>留给机器，
+              </h2>
+              <!-- 下半句：患者 (强调色) -->
+              <h2 class="text-6xl font-bold text-[#1F2937] tracking-tight mt-2">
+                把<span class="text-[#C00000] border-b-4 border-red-100 pb-1 mx-2">时间</span>还给患者。”
+              </h2>
+            </div>
+          </div>
+
+          <!-- 支撑逻辑区 (Split Cards) -->
+          <div class="w-full max-w-[1080px] grid grid-cols-2 gap-8">
+
+            <!-- 左侧：现状/机器 (Gray Theme) -->
+            <div
+              class="glass-card rounded-2xl p-8 flex items-start gap-6 group hover:bg-white transition-colors duration-300">
+              <div
+                class="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center shrink-0 text-gray-500 shadow-sm border border-gray-200 group-hover:scale-105 transition-transform">
+                <i class="fa-regular fa-keyboard text-3xl"></i>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-3">
+                  <span
+                    class="px-2.5 py-1 rounded-md bg-gray-100 text-gray-600 text-xs font-bold tracking-wider">现状认知</span>
+                  <div class="h-px flex-1 bg-gray-200"></div>
+                </div>
+                <h3 class="text-xl font-bold text-[#1F2937] mb-2">机械录入的困局</h3>
+                <p class="text-lg text-[#4B5563] leading-relaxed">
+                  医护人员在HIS系统前耗费了大量精力，挤占了本该用于专业护理的宝贵时间。
+                </p>
+              </div>
+            </div>
+
+            <!-- 右侧：期望/患者 (Teal/Red Theme for Care) -->
+            <div
+              class="glass-card rounded-2xl p-8 flex items-start gap-6 group hover:bg-white transition-colors duration-300 border-l-4 border-l-[#C00000]/20">
+              <div
+                class="w-16 h-16 rounded-xl bg-teal-50 flex items-center justify-center shrink-0 text-teal-600 shadow-sm border border-teal-100 group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-heart-pulse text-3xl"></i>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-3">
+                  <span
+                    class="px-2.5 py-1 rounded-md bg-teal-50 text-teal-700 text-xs font-bold tracking-wider">期望目标</span>
+                  <div class="h-px flex-1 bg-teal-100"></div>
+                </div>
+                <h3 class="text-xl font-bold text-[#1F2937] mb-2">回归医疗本质</h3>
+                <p class="text-lg text-[#4B5563] leading-relaxed">
+                  通过工具全员减负，让医护人员从重复劳动中解脱，提升工作幸福感与患者满意度。
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+        </main>
+
+      </div>
+    </div>
+  </div>
+  <div id="overlay" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50"
+    onclick="this.style.display='none'">
+    <img id="overlay-img" class="max-w-[90%] max-h-[90%] object-contain" src="" alt="overlay">
+  </div>
+  <script>
+    // === 1. 动态缩放逻辑（保留 1920x1080 基准） ===
+    function fitSlide() {
+      const shell = document.getElementById('page-shell');
+      const wrap = document.getElementById('slide-scale-wrapper');
+      if (!shell || !wrap) return;
+      const sw = 1280, sh = 720;
+      const ww = shell.clientWidth, wh = shell.clientHeight;
+      const scale = Math.min(ww / sw, wh / sh);
+      wrap.style.transform = `scale(${scale})`;
+      wrap.style.transformOrigin = 'center center';
+    }
+    window.addEventListener('resize', fitSlide);
+    window.addEventListener('load', fitSlide);
+    function openOverlay(src) {
+      document.getElementById('overlay-img').src = src;
+      document.getElementById('overlay').style.display = 'flex';
+    }
+
+    // 立即执行一次 fitSlide()，确保在浏览器渲染时就应用缩放
+    fitSlide();
+
+    // 监听窗口大小变化
+    window.addEventListener('resize', fitSlide);
+    // **注意：移除了 window.addEventListener('load', fitSlide); **
+
+    // === 2. 键盘切换逻辑（保持不变） ===
+    document.addEventListener('keydown', (event) => {
+      const isNextKey = event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ';
+      const isPrevKey = event.key === 'ArrowLeft' || event.key === 'PageUp';
+      if (isNextKey) {
+        window.parent.postMessage({ type: 'SWIPER_NEXT' }, '*');
+        if (event.key === ' ') event.preventDefault();
+      } else if (isPrevKey) {
+        window.parent.postMessage({ type: 'SWIPER_PREV' }, '*');
+      }
+    });
+  </script>
+</body>
+
+</html>
