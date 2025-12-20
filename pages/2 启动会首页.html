@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cover Slide</title>
+    <script src="https://unpkg.com/@t-agent/cdn@0.0.1/tailwind@4.js"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.cn/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        /* 解决 SVG 文字路径兼容性问题 */
+        svg {
+            overflow: visible;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-gray-900">
+        <!-- 缩放容器 -->
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <!-- 核心 Slide 容器 -->
+            <div id="slide-container"
+                class="w-[1280px] h-[720px] box-border flex flex-col relative overflow-hidden bg-[#F8F9FA]">
+
+                <!-- 1. 全局背景层 -->
+                <div
+                    class='absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-[#C00000]/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 z-0 pointer-events-none'>
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-[800px] h-[800px] bg-[#0D9488]/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 z-0 pointer-events-none">
+                </div>
+                <div class="absolute inset-0 z-0 opacity-30"
+                    style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 40px 40px;">
+                </div>
+
+                <!-- NEW: 个人名片/联系方式 (低调设计) -->
+                <!-- 位置：右下角 | 交互：默认半透明，鼠标悬停变清晰 -->
+                <div
+                    class="absolute bottom-6 right-8 z-30 flex flex-col items-end opacity-40 hover:opacity-100 transition-opacity duration-500 cursor-default group">
+                    <div class="flex items-center gap-2 text-xs text-gray-500 font-medium">
+                        <i
+                            class="fa-solid fa-user-check text-[#C00000] text-[10px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-2 group-hover:translate-x-0"></i>
+                        <span>影刀客户成功</span>
+                        <span class="w-px h-3 bg-gray-300"></span>
+                        <span class="text-gray-800 font-bold">图南</span>
+                    </div>
+                    <div
+                        class="text-[10px] text-gray-600 font-mono tracking-wider mt-0.5 group-hover:text-[#C00000] transition-colors duration-300">
+                        199-5165-6379
+                    </div>
+                </div>
+
+                <!-- 2. 主要内容区 -->
+                <div class="relative z-20 w-full h-full flex flex-col items-center justify-center px-20 pt-10 pb-32">
+
+                    <!-- Logo 联合展示区域 -->
+                    <div class="mb-10 animate-fade-in-up flex items-center justify-center gap-10">
+
+                        <!-- 左侧：康健医疗 -->
+                        <div
+                            class="h-24 w-24 bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-white/60 flex items-center justify-center p-2 group hover:scale-105 transition-transform duration-500">
+                            <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                class="w-full h-full">
+                                <defs>
+                                    <path id="textCircleTop" d="M 45, 200 a 155,155 0 1,1 310,0" />
+                                    <path id="textCircleBottom" d="M 45, 200 a 155,155 0 0,0 310,0" />
+                                </defs>
+                                <circle cx="200" cy="200" r="190" stroke="#0052CC" stroke-width="4" fill="white" />
+                                <circle cx="200" cy="200" r="182" stroke="#0052CC" stroke-width="1" />
+                                <circle cx="200" cy="200" r="130" stroke="#0052CC" stroke-width="2" fill="#F8FAFC" />
+                                <text font-family="'Inter', sans-serif" font-weight="bold" font-size="24" fill="#172B4D"
+                                    letter-spacing="0.1em" dominant-baseline="middle">
+                                    <textPath href="#textCircleTop" startOffset="50%" text-anchor="middle">KANGJIAN
+                                        MEDICAL</textPath>
+                                </text>
+                                <text font-family="'Noto Sans SC', sans-serif" font-weight="900" font-size="38"
+                                    fill="#0052CC" letter-spacing="0.4em" dominant-baseline="middle">
+                                    <textPath href="#textCircleBottom" startOffset="50%" text-anchor="middle">康健医疗
+                                    </textPath>
+                                </text>
+                                <g transform="translate(200, 200) scale(1.8)">
+                                    <path d="M0,-10 C-15,-25 -25,-15 0,-45 C25,-15 15,-25 0,-10 Z" fill="#0052CC" />
+                                    <path d="M0,10 C15,25 25,15 0,45 C-25,15 -15,25 0,10 Z" fill="#00B8D9" />
+                                    <path d="M-10,0 C-25,-15 -15,-25 -45,0 C-15,25 -25,15 -10,0 Z" fill="#FF8B00" />
+                                    <path d="M10,0 C25,15 15,25 45,0 C15,-25 25,-15 10,0 Z" fill="#36B37E" />
+                                    <circle cx="0" cy="0" r="8" fill="white" />
+                                </g>
+                            </svg>
+                        </div>
+
+                        <!-- 右侧：影刀RPA -->
+                        <div
+                            class="h-20 px-8 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-white/60 flex items-center justify-center group hover:scale-105 transition-transform duration-500">
+                            <img src="https://winrobot-ai-power.yingdao.com/forma-material-/1764913322804/b230688b-e741-405a-81c2-e254f5810774/影刀Logo.png"
+                                alt="影刀RPA Logo" class="h-8 w-auto object-contain block" />
+                        </div>
+
+                    </div>
+
+                    <!-- 标题组合 -->
+                    <div class="text-center space-y-8 max-w-5xl">
+                        <div
+                            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C00000]/5 border border-[#C00000]/10 mb-2">
+                            <i class="fa-solid fa-bolt text-[#C00000] text-sm"></i>
+                            <span class="text-[#C00000] font-bold text-sm tracking-wider uppercase">数字化转型 · 效能革新</span>
+                        </div>
+
+                        <h1 class="text-7xl font-black text-[#1F2937] tracking-tight leading-[1.1]">
+                            康健医疗 & 影刀RPA<br>项目启动大会
+                        </h1>
+
+                        <div class="flex items-center justify-center gap-4 mt-6">
+                            <div class="h-px w-12 bg-gradient-to-r from-transparent to-gray-300"></div>
+                            <p class="text-2xl text-[#4B5563] font-medium tracking-wide">
+                                科技赋能医疗 · 让服务更有温度
+                            </p>
+                            <div class="h-px w-12 bg-gradient-to-l from-transparent to-gray-300"></div>
+                        </div>
+                    </div>
+
+                    <!-- 底部装饰 -->
+                    <div class="absolute bottom-12 flex gap-16 opacity-40 mix-blend-multiply pointer-events-none">
+                        <div class="flex flex-col items-center gap-2">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+                                <i class="fa-solid fa-heart-pulse text-xl"></i>
+                            </div>
+                            <span class="text-xs font-semibold text-gray-400">智能医疗</span>
+                        </div>
+                        <div class="flex flex-col items-center gap-2">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-center text-[#0D9488]">
+                                <i class="fa-solid fa-robot text-xl"></i>
+                            </div>
+                            <span class="text-xs font-semibold text-gray-400">自动化</span>
+                        </div>
+                        <div class="flex flex-col items-center gap-2">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600">
+                                <i class="fa-solid fa-shield-halved text-xl"></i>
+                            </div>
+                            <span class="text-xs font-semibold text-gray-400">数据安全</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function fitSlide() {
+            const shell = document.getElementById('page-shell');
+            const wrap = document.getElementById('slide-scale-wrapper');
+            if (!shell || !wrap) return;
+            const sw = 1280, sh = 720;
+            const ww = shell.clientWidth, wh = shell.clientHeight;
+            const scale = Math.min(ww / sw, wh / sh);
+            wrap.style.transform = `scale(${scale})`;
+            wrap.style.transformOrigin = 'center center';
+        }
+        window.addEventListener('resize', fitSlide);
+        window.addEventListener('load', fitSlide);
+        fitSlide();
+
+        document.addEventListener('keydown', (event) => {
+            const isNextKey = event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ';
+            const isPrevKey = event.key === 'ArrowLeft' || event.key === 'PageUp';
+            if (isNextKey) {
+                window.parent.postMessage({ type: 'SWIPER_NEXT' }, '*');
+                if (event.key === ' ') event.preventDefault();
+            } else if (isPrevKey) {
+                window.parent.postMessage({ type: 'SWIPER_PREV' }, '*');
+            }
+        });
+    </script>
+</body>
+
+</html>
