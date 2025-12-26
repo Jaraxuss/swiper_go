@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>02 影刀RPA能做什么？</title>
+    <script src="https://unpkg.com/@t-agent/cdn@0.0.1/tailwind@4.js"></script>
+    <link href="https://unpkg.com/@t-agent/cdn@0.0.1/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../lib/fonts/fonts.css" rel="stylesheet" />
+    <style>
+        /* Custom Font Stacks */
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Hide scrollbars for clean presentation */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Custom Red Color */
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .border-rpa-red {
+            border-color: #C00000;
+        }
+
+        .shadow-rpa-red {
+            shadow-color: rgba(192, 0, 0, 0.5);
+        }
+
+        /* Animations */
+        @keyframes float-subtle {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .animate-float {
+            animation: float-subtle 3s ease-in-out infinite;
+        }
+
+        /* Key Press Animation */
+        @keyframes key-press {
+
+            0%,
+            100% {
+                transform: translateY(0);
+                box-shadow: 0 4px 0 #cbd5e0;
+            }
+
+            50% {
+                transform: translateY(4px);
+                box-shadow: 0 0 0 #cbd5e0;
+            }
+        }
+
+        .animate-key {
+            animation: key-press 2s infinite;
+        }
+
+        /* Mouse Click Animation */
+        @keyframes mouse-click {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .animate-click {
+            animation: mouse-click 2s infinite;
+        }
+
+        /* Database Data Flow */
+        @keyframes flow-data {
+            0% {
+                transform: translateX(-10px);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(10px);
+                opacity: 0;
+            }
+        }
+
+        .animate-data-flow {
+            animation: flow-data 1.5s linear infinite;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-gray-900">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+
+            <!-- Surface Background -->
+            <div id="slide-container"
+                class="w-[1280px] h-[720px] box-border flex flex-col relative overflow-hidden bg-[#F8F9FA] p-12">
+
+                <!-- Global Layer (Decorative) -->
+                <div
+                    class='absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-[#C00000]/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 z-0 pointer-events-none'>
+                </div>
+
+                <!-- Header -->
+                <header class="relative z-20 mb-12 shrink-0 flex items-center gap-4">
+                    <!-- Stylized Number 02 -->
+                    <div class="relative">
+                        <div class="absolute -top-4 -left-4 w-16 h-16 bg-red-100 rounded-full blur-xl opacity-70"></div>
+                        <div
+                            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-sm z-0">
+                        </div>
+                        <span class="relative z-10 text-6xl font-black text-gray-900 tracking-tighter">02</span>
+                    </div>
+
+                    <h1 class="text-4xl font-bold tracking-tight text-gray-900 mt-2">
+                        影刀RPA能做什么？
+                    </h1>
+
+                </header>
+
+                <!-- Main Content Grid -->
+                <div class="flex-1 grid grid-cols-3 gap-8 relative z-20 h-full min-h-0 items-start">
+
+                    <!-- 1. Mouse & Keyboard Automation -->
+                    <div class="flex flex-col items-center group h-full">
+                        <!-- Visual Container -->
+                        <div class="w-full h-56 relative mb-8 flex items-center justify-center">
+                            <!-- Background Soft Glow -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-tr from-gray-100 to-white rounded-2xl shadow-inner opacity-50">
+                            </div>
+
+                            <!-- RPA Interface Simulation -->
+                            <div
+                                class="w-64 h-40 bg-white rounded-lg shadow-lg border border-gray-100 flex flex-col overflow-hidden relative z-10 transform group-hover:scale-105 transition-transform duration-500">
+                                <!-- Header -->
+                                <div class="h-6 bg-gray-50 border-b border-gray-100 flex items-center px-2 gap-1">
+                                    <div class="w-2 h-2 rounded-full bg-red-400"></div>
+                                    <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                                    <div class="w-2 h-2 rounded-full bg-green-400"></div>
+                                </div>
+                                <!-- Canvas -->
+                                <div
+                                    class="flex-1 p-4 bg-gray-50 relative overflow-hidden flex items-center justify-center">
+                                    <!-- Target Element -->
+                                    <div
+                                        class="w-32 h-20 bg-blue-100 border-2 border-dashed border-blue-300 rounded flex items-center justify-center relative">
+                                        <span class="text-blue-400 text-xs font-bold">目标区域</span>
+                                        <!-- Mouse Cursor -->
+                                        <i
+                                            class="fa-solid fa-arrow-pointer absolute -bottom-4 -right-4 text-2xl text-gray-800 drop-shadow-md animate-click"></i>
+                                    </div>
+                                </div>
+                                <!-- Bottom Action Bar (Keyboard Sim) -->
+                                <div
+                                    class="h-12 bg-white border-t border-gray-100 flex items-center justify-center gap-2">
+                                    <!-- Key: Ctrl -->
+                                    <div
+                                        class="w-10 h-8 bg-gray-100 rounded border-b-4 border-gray-300 flex items-center justify-center text-xs font-bold text-gray-600 animate-key">
+                                        Ctrl
+                                    </div>
+                                    <span class="text-gray-400">+</span>
+                                    <!-- Key: D -->
+                                    <div class="w-8 h-8 bg-gray-100 rounded border-b-4 border-gray-300 flex items-center justify-center text-xs font-bold text-gray-600 animate-key"
+                                        style="animation-delay: 0.1s">
+                                        D
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Text Content -->
+                        <div class="text-center px-4">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">鼠标键盘的自动化</h3>
+                            <p class="text-sm text-gray-500 leading-relaxed text-justify">
+                                影刀可以控制您的键盘和鼠标，就像人一样操作：发送按键或将鼠标移至何处、模拟击键、鼠标移动和单击等。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 2. Excel Automation -->
+                    <div class="flex flex-col items-center group h-full">
+                        <!-- Visual Container -->
+                        <div class="w-full h-56 relative mb-8 flex items-center justify-center">
+                            <!-- Excel File Icon (Background Decor) -->
+                            <div
+                                class="absolute top-4 right-10 text-9xl text-green-50 opacity-50 rotate-12 pointer-events-none">
+                                <i class="fa-solid fa-file-csv"></i>
+                            </div>
+
+                            <!-- Excel Window -->
+                            <div
+                                class="w-64 h-40 bg-white rounded-lg shadow-lg border border-green-100 flex flex-col overflow-hidden relative z-10 transform group-hover:scale-105 transition-transform duration-500">
+                                <!-- Excel Header -->
+                                <div class="h-8 bg-[#107C41] flex items-center px-3 justify-between">
+                                    <span class="text-white text-[10px] font-bold">Report.xlsx</span>
+                                    <div class="flex gap-1">
+                                        <div class="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
+                                        <div class="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
+                                    </div>
+                                </div>
+                                <!-- Toolbar -->
+                                <div class="h-6 bg-gray-100 border-b border-gray-200 flex items-center px-2 gap-2">
+                                    <div
+                                        class="w-4 h-4 bg-white border border-gray-300 rounded flex items-center justify-center text-[8px] text-green-700 font-bold">
+                                        ∑</div>
+                                    <div class="w-12 h-3 bg-white border border-gray-300 rounded"></div>
+                                </div>
+                                <!-- Grid -->
+                                <div class="flex-1 bg-white p-2 grid grid-cols-4 gap-0.5 relative">
+                                    <!-- Header Row -->
+                                    <div
+                                        class="col-span-1 h-5 bg-gray-100 border border-gray-200 text-[8px] flex items-center justify-center text-gray-500">
+                                        ID</div>
+                                    <div
+                                        class="col-span-1 h-5 bg-gray-100 border border-gray-200 text-[8px] flex items-center justify-center text-gray-500">
+                                        Name</div>
+                                    <div
+                                        class="col-span-1 h-5 bg-gray-100 border border-gray-200 text-[8px] flex items-center justify-center text-gray-500">
+                                        Date</div>
+                                    <div
+                                        class="col-span-1 h-5 bg-gray-100 border border-gray-200 text-[8px] flex items-center justify-center text-gray-500">
+                                        Val</div>
+
+                                    <!-- Data Rows -->
+                                    <div class="bg-white border border-gray-100 h-4"></div>
+                                    <div class="bg-white border border-gray-100 h-4"></div>
+                                    <div class="bg-white border border-gray-100 h-4"></div>
+                                    <div class="bg-white border border-gray-100 h-4"></div>
+                                    <div class="bg-white border border-gray-100 h-4"></div>
+                                    <div class="bg-white border border-gray-100 h-4"></div>
+                                    <div class="bg-white border border-gray-100 h-4"></div>
+                                    <div class="bg-white border border-gray-100 h-4"></div>
+
+                                    <!-- Active Cell (Automated) -->
+                                    <div
+                                        class="col-span-1 h-4 border-2 border-green-500 bg-green-50 relative overflow-visible z-20">
+                                        <!-- Cursor -->
+                                        <i
+                                            class="fa-solid fa-plus text-white bg-green-500 absolute -bottom-2 -right-2 text-[8px] w-3 h-3 rounded-sm flex items-center justify-center shadow-sm"></i>
+                                    </div>
+                                    <div class="bg-white border border-gray-100 h-4"></div>
+                                    <div class="bg-white border border-gray-100 h-4"></div>
+                                    <div class="bg-white border border-gray-100 h-4"></div>
+                                </div>
+                            </div>
+
+                            <!-- Floating Excel Logo -->
+                            <div
+                                class="absolute -bottom-4 right-8 w-10 h-10 bg-white rounded-lg shadow-md border border-gray-100 flex items-center justify-center text-[#107C41] text-xl z-20 animate-float">
+                                <i class="fa-solid fa-file-excel"></i>
+                            </div>
+                        </div>
+
+                        <!-- Text Content -->
+                        <div class="text-center px-4">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">Excel 自动化</h3>
+                            <p class="text-sm text-gray-500 leading-relaxed text-justify">
+                                影刀支持Excel的宏、单元格、Sheet等各类Excel自动化操作，如可以自动生成所需的Excel报表。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Database & SQL Automation -->
+                    <div class="flex flex-col items-center group h-full">
+                        <!-- Visual Container -->
+                        <div class="w-full h-56 relative mb-8 flex items-center justify-center">
+
+                            <!-- Main Container Window -->
+                            <div
+                                class="w-64 h-40 bg-white rounded-lg shadow-lg border border-gray-100 flex flex-col overflow-hidden relative z-10 transform group-hover:scale-105 transition-transform duration-500">
+                                <!-- Header -->
+                                <div class="h-6 bg-gray-50 border-b border-gray-100 flex items-center px-2">
+                                    <span class="text-[8px] text-gray-400 font-mono">SQL Query Runner</span>
+                                </div>
+                                <!-- Body -->
+                                <div class="flex-1 p-4 flex flex-col items-center justify-center relative">
+                                    <!-- Connections Diagram -->
+                                    <div class="flex items-center justify-center gap-4 w-full">
+                                        <!-- Source: RPA -->
+                                        <div
+                                            class="w-10 h-10 bg-red-50 rounded-full border border-red-100 flex items-center justify-center text-rpa-red shadow-sm z-10">
+                                            <i class="fa-solid fa-robot"></i>
+                                        </div>
+
+                                        <!-- Connection Line -->
+                                        <div class="flex-1 h-0.5 bg-gray-200 relative overflow-hidden">
+                                            <div class="w-2 h-0.5 bg-blue-400 absolute top-0 left-0 animate-data-flow">
+                                            </div>
+                                        </div>
+
+                                        <!-- Target: DB Group -->
+                                        <div class="flex flex-col gap-2 z-10">
+                                            <div
+                                                class="w-24 h-6 bg-white border border-gray-200 rounded shadow-sm flex items-center px-2 gap-2">
+                                                <i class="fa-solid fa-database text-blue-600 text-[10px]"></i>
+                                                <span class="text-[8px] font-bold text-gray-600">MySQL</span>
+                                            </div>
+                                            <div
+                                                class="w-24 h-6 bg-white border border-gray-200 rounded shadow-sm flex items-center px-2 gap-2">
+                                                <i class="fa-solid fa-server text-orange-600 text-[10px]"></i>
+                                                <span class="text-[8px] font-bold text-gray-600">Oracle</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- SQL Code Snippet -->
+                                    <div
+                                        class="mt-3 w-full bg-gray-900 rounded p-2 font-mono text-[8px] text-green-400 opacity-90">
+                                        > SELECT * FROM users;<br>
+                                        <span class="text-white">Query OK, 5 rows.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Floating DB Icon -->
+                            <div
+                                class="absolute top-0 right-10 w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center text-blue-500 text-sm animate-bounce-slow opacity-50">
+                                <i class="fa-solid fa-cloud"></i>
+                            </div>
+                        </div>
+
+                        <!-- Text Content -->
+                        <div class="text-center px-4">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">数据库和SQL的自动化</h3>
+                            <p class="text-sm text-gray-500 leading-relaxed text-justify">
+                                通过使用影刀来连接任何数据库并自动运行SQL查询，提升操作效率及降低安全风险。
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/slide-core.js"></script>
+</body>
+
+</html>
