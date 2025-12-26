@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>影刀RPA能做什么？</title>
+    <script src="https://unpkg.com/@t-agent/cdn@0.0.1/tailwind@4.js"></script>
+    <link href="https://unpkg.com/@t-agent/cdn@0.0.1/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../lib/fonts/fonts.css" rel="stylesheet" />
+    <style>
+        /* Custom Font Stacks */
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Hide scrollbars for clean presentation */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Custom Red Color */
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .border-rpa-red {
+            border-color: #C00000;
+        }
+
+        /* Animations */
+        @keyframes float-icon {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .animate-float-slow {
+            animation: float-icon 4s ease-in-out infinite;
+        }
+
+        .animate-float-medium {
+            animation: float-icon 3s ease-in-out infinite;
+        }
+
+        .animate-float-fast {
+            animation: float-icon 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(192, 0, 0, 0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(192, 0, 0, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(192, 0, 0, 0);
+            }
+        }
+
+        .animate-pulse-ring {
+            animation: pulse-ring 2s infinite;
+        }
+
+        /* Phone Screen Scroll Animation */
+        @keyframes scroll-screen {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .animate-scroll {
+            animation: scroll-screen 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-gray-900">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+
+            <!-- Surface Background -->
+            <div id="slide-container"
+                class="w-[1280px] h-[720px] box-border flex flex-col relative overflow-hidden bg-[#F8F9FA] p-12">
+
+                <!-- Global Layer (Decorative) -->
+                <div
+                    class='absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-[#C00000]/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 z-0 pointer-events-none'>
+                </div>
+
+                <!-- Header -->
+                <header class="relative z-20 mb-12 shrink-0 flex items-center gap-4">
+                    <!-- Stylized Number 01 -->
+                    <div class="relative">
+                        <div class="absolute -top-4 -left-4 w-16 h-16 bg-red-100 rounded-full blur-xl opacity-70"></div>
+                        <div
+                            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-sm z-0">
+                        </div>
+                        <span class="relative z-10 text-6xl font-black text-gray-900 tracking-tighter">01</span>
+                    </div>
+
+                    <h1 class="text-4xl font-bold tracking-tight text-gray-900 mt-2">
+                        影刀RPA能做什么？
+                    </h1>
+                </header>
+
+                <!-- Main Content Grid -->
+                <div class="flex-1 grid grid-cols-3 gap-8 relative z-20 h-full min-h-0 items-start">
+
+                    <!-- 1. Desktop Automation -->
+                    <div class="flex flex-col items-center group h-full">
+                        <!-- Visual Container -->
+                        <div class="w-full h-56 relative mb-8 flex items-center justify-center">
+                            <!-- Background Soft Glow -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-tr from-gray-100 to-white rounded-2xl shadow-inner opacity-50">
+                            </div>
+
+                            <!-- Main Window (Mock App) -->
+                            <div
+                                class="w-64 h-40 bg-white rounded-lg shadow-lg border border-gray-100 flex flex-col overflow-hidden relative z-10 transform group-hover:scale-105 transition-transform duration-500">
+                                <!-- Window Header -->
+                                <div class="h-6 bg-gray-50 border-b border-gray-100 flex items-center px-2 gap-1">
+                                    <div class="w-2 h-2 rounded-full bg-red-400"></div>
+                                    <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                                    <div class="w-2 h-2 rounded-full bg-green-400"></div>
+                                </div>
+                                <!-- Window Body (List) -->
+                                <div class="p-3 space-y-2">
+                                    <div class="flex items-center gap-2 p-1.5 bg-red-50 rounded border border-red-100">
+                                        <div
+                                            class="w-4 h-4 bg-rpa-red rounded-full flex items-center justify-center text-[8px] text-white">
+                                            <i class="fa-solid fa-bolt"></i>
+                                        </div>
+                                        <div class="h-1.5 w-24 bg-red-200 rounded"></div>
+                                    </div>
+                                    <div class="flex items-center gap-2 p-1.5 hover:bg-gray-50 rounded">
+                                        <div class="w-4 h-4 bg-blue-100 rounded-full"></div>
+                                        <div class="h-1.5 w-20 bg-gray-200 rounded"></div>
+                                    </div>
+                                    <div class="flex items-center gap-2 p-1.5 hover:bg-gray-50 rounded">
+                                        <div class="w-4 h-4 bg-green-100 rounded-full"></div>
+                                        <div class="h-1.5 w-16 bg-gray-200 rounded"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Floating Icons -->
+                            <div
+                                class="absolute -bottom-4 left-10 w-12 h-12 bg-white rounded-xl shadow-md border border-gray-100 flex items-center justify-center text-green-500 text-2xl z-20 animate-float-slow">
+                                <i class="fa-brands fa-weixin"></i>
+                            </div>
+                            <div
+                                class="absolute -bottom-2 right-12 w-10 h-10 bg-white rounded-xl shadow-md border border-gray-100 flex items-center justify-center text-blue-500 text-xl z-20 animate-float-medium delay-75">
+                                <i class="fa-brands fa-dingding"></i>
+                                <!-- Requires newer FA, using placeholder if not renders -->
+                                <i class="fa-solid fa-paper-plane absolute opacity-0"></i>
+                                <!-- Fallback if dingding fails visually -->
+                            </div>
+                            <div
+                                class="absolute top-12 -right-2 w-8 h-8 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center text-orange-500 text-sm z-0 animate-float-fast">
+                                <i class="fa-brands fa-linux"></i>
+                            </div>
+                        </div>
+
+                        <!-- Text Content -->
+                        <div class="text-center px-4">
+                            <h3 class="text-xl font-bold text-rpa-red mb-4">任何桌面软件自动化</h3>
+                            <p class="text-sm text-gray-500 leading-relaxed">
+                                包括<b>HIS、EMR、LIS、PACS</b>等医院常用系统。
+                            </p>
+                            <p class="text-sm text-gray-500 leading-relaxed">
+                                可以实现所有桌面应用程序的自动化，甚至QQ、微信、钉钉或你日常使用的任何其他应用程序。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 2. Web Automation -->
+                    <div class="flex flex-col items-center group h-full">
+                        <!-- Visual Container -->
+                        <div class="w-full h-56 relative mb-8 flex items-center justify-center">
+                            <!-- Browser Window -->
+                            <div
+                                class="w-64 h-40 bg-white rounded-lg shadow-lg border border-gray-100 flex flex-col overflow-hidden relative z-10 transform group-hover:scale-105 transition-transform duration-500">
+                                <!-- Browser Tab Bar -->
+                                <div class="h-8 bg-gray-800 flex items-end px-2 pt-2 gap-1">
+                                    <div class="bg-white rounded-t px-3 py-1 text-[8px] font-bold w-24 truncate">网页自动化
+                                    </div>
+                                    <div class="bg-gray-700 rounded-t px-3 py-1 w-16 opacity-50"></div>
+                                </div>
+                                <!-- Browser Body -->
+                                <div class="flex-1 p-3 bg-gray-50 relative">
+                                    <!-- Skeleton UI -->
+                                    <div class="w-full h-2 bg-gray-200 rounded mb-2"></div>
+                                    <div class="flex gap-2">
+                                        <div class="w-2/3 space-y-2">
+                                            <div
+                                                class="w-full h-16 bg-white border border-gray-200 rounded p-2 flex flex-col gap-1">
+                                                <div class="w-8 h-8 rounded bg-gray-100 mb-1"></div>
+                                                <div class="w-full h-1 bg-gray-200 rounded"></div>
+                                            </div>
+                                        </div>
+                                        <!-- API Block -->
+                                        <div class="w-1/3 flex items-center justify-center">
+                                            <div
+                                                class="bg-[#2196F3] text-white text-xs font-bold px-2 py-1 rounded shadow-md animate-pulse">
+                                                API</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Chrome Icon decoration -->
+                                    <div
+                                        class="absolute -bottom-3 -right-3 w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center z-20">
+                                        <i class="fa-brands fa-chrome text-2xl text-gray-700"></i>
+                                        <!-- Simplified chrome logo using brands -->
+                                        <div
+                                            class="absolute inset-0 rounded-full border-4 border-transparent border-t-red-500 border-r-yellow-500 border-b-green-500 border-l-blue-500 opacity-80">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Text Content -->
+                        <div class="text-center px-4">
+                            <h3 class="text-xl font-bold text-rpa-red mb-4">任何网页自动化</h3>
+                            <p class="text-sm text-gray-500 leading-relaxed">
+                                包括<b>医保两定平台、HQMS、院感系统、集采系统</b>等。
+                            </p>
+                            <p class="text-sm text-gray-500 leading-relaxed">
+                                实现网页JS脚本，数据抓取、Web表单填写、网页操作，API调用等，轻松实现自动化的Web任务。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Mobile App Automation -->
+                    <div class="flex flex-col items-center group h-full">
+                        <!-- Visual Container -->
+                        <div class="w-full h-56 relative mb-8 flex items-center justify-center">
+
+                            <!-- Phone Device -->
+                            <div
+                                class="w-28 h-48 bg-gray-800 rounded-[1.5rem] shadow-xl border-4 border-gray-800 relative overflow-hidden z-10 transform group-hover:scale-105 transition-transform duration-500">
+                                <!-- Notion Island / Camera -->
+                                <div
+                                    class="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-4 bg-black rounded-b-lg z-20">
+                                </div>
+
+                                <!-- Screen Content -->
+                                <div class="w-full h-full bg-white flex flex-col pt-5 px-2 relative overflow-hidden">
+                                    <!-- App Grid (Animated) -->
+                                    <div class="grid grid-cols-3 gap-2 animate-scroll">
+                                        <!-- Fake Apps -->
+                                        <div class="w-6 h-6 rounded-md bg-green-500"></div>
+                                        <div class="w-6 h-6 rounded-md bg-blue-500"></div>
+                                        <div class="w-6 h-6 rounded-md bg-yellow-500"></div>
+                                        <div class="w-6 h-6 rounded-md bg-purple-500"></div>
+                                        <div class="w-6 h-6 rounded-md bg-pink-500"></div>
+                                        <div class="w-6 h-6 rounded-md bg-gray-300"></div>
+
+                                        <!-- Banner -->
+                                        <div
+                                            class="col-span-3 h-12 bg-orange-100 rounded-lg mt-2 flex items-center justify-center">
+                                            <div class="w-8 h-8 rounded-full bg-orange-200 overflow-hidden">
+                                                <img src="https://ui-avatars.com/api/?name=User&background=random"
+                                                    class="w-full h-full opacity-80" alt="avatar">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bottom Nav -->
+                                    <div
+                                        class="absolute bottom-0 left-0 w-full h-6 bg-gray-50 border-t border-gray-200 flex justify-around items-center text-gray-400 text-[10px]">
+                                        <i class="fa-solid fa-house text-gray-600"></i>
+                                        <i class="fa-solid fa-compass"></i>
+                                        <i class="fa-solid fa-user"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Floating RPA Toolbar (Side) -->
+                            <div class="absolute top-8 right-16 flex flex-col gap-2 z-20">
+                                <div
+                                    class="w-8 h-24 bg-white rounded-full shadow-lg border border-gray-100 flex flex-col items-center justify-center gap-3 py-2 text-gray-400 text-xs">
+                                    <i class="fa-solid fa-link hover:text-rpa-red transition-colors"></i>
+                                    <i class="fa-solid fa-arrow-left hover:text-rpa-red transition-colors"></i>
+                                    <i class="fa-solid fa-house hover:text-rpa-red transition-colors"></i>
+                                    <i
+                                        class="fa-solid fa-rotate hover:text-rpa-red transition-colors animate-spin-slow"></i>
+                                </div>
+                            </div>
+
+                            <!-- Coordinate Tooltip -->
+                            <div
+                                class="absolute bottom-4 right-10 bg-white px-1.5 py-0.5 rounded border border-gray-200 shadow-sm text-[8px] text-gray-500 font-mono z-20">
+                                x: 683 y: 1427
+                            </div>
+                        </div>
+
+                        <!-- Text Content -->
+                        <div class="text-center px-4">
+                            <h3 class="text-xl font-bold text-rpa-red mb-4">任何手机App自动化</h3>
+                            <p class="text-sm text-gray-500 leading-relaxed">
+                                能驱动手机上的任何APP进行输入、点击、手势滑动、提取数据等操作；支持同时控制多台手机设备进行自动化。
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/slide-core.js"></script>
+</body>
+
+</html>
