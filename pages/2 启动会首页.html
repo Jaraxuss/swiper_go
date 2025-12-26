@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cover Slide</title>
+    <title>严料坊项目启动会</title>
     <script src="https://unpkg.com/@t-agent/cdn@0.0.1/tailwind@4.js"></script>
-    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
     <link
         href="https://fonts.googleapis.cn/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
         rel="stylesheet" />
@@ -16,11 +15,49 @@
         svg {
             overflow: visible;
         }
+
+        /* 字体设置 */
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        /* 入场动画 */
+        @keyframes fade-in-up {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-enter {
+            animation: fade-in-up 0.8s ease-out forwards;
+        }
+
+        /* 玻璃拟态卡片 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
 
-<body>
-    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-gray-900">
+<body
+    class="bg-gray-900 flex items-center justify-center h-screen w-screen selection:bg-red-100 selection:text-red-800 font-sans">
+    <div id="page-shell" class="w-full h-full flex items-center justify-center">
         <!-- 缩放容器 -->
         <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
             <!-- 核心 Slide 容器 -->
@@ -28,23 +65,29 @@
                 class="w-[1280px] h-[720px] box-border flex flex-col relative overflow-hidden bg-[#F8F9FA]">
 
                 <!-- 1. 全局背景层 -->
+                <!-- 右上角红色光晕 -->
                 <div
                     class='absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-[#C00000]/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 z-0 pointer-events-none'>
                 </div>
+                <!-- 左下角蓝色光晕 (飞书蓝) -->
                 <div
-                    class="absolute bottom-0 left-0 w-[800px] h-[800px] bg-[#0D9488]/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 z-0 pointer-events-none">
+                    class="absolute bottom-0 left-0 w-[800px] h-[800px] bg-[#3370FF]/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 z-0 pointer-events-none">
                 </div>
+                <!-- 网格纹理 -->
                 <div class="absolute inset-0 z-0 opacity-30"
                     style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 40px 40px;">
                 </div>
 
-                <!-- NEW: 个人名片/联系方式 (低调设计) -->
-                <!-- 位置：右下角 | 交互：默认半透明，鼠标悬停变清晰 -->
+                <!-- 个人名片/联系方式 -->
                 <div
-                    class="absolute bottom-6 right-8 z-30 flex flex-col items-end opacity-40 hover:opacity-100 transition-opacity duration-500 cursor-default group">
+                    class="absolute bottom-6 right-8 z-30 flex flex-col items-end opacity-60 hover:opacity-100 transition-opacity duration-500 cursor-default group">
                     <div class="flex items-center gap-2 text-xs text-gray-500 font-medium">
-                        <i
-                            class="fa-solid fa-user-check text-[#C00000] text-[10px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-2 group-hover:translate-x-0"></i>
+                        <!-- 这里的 user icon 用 SVG 替代 -->
+                        <svg class="w-3 h-3 text-[#C00000] opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-2 group-hover:translate-x-0"
+                            fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                        </svg>
                         <span>影刀客户成功</span>
                         <span class="w-px h-3 bg-gray-300"></span>
                         <span class="text-gray-800 font-bold">图南</span>
@@ -56,96 +99,95 @@
                 </div>
 
                 <!-- 2. 主要内容区 -->
-                <div class="relative z-20 w-full h-full flex flex-col items-center justify-center px-20 pt-10 pb-32">
-
-                    <!-- Logo 联合展示区域 -->
-                    <div class="mb-10 animate-fade-in-up flex items-center justify-center gap-10">
-
-                        <!-- 左侧：康健医疗 -->
-                        <div
-                            class="h-24 w-24 bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-white/60 flex items-center justify-center p-2 group hover:scale-105 transition-transform duration-500">
-                            <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                class="w-full h-full">
-                                <defs>
-                                    <path id="textCircleTop" d="M 45, 200 a 155,155 0 1,1 310,0" />
-                                    <path id="textCircleBottom" d="M 45, 200 a 155,155 0 0,0 310,0" />
-                                </defs>
-                                <circle cx="200" cy="200" r="190" stroke="#0052CC" stroke-width="4" fill="white" />
-                                <circle cx="200" cy="200" r="182" stroke="#0052CC" stroke-width="1" />
-                                <circle cx="200" cy="200" r="130" stroke="#0052CC" stroke-width="2" fill="#F8FAFC" />
-                                <text font-family="'Inter', sans-serif" font-weight="bold" font-size="24" fill="#172B4D"
-                                    letter-spacing="0.1em" dominant-baseline="middle">
-                                    <textPath href="#textCircleTop" startOffset="50%" text-anchor="middle">KANGJIAN
-                                        MEDICAL</textPath>
-                                </text>
-                                <text font-family="'Noto Sans SC', sans-serif" font-weight="900" font-size="38"
-                                    fill="#0052CC" letter-spacing="0.4em" dominant-baseline="middle">
-                                    <textPath href="#textCircleBottom" startOffset="50%" text-anchor="middle">康健医疗
-                                    </textPath>
-                                </text>
-                                <g transform="translate(200, 200) scale(1.8)">
-                                    <path d="M0,-10 C-15,-25 -25,-15 0,-45 C25,-15 15,-25 0,-10 Z" fill="#0052CC" />
-                                    <path d="M0,10 C15,25 25,15 0,45 C-25,15 -15,25 0,10 Z" fill="#00B8D9" />
-                                    <path d="M-10,0 C-25,-15 -15,-25 -45,0 C-15,25 -25,15 -10,0 Z" fill="#FF8B00" />
-                                    <path d="M10,0 C25,15 15,25 45,0 C15,-25 25,-15 10,0 Z" fill="#36B37E" />
-                                    <circle cx="0" cy="0" r="8" fill="white" />
-                                </g>
-                            </svg>
-                        </div>
-
-                        <!-- 右侧：影刀RPA -->
-                        <div
-                            class="h-20 px-8 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-white/60 flex items-center justify-center group hover:scale-105 transition-transform duration-500">
-                            <img src="https://winrobot-ai-power.yingdao.com/forma-material-/1764913322804/b230688b-e741-405a-81c2-e254f5810774/影刀Logo.png"
-                                alt="影刀RPA Logo" class="h-8 w-auto object-contain block" />
-                        </div>
-
-                    </div>
+                <div class="relative z-20 w-full h-full flex flex-col items-center justify-center px-20 pt-8 pb-32">
 
                     <!-- 标题组合 -->
-                    <div class="text-center space-y-8 max-w-5xl">
+                    <div class="text-center space-y-8 max-w-6xl animate-enter">
+                        <!-- 顶部标签：文案更新 -->
                         <div
-                            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C00000]/5 border border-[#C00000]/10 mb-2">
-                            <i class="fa-solid fa-bolt text-[#C00000] text-sm"></i>
-                            <span class="text-[#C00000] font-bold text-sm tracking-wider uppercase">数字化转型 · 效能革新</span>
+                            class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#C00000]/5 to-[#C00000]/10 border border-[#C00000]/10 mb-2">
+                            <svg class="w-4 h-4 text-[#C00000]" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M7 2v11h3v9l7-12h-4l4-8z" />
+                            </svg>
+                            <span class="text-[#C00000] font-bold text-sm tracking-wide uppercase">内容生产自动化 ·
+                                业务增长新引擎</span>
                         </div>
 
-                        <h1 class="text-7xl font-black text-[#1F2937] tracking-tight leading-[1.1]">
-                            康健医疗 & 影刀RPA<br>项目启动大会
+                        <!-- 主标题：字体优化 -->
+                        <!-- 调整 font-black 为 font-extrabold，减少视觉压迫感，增加字间距 -->
+                        <h1 class="text-[76px] font-extrabold text-[#1F2937] tracking-tight leading-[1.15]">
+                            严料坊 & 影刀RPA<br>
+                            <span class="text-[64px] font-bold text-[#374151]">项目启动宣讲会</span>
                         </h1>
 
-                        <div class="flex items-center justify-center gap-4 mt-6">
-                            <div class="h-px w-12 bg-gradient-to-r from-transparent to-gray-300"></div>
+                        <!-- 副标题/Slogan -->
+                        <div class="flex items-center justify-center gap-6 mt-6">
+                            <div class="h-px w-20 bg-gradient-to-r from-transparent to-gray-300"></div>
                             <p class="text-2xl text-[#4B5563] font-medium tracking-wide">
-                                科技赋能医疗 · 让服务更有温度
+                                构建<span class="text-[#C00000] font-bold mx-1">自动化内容流水线</span> · 释放全员创造力
                             </p>
-                            <div class="h-px w-12 bg-gradient-to-l from-transparent to-gray-300"></div>
+                            <div class="h-px w-20 bg-gradient-to-l from-transparent to-gray-300"></div>
                         </div>
                     </div>
 
-                    <!-- 底部装饰 -->
-                    <div class="absolute bottom-12 flex gap-16 opacity-40 mix-blend-multiply pointer-events-none">
-                        <div class="flex flex-col items-center gap-2">
+                    <!-- 底部装饰图标：实体化、图形化 -->
+                    <div class="absolute bottom-16 flex gap-10 w-full justify-center px-20 animate-enter"
+                        style="animation-delay: 0.2s;">
+
+                        <!-- 1. 内容矩阵 -->
+                        <div
+                            class="glass-card flex-1 h-32 rounded-2xl flex items-center p-6 gap-5 group cursor-default">
                             <div
-                                class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
-                                <i class="fa-solid fa-heart-pulse text-xl"></i>
+                                class="w-16 h-16 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-500 shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                <!-- 图标：图片/媒体 -->
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                </svg>
                             </div>
-                            <span class="text-xs font-semibold text-gray-400">智能医疗</span>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-1">内容矩阵</h3>
+                                <p class="text-xs text-gray-500 leading-relaxed">全域热点抓取<br>爆款素材库构建</p>
+                            </div>
                         </div>
-                        <div class="flex flex-col items-center gap-2">
+
+                        <!-- 2. 自动化流水线 (强调) -->
+                        <div
+                            class="glass-card flex-1 h-32 rounded-2xl flex items-center p-6 gap-5 group cursor-default border-red-100 bg-white/70">
                             <div
-                                class="w-12 h-12 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-center text-[#0D9488]">
-                                <i class="fa-solid fa-robot text-xl"></i>
+                                class="w-16 h-16 rounded-xl bg-red-50 border border-red-100 flex items-center justify-center text-[#C00000] shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                <!-- 图标：自动化/机器人 -->
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                                </svg>
                             </div>
-                            <span class="text-xs font-semibold text-gray-400">自动化</span>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-1 text-[#C00000]">自动化流水线</h3>
+                                <p class="text-xs text-gray-500 leading-relaxed">AI 文案批量生产<br>自动分发与回填</p>
+                            </div>
                         </div>
-                        <div class="flex flex-col items-center gap-2">
+
+                        <!-- 3. 飞书联动 -->
+                        <div
+                            class="glass-card flex-1 h-32 rounded-2xl flex items-center p-6 gap-5 group cursor-default">
                             <div
-                                class="w-12 h-12 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-600">
-                                <i class="fa-solid fa-shield-halved text-xl"></i>
+                                class="w-16 h-16 rounded-xl bg-[#3370FF]/10 border border-[#3370FF]/20 flex items-center justify-center text-[#3370FF] shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                <!-- 图标：表格/协同 -->
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
+                                </svg>
                             </div>
-                            <span class="text-xs font-semibold text-gray-400">数据安全</span>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-1">飞书协同</h3>
+                                <p class="text-xs text-gray-500 leading-relaxed">多维表格深度集成<br>数据资产沉淀</p>
+                            </div>
                         </div>
+
                     </div>
 
                 </div>
