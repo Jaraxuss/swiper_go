@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>影刀RPA简介</title>
+    <script src="https://unpkg.com/@t-agent/cdn@0.0.1/tailwind@4.js"></script>
+    <link href="https://unpkg.com/@t-agent/cdn@0.0.1/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../lib/fonts/fonts.css" rel="stylesheet" />
+    <style>
+        /* Custom Font Stacks */
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Hide scrollbars for clean presentation */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Custom Red Color */
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .border-rpa-red {
+            border-color: #C00000;
+        }
+
+        /* Mechanical Arm Animation */
+        @keyframes rotate-arm {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(-15deg);
+            }
+        }
+
+        .animate-arm-base {
+            animation: rotate-arm 4s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+
+        /* Flow Animation */
+        @keyframes flow-dash {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+
+        .animate-flow-line {
+            stroke-dasharray: 5;
+            animation: flow-dash 1s linear infinite;
+        }
+
+        /* Floating Effect for Cards */
+        .hover-float {
+            transition: transform 0.3s ease;
+        }
+
+        .hover-float:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-gray-900">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+
+            <!-- Surface Background -->
+            <div id="slide-container"
+                class="w-[1280px] h-[720px] box-border flex flex-col relative overflow-hidden bg-[#F8F9FA] px-12 py-8">
+
+                <!-- Global Layer (Decorative) -->
+                <div
+                    class='absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-[#C00000]/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 z-0 pointer-events-none'>
+                </div>
+
+                <!-- Header Section -->
+                <header class="relative z-20 mb-4 shrink-0 flex justify-between items-start">
+                    <div>
+                        <h1 class="text-4xl font-bold tracking-tight text-gray-900 relative inline-block">
+                            影刀RPA简介
+                            <!-- Decorative Underline -->
+                            <span class="absolute -bottom-3 left-0 w-16 h-1.5 bg-rpa-red rounded-full"></span>
+                        </h1>
+                    </div>
+                </header>
+
+                <!-- Main Content Grid -->
+                <div class="flex-1 flex flex-col relative z-20 h-full min-h-0">
+
+                    <!-- Description Text -->
+                    <div class="mb-6 text-xl leading-relaxed text-gray-600 max-w-5xl">
+                        影刀RPA是一款软件机器人，能模拟人的各种操作，在任何应用程序上进行鼠标点击、键盘输入、信息读取等操作，释放各种
+                        <span class="text-rpa-red font-bold underline decoration-2 underline-offset-4">有逻辑规则</span>、
+                        <span class="text-rpa-red font-bold underline decoration-2 underline-offset-4">大量的</span>、
+                        <span class="text-rpa-red font-bold underline decoration-2 underline-offset-4">重复性</span>
+                        的人工工作。
+                    </div>
+
+                    <!-- Comparison Section -->
+                    <div class="flex items-center justify-between gap-6 flex-1 h-full min-h-0">
+
+                        <!-- LEFT: Physical Robot (Workshop) -->
+                        <div class="flex-1 h-full flex flex-col hover-float group">
+                            <h3 class="text-lg font-bold text-gray-700 mb-4 pl-2 border-l-4 border-gray-400">车间上的非主观决策工作
+                            </h3>
+
+                            <div
+                                class="flex-1 bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden relative flex flex-col">
+                                <!-- Visual Scene: Factory -->
+                                <div
+                                    class="flex-1 bg-gray-100 relative flex items-center justify-center overflow-hidden">
+
+                                    <!-- Physical Robot Background -->
+                                    <img src="robot_arms.png"
+                                        class="absolute inset-0 w-full h-full object-fill opacity-100 mix-blend-multiply"
+                                        alt="车间机械臂背景"
+                                        onerror="this.src='https://placehold.co/600x400/e5e7eb/a3a3a3?text=robot_arms.png'; this.classList.remove('mix-blend-multiply');" />
+                                </div>
+
+                                <!-- Caption -->
+                                <div class="p-4 bg-gray-50 border-t border-gray-100">
+                                    <p class="text-center text-gray-600 font-medium">
+                                        物理机器人（机械手臂）<br>释放<span class="text-blue-600 font-bold">蓝领</span>的生产力
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MIDDLE: Arrow -->
+                        <div class="w-16 flex items-center justify-center text-gray-300">
+                            <i class="fa-solid fa-arrow-right text-6xl"></i>
+                        </div>
+
+                        <!-- RIGHT: Software Robot (RPA) -->
+                        <div class="flex-1 h-full flex flex-col hover-float group">
+                            <h3 class="text-lg font-bold text-gray-700 mb-4 pl-2 border-l-4 border-rpa-red">影刀RPA解决
+                                PC/手机上的工作</h3>
+
+                            <div
+                                class="flex-1 bg-white rounded-xl border border-red-100 shadow-lg overflow-hidden relative flex flex-col">
+                                <!-- Visual Scene: IDE Interface -->
+                                <div class="flex-1 bg-white relative flex flex-col p-4">
+                                    <!-- IDE Header -->
+                                    <div class="h-6 w-full bg-gray-100 rounded mb-2 flex items-center px-2 gap-2">
+                                        <div class="flex gap-1">
+                                            <div class="w-2 h-2 rounded-full bg-red-400"></div>
+                                            <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                                            <div class="w-2 h-2 rounded-full bg-green-400"></div>
+                                        </div>
+                                        <div class="text-[10px] text-gray-400 ml-2">我的第一个应用</div>
+                                    </div>
+
+                                    <!-- IDE Body -->
+                                    <div class="flex flex-1 gap-2 min-h-0">
+                                        <!-- Sidebar (Commands) -->
+                                        <div
+                                            class="w-1/4 bg-gray-50 rounded border border-gray-100 p-2 flex flex-col gap-2">
+                                            <div
+                                                class="w-full h-6 bg-white border border-gray-200 rounded flex items-center px-1 gap-1 shadow-sm">
+                                                <div
+                                                    class="w-3 h-3 bg-blue-100 rounded text-blue-500 flex items-center justify-center text-[8px]">
+                                                    <i class="fa-solid fa-mouse-pointer"></i>
+                                                </div>
+                                                <div class="h-1 w-8 bg-gray-200 rounded"></div>
+                                            </div>
+                                            <div
+                                                class="w-full h-6 bg-white border border-gray-200 rounded flex items-center px-1 gap-1 shadow-sm">
+                                                <div
+                                                    class="w-3 h-3 bg-green-100 rounded text-green-500 flex items-center justify-center text-[8px]">
+                                                    <i class="fa-brands fa-excel"></i>
+                                                </div>
+                                                <div class="h-1 w-10 bg-gray-200 rounded"></div>
+                                            </div>
+                                            <div
+                                                class="w-full h-6 bg-white border border-gray-200 rounded flex items-center px-1 gap-1 shadow-sm">
+                                                <div
+                                                    class="w-3 h-3 bg-orange-100 rounded text-orange-500 flex items-center justify-center text-[8px]">
+                                                    <i class="fa-solid fa-keyboard"></i>
+                                                </div>
+                                                <div class="h-1 w-6 bg-gray-200 rounded"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Canvas (Flowchart) -->
+                                        <div
+                                            class="flex-1 bg-gray-50 rounded border border-gray-100 relative overflow-hidden flex items-center justify-center">
+                                            <!-- Grid Pattern -->
+                                            <div class="absolute inset-0 opacity-20"
+                                                style="background-image: linear-gradient(#ccc 1px, transparent 1px), linear-gradient(90deg, #ccc 1px, transparent 1px); background-size: 20px 20px;">
+                                            </div>
+
+                                            <!-- Flow Nodes -->
+                                            <div
+                                                class="relative z-10 flex flex-col gap-6 items-center w-full max-w-[180px]">
+                                                <!-- Node 1 -->
+                                                <div
+                                                    class="w-full bg-white border border-gray-200 rounded px-3 py-2 shadow-sm flex items-center gap-2">
+                                                    <i class="fa-solid fa-globe text-blue-500 text-xs"></i>
+                                                    <span class="text-xs text-gray-600 font-medium">打开网页</span>
+                                                </div>
+
+                                                <!-- Connecting Line 1 -->
+                                                <div class="absolute top-[34px] left-1/2 w-px h-6 bg-gray-300"></div>
+
+                                                <!-- Node 2 (Highlighted) -->
+                                                <div
+                                                    class="w-full bg-white border-l-4 border-rpa-red rounded px-3 py-2 shadow-md flex items-center gap-2 scale-105 transform">
+                                                    <i class="fa-solid fa-bullseye text-rpa-red text-xs"></i>
+                                                    <span class="text-xs text-gray-800 font-bold">点击网页元素</span>
+                                                    <!-- Cursor Icon -->
+                                                    <i
+                                                        class="fa-solid fa-arrow-pointer text-gray-800 absolute -right-3 bottom-0 text-lg drop-shadow-md"></i>
+                                                </div>
+
+                                                <!-- Connecting Line 2 -->
+                                                <div class="absolute top-[90px] left-1/2 w-px h-6 bg-gray-300"></div>
+
+                                                <!-- Node 3 -->
+                                                <div
+                                                    class="w-full bg-white border border-gray-200 rounded px-3 py-2 shadow-sm flex items-center gap-2">
+                                                    <i class="fa-solid fa-file-excel text-green-600 text-xs"></i>
+                                                    <span class="text-xs text-gray-600 font-medium">写入数据</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Caption -->
+                                <div class="p-4 bg-red-50 border-t border-red-100">
+                                    <p class="text-center text-gray-600 font-medium">
+                                        影刀软件机器人<br>释放<span class="text-rpa-red font-bold">白领</span>的生产力
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/slide-core.js"></script>
+</body>
+
+</html>
