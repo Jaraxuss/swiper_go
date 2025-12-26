@@ -3,11 +3,12 @@
  * Add or remove slides here. Supports comments and easy reordering.
  */
 const slideConfig = [
-    "pages/2 启动会首页.html",
-    "pages/7 影刀能做什么.html",
-    "pages/8 影刀能做什么2.html",
-    "pages/9 小试影刀.html",
-    "pages/12 更多场景案例1.html",
+    "pages/启动会首页.html",
+    "pages/影刀RPA简介.html",
+    "pages/影刀能做什么.html",
+    "pages/影刀能做什么2.html",
+    "pages/小试影刀.html",
+    "pages/核心场景相关案例.html",
     "pages/直播自动化.html",
 ];
 
