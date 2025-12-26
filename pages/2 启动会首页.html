@@ -154,32 +154,7 @@
         </div>
     </div>
 
-    <script>
-        function fitSlide() {
-            const shell = document.getElementById('page-shell');
-            const wrap = document.getElementById('slide-scale-wrapper');
-            if (!shell || !wrap) return;
-            const sw = 1280, sh = 720;
-            const ww = shell.clientWidth, wh = shell.clientHeight;
-            const scale = Math.min(ww / sw, wh / sh);
-            wrap.style.transform = `scale(${scale})`;
-            wrap.style.transformOrigin = 'center center';
-        }
-        window.addEventListener('resize', fitSlide);
-        window.addEventListener('load', fitSlide);
-        fitSlide();
-
-        document.addEventListener('keydown', (event) => {
-            const isNextKey = event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ';
-            const isPrevKey = event.key === 'ArrowLeft' || event.key === 'PageUp';
-            if (isNextKey) {
-                window.parent.postMessage({ type: 'SWIPER_NEXT' }, '*');
-                if (event.key === ' ') event.preventDefault();
-            } else if (isPrevKey) {
-                window.parent.postMessage({ type: 'SWIPER_PREV' }, '*');
-            }
-        });
-    </script>
+    <script src="../js/slide-core.js"></script>
 </body>
 
 </html>
