@@ -132,43 +132,12 @@
     onclick="this.style.display='none'">
     <img id="overlay-img" class="max-w-[90%] max-h-[90%] object-contain" src="" alt="overlay">
   </div>
+  <script src="../js/slide-core.js"></script>
   <script>
-    // === 1. 动态缩放逻辑（保留 1920x1080 基准） ===
-    function fitSlide() {
-      const shell = document.getElementById('page-shell');
-      const wrap = document.getElementById('slide-scale-wrapper');
-      if (!shell || !wrap) return;
-      const sw = 1280, sh = 720;
-      const ww = shell.clientWidth, wh = shell.clientHeight;
-      const scale = Math.min(ww / sw, wh / sh);
-      wrap.style.transform = `scale(${scale})`;
-      wrap.style.transformOrigin = 'center center';
-    }
-    window.addEventListener('resize', fitSlide);
-    window.addEventListener('load', fitSlide);
     function openOverlay(src) {
       document.getElementById('overlay-img').src = src;
       document.getElementById('overlay').style.display = 'flex';
     }
-
-    // 立即执行一次 fitSlide()，确保在浏览器渲染时就应用缩放
-    fitSlide();
-
-    // 监听窗口大小变化
-    window.addEventListener('resize', fitSlide);
-    // **注意：移除了 window.addEventListener('load', fitSlide); **
-
-    // === 2. 键盘切换逻辑（保持不变） ===
-    document.addEventListener('keydown', (event) => {
-      const isNextKey = event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ';
-      const isPrevKey = event.key === 'ArrowLeft' || event.key === 'PageUp';
-      if (isNextKey) {
-        window.parent.postMessage({ type: 'SWIPER_NEXT' }, '*');
-        if (event.key === ' ') event.preventDefault();
-      } else if (isPrevKey) {
-        window.parent.postMessage({ type: 'SWIPER_PREV' }, '*');
-      }
-    });
   </script>
 </body>
 
