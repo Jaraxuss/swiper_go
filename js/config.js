@@ -24,6 +24,9 @@ const slideConfig = [
     "pages/更多场景案例2.html",
     "pages/场景_财务部痛点.html",
     "pages/场景_财务部方案.html",
+
+    "pages/从何开始.html",
+    "pages/学习路径规划.html",
 ];
 
 // If you need to export this for potential build tools, you can add:
