@@ -8,7 +8,12 @@ const slideConfig = [
     "pages/影刀能做什么.html",
     "pages/影刀能做什么2.html",
     "pages/小试影刀.html",
-    "pages/核心场景相关案例.html",
+    "pages/核心场景相关案例1.html",
+    "pages/小红书笔记批量采集.html",
+    "pages/影刀AI Power介绍.html",
+    "pages/AI音频克隆.html",
+    "pages/核心场景相关案例2.html",
+    "pages/核心场景相关案例3.html",
     "pages/直播自动化.html",
 ];
 

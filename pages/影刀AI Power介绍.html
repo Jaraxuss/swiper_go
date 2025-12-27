@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>影刀 AI Power 介绍</title>
+    <script src="https://unpkg.com/@t-agent/cdn@0.0.1/tailwind@4.js"></script>
+    <link href="https://unpkg.com/@t-agent/cdn@0.0.1/font-awesome/all.min.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.cn/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
+        rel="stylesheet" />
+    <style>
+        /* 字体设置 */
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        /* 隐藏滚动条 */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 影刀品牌色 */
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        /* 动画逻辑 */
+        @keyframes fade-in-up {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-enter {
+            animation: fade-in-up 0.8s ease-out forwards;
+        }
+
+        /* 视频容器美化 */
+        .video-wrapper {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 6px solid white;
+            transition: transform 0.3s ease;
+        }
+
+        .video-wrapper:hover {
+            transform: scale(1.02);
+        }
+
+        /* 玻璃拟态卡片 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* AI 专属渐变字 */
+        .text-gradient-ai {
+            background: linear-gradient(135deg, #C00000 0%, #FF6B6B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gray-900 flex items-center justify-center h-screen w-screen selection:bg-red-100 selection:text-red-800 font-sans">
+    <div id="page-shell" class="flex items-center justify-center h-full w-full">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+
+            <!-- 画布容器 -->
+            <div id="slide-container"
+                class="w-full h-full box-border flex flex-col relative overflow-hidden bg-[#F8F9FA] p-12">
+
+                <!-- 背景装饰：左上角紫色光晕（代表智能），右下角红色光晕 -->
+                <div
+                    class="absolute -top-20 -left-20 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-3xl pointer-events-none">
+                </div>
+                <div
+                    class="absolute -bottom-20 -right-20 w-[500px] h-[500px] bg-red-500/5 rounded-full blur-3xl pointer-events-none">
+                </div>
+
+                <!-- 头部标题区 -->
+                <header class="relative z-20 mb-8 shrink-0">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-1.5 h-8 bg-gradient-to-b from-[#C00000] to-purple-600 rounded-full"></div>
+                        <h1 class="text-4xl font-bold tracking-tight text-gray-900">
+                            影刀 AI Power：给机器人装上“大脑”
+                        </h1>
+                    </div>
+                    <p class="text-gray-500 ml-5 text-sm font-medium tracking-wide uppercase">
+                        Empowering RPA with Generative AI Capabilities
+                    </p>
+                </header>
+
+                <!-- 主要内容区：左右布局 -->
+                <div class="flex-1 flex gap-10 relative z-20 h-full min-h-0">
+
+                    <!-- 左侧：核心能力提炼 (1/2 宽度) -->
+                    <div class="w-1/2 flex flex-col gap-6 justify-center pb-8">
+
+                        <!-- 核心观点 -->
+                        <div class="animate-enter" style="animation-delay: 0.1s;">
+                            <p class="text-xl text-gray-700 font-medium leading-relaxed">
+                                传统 RPA 只能做“搬运工”，<br>
+                                <span class="text-gradient-ai font-bold text-2xl">AI Power</span> 让它具备了理解与创作能力。
+                            </p>
+                        </div>
+
+                        <!-- 功能卡片 1: 开箱即用 -->
+                        <div class="glass-card rounded-2xl p-5 shadow-sm hover:shadow-md transition-all animate-enter"
+                            style="animation-delay: 0.2s;">
+                            <div class="flex items-start gap-4">
+                                <div
+                                    class="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600 shrink-0 mt-1">
+                                    <i class="fa-solid fa-box-open text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-gray-800 mb-1">主流大模型开箱即用</h3>
+                                    <p class="text-sm text-gray-500 leading-relaxed">
+                                        内置 <span class="font-bold">ChatGPT、MiniMax、通义千问、文心一言</span>
+                                        等顶尖模型。无需复杂代码配置，拖拽指令即可直接对话。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 功能卡片 2: 内容生成 (严料坊核心需求) -->
+                        <div class="glass-card rounded-2xl p-5 shadow-sm hover:shadow-md transition-all animate-enter border-l-4 border-l-[#C00000]"
+                            style="animation-delay: 0.3s;">
+                            <div class="flex items-start gap-4">
+                                <div
+                                    class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center text-[#C00000] shrink-0 mt-1">
+                                    <i class="fa-solid fa-pen-nib text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-gray-800 mb-1">自动化内容创作流水线</h3>
+                                    <p class="text-sm text-gray-500 leading-relaxed">
+                                        <span class="bg-yellow-100 text-yellow-800 px-1 rounded">RPA抓热点</span> ➔ <span
+                                            class="bg-purple-100 text-purple-800 px-1 rounded">AI写文案</span> ➔ <span
+                                            class="bg-blue-100 text-blue-800 px-1 rounded">飞书多维表归档</span>。一键生成高质量小红书/抖音脚本。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 功能卡片 3: 非结构化数据处理 -->
+                        <div class="glass-card rounded-2xl p-5 shadow-sm hover:shadow-md transition-all animate-enter"
+                            style="animation-delay: 0.4s;">
+                            <div class="flex items-start gap-4">
+                                <div
+                                    class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 mt-1">
+                                    <i class="fa-solid fa-file-invoice text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-gray-800 mb-1">智能理解非结构化数据</h3>
+                                    <p class="text-sm text-gray-500 leading-relaxed">
+                                        自动提取图片、PDF中的关键信息，智能分析评论区情感倾向，辅助选品决策。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- 右侧：视频播放器 (1/2 宽度) -->
+                    <div class="w-1/2 flex items-center justify-center animate-enter pl-4"
+                        style="animation-delay: 0.5s;">
+                        <div
+                            class="video-wrapper w-full rounded-xl overflow-hidden bg-black aspect-[16/10] relative group">
+                            <!-- 视频源：文件名约定为 影刀AI Power介绍.mp4 -->
+                            <video id="demo-video" class="w-full h-full object-cover" controls>
+                                <source src="影刀AI Power介绍.mp4" type="video/mp4">
+                                <div class="flex flex-col items-center justify-center h-full text-white">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-4xl mb-2 opacity-50"></i>
+                                    <span class="text-sm opacity-50">请放置文件：影刀AI Power介绍.mp4</span>
+                                </div>
+                            </video>
+
+                            <!-- 顶部模拟窗口栏 -->
+                            <div
+                                class="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-black/60 to-transparent flex items-center px-3 gap-1.5 pointer-events-none">
+                                <div class="w-2.5 h-2.5 rounded-full bg-[#FF5F57]"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-[#28C840]"></div>
+                                <span class="ml-2 text-[10px] text-white/50 font-mono">AI_Power_Demo.rpa</span>
+                            </div>
+
+                            <!-- 播放按钮遮罩 -->
+                            <div id="play-overlay"
+                                class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors pointer-events-none">
+                                <div
+                                    class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fa-solid fa-play text-white ml-1 text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 底部页码 -->
+                <footer
+                    class="absolute bottom-10 left-12 right-12 flex justify-between items-center text-[10px] text-gray-400 font-bold tracking-widest uppercase border-t border-gray-200 pt-4">
+                    <div>影刀RPA · 严料坊内容生产流水线</div>
+                    <div class="flex items-center gap-2">
+                        <span>AI POWER</span>
+                        <span class="w-8 h-px bg-gray-300"></span>
+                        PAGE 06
+                    </div>
+                </footer>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/slide-core.js"></script>
+</body>
+
+</html>
