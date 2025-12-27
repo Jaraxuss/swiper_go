@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RPA 解决方案</title>
+    <script src="https://unpkg.com/@t-agent/cdn@0.0.1/tailwind@4.js"></script>
+    <link href="https://unpkg.com/@t-agent/cdn@0.0.1/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../lib/fonts/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        /* 动画 */
+        @keyframes fade-in-right {
+            0% {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-item {
+            opacity: 0;
+            animation: fade-in-right 0.5s ease-out forwards;
+        }
+
+        /* 视频容器美化 */
+        .video-wrapper {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 6px solid white;
+            transition: transform 0.3s ease;
+        }
+
+        .video-wrapper:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gray-900 flex items-center justify-center h-screen w-screen selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="flex items-center justify-center h-full w-full">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+
+            <!-- 画布容器 -->
+            <div id="slide-container"
+                class="w-full h-full box-border flex flex-col relative overflow-hidden bg-[#F8F9FA] p-12">
+
+                <!-- 装饰背景 -->
+                <div
+                    class='absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-[#C00000]/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 z-0 pointer-events-none'>
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-red-500/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 z-0 pointer-events-none">
+                </div>
+
+                <!-- 头部 -->
+                <header class="relative z-20 mb-6 shrink-0">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-1.5 h-8 bg-[#C00000] rounded-full"></div>
+                        <h1 class="text-4xl font-bold tracking-tight text-gray-900">
+                            影刀 RPA 业务场景 · <span class="text-[#C00000]">解决方案</span>
+                        </h1>
+                    </div>
+                </header>
+
+                <!-- 左右分栏布局 -->
+                <div class="flex-1 flex gap-8 relative z-20 h-full min-h-0">
+
+                    <!-- 左侧：场景列表 -->
+                    <div class="w-[58%] grid grid-cols-2 gap-3 content-start overflow-y-visible pr-2">
+
+                        <!-- 卡片 1: 资金管理 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-3.5 animate-item hover:shadow-md transition-shadow group"
+                            style="animation-delay: 0.1s;">
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <i
+                                    class="fa-solid fa-wallet text-[#C00000] text-sm group-hover:scale-110 transition-transform"></i>
+                                <h3 class="font-bold text-gray-800 text-base">资金管理</h3>
+                            </div>
+                            <div class="text-[11px] text-gray-500 leading-relaxed space-y-0.5 font-medium">
+                                <p>• 网银 U 盾自动化 / 批量操控</p>
+                                <p>• 银行流水下载对账</p>
+                                <p>• 自动生成余额明细 / 批量打款</p>
+                            </div>
+                        </div>
+
+                        <!-- 卡片 2: 凭证制作 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-3.5 animate-item hover:shadow-md transition-shadow group"
+                            style="animation-delay: 0.15s;">
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <i
+                                    class="fa-solid fa-file-invoice text-[#C00000] text-sm group-hover:scale-110 transition-transform"></i>
+                                <h3 class="font-bold text-gray-800 text-base">凭证制作</h3>
+                            </div>
+                            <div class="text-[11px] text-gray-500 leading-relaxed space-y-0.5 font-medium">
+                                <p>• 凭证自动录入</p>
+                                <p>• 收入成本审核</p>
+                                <p>• 下推生成总账凭证</p>
+                                <p>• 工资、社保生成金蝶单据</p>
+                            </div>
+                        </div>
+
+                        <!-- 卡片 3: 税务管理 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-3.5 animate-item hover:shadow-md transition-shadow group"
+                            style="animation-delay: 0.2s;">
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <i
+                                    class="fa-solid fa-building-columns text-[#C00000] text-sm group-hover:scale-110 transition-transform"></i>
+                                <h3 class="font-bold text-gray-800 text-base">税务管理</h3>
+                            </div>
+                            <div class="text-[11px] text-gray-500 leading-relaxed space-y-0.5 font-medium">
+                                <p>• 税务申报 / 进项认证 / 统计申报</p>
+                                <p>• 进项税发票抵扣与认证</p>
+                                <p>• 批量开专票 / 申请</p>
+                            </div>
+                        </div>
+
+                        <!-- 卡片 4: 经营数据 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-3.5 animate-item hover:shadow-md transition-shadow group"
+                            style="animation-delay: 0.25s;">
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <i
+                                    class="fa-solid fa-chart-line text-[#C00000] text-sm group-hover:scale-110 transition-transform"></i>
+                                <h3 class="font-bold text-gray-800 text-base">经营数据</h3>
+                            </div>
+                            <div class="text-[11px] text-gray-500 leading-relaxed space-y-0.5 font-medium">
+                                <p>• 各平台经营数据下载/截图</p>
+                                <p>• 批量下载同行财报分析</p>
+                                <p>• 经营日报自动生成</p>
+                            </div>
+                        </div>
+
+                        <!-- 卡片 5: 销售收款 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-3.5 animate-item hover:shadow-md transition-shadow group"
+                            style="animation-delay: 0.3s;">
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <i
+                                    class="fa-solid fa-money-bill-transfer text-[#C00000] text-sm group-hover:scale-110 transition-transform"></i>
+                                <h3 class="font-bold text-gray-800 text-base">销售收款</h3>
+                            </div>
+                            <div class="text-[11px] text-gray-500 leading-relaxed space-y-0.5 font-medium">
+                                <p>• ERP 订单/发货/发票推送</p>
+                                <p>• 自动填写/管理发票信息</p>
+                                <p>• 到款信息自动通知</p>
+                            </div>
+                        </div>
+
+                        <!-- 卡片 6: 采购付款 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-3.5 animate-item hover:shadow-md transition-shadow group"
+                            style="animation-delay: 0.35s;">
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <i
+                                    class="fa-solid fa-cart-shopping text-[#C00000] text-sm group-hover:scale-110 transition-transform"></i>
+                                <h3 class="font-bold text-gray-800 text-base">采购付款</h3>
+                            </div>
+                            <div class="text-[11px] text-gray-500 leading-relaxed space-y-0.5 font-medium">
+                                <p>• 发票信息提取 / 账单核对</p>
+                                <p>• 批量生成供应商对账单</p>
+                                <p>• OA 审批自动付款</p>
+                            </div>
+                        </div>
+
+                        <!-- 卡片 7: 取数做账 & 报表 -->
+                        <div class="col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-3.5 animate-item hover:shadow-md transition-shadow group"
+                            style="animation-delay: 0.4s;">
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <i
+                                    class="fa-solid fa-table text-[#C00000] text-sm group-hover:scale-110 transition-transform"></i>
+                                <h3 class="font-bold text-gray-800 text-base">总账报表 & 取数做账</h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-[11px] text-gray-500 leading-relaxed font-medium">
+                                <div>
+                                    <p>• 月初生成理财日报</p>
+                                    <p>• 各平台推广费用统计</p>
+                                    <p>• 盘点数据录入 / 利润核算</p>
+                                </div>
+                                <div>
+                                    <p>• 各类财务计算数据核对</p>
+                                    <p>• 会计报表自动生成批量</p>
+                                    <p>• 各套账处理</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- 右侧：视频演示区 (42% 宽度) -->
+                    <div class="w-[42%] h-full flex flex-col justify-center items-center animate-item pl-4"
+                        style="animation-delay: 0.5s;">
+                        <div
+                            class="video-wrapper w-full rounded-xl overflow-hidden bg-black aspect-[16/10] relative group">
+                            <!-- 视频源 -->
+                            <video id="demo-video" class="w-full h-full object-cover" controls>
+                                <source src="../assets/影刀财务机器人.mp4" type="video/mp4">
+                                <div class="flex flex-col items-center justify-center h-full text-white">
+                                    <i class="fa-solid fa-file-invoice-dollar text-4xl mb-2 opacity-50"></i>
+                                    <span class="text-sm opacity-50">请放置文件：影刀财务机器人.mp4</span>
+                                </div>
+                            </video>
+
+                            <!-- 顶部模拟窗口栏 -->
+                            <div
+                                class="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-black/60 to-transparent flex items-center px-3 gap-1.5 pointer-events-none">
+                                <div class="w-2.5 h-2.5 rounded-full bg-[#FF5F57]"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-[#28C840]"></div>
+                                <span class="ml-2 text-[10px] text-white/50 font-mono">Financial_Robot_Demo.rpa</span>
+                            </div>
+
+                            <!-- 播放按钮遮罩 -->
+                            <div id="play-overlay"
+                                class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors pointer-events-none">
+                                <div
+                                    class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fa-solid fa-play text-white ml-1 text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 视频下方说明 -->
+                        <div class="mt-4 text-center">
+                            <h3 class="text-gray-800 font-bold mb-1">财务机器人实机演示</h3>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/slide-core.js"></script>
+</body>
+
+</html>

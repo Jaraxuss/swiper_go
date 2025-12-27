@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>财务部门痛点</title>
+    <script src="https://unpkg.com/@t-agent/cdn@0.0.1/tailwind@4.js"></script>
+    <link href="https://unpkg.com/@t-agent/cdn@0.0.1/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../lib/fonts/fonts.css" rel="stylesheet" />
+    <style>
+        /* 字体设置 */
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        /* 隐藏滚动条 */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 影刀品牌色 */
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .border-rpa-red {
+            border-color: #C00000;
+        }
+
+        /* 依次入场动画 */
+        @keyframes slide-up-fade {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-item {
+            opacity: 0;
+            animation: slide-up-fade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gray-900 flex items-center justify-center h-screen w-screen selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="flex items-center justify-center h-full w-full">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+
+            <!-- 画布容器 -->
+            <div id="slide-container"
+                class="w-full h-full box-border flex flex-col relative overflow-hidden bg-[#F8F9FA] p-12">
+
+                <!-- 背景装饰：右上角红晕 -->
+                <div
+                    class='absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-[#C00000]/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 z-0 pointer-events-none'>
+                </div>
+                <!-- 背景装饰：左下角蓝晕 -->
+                <div
+                    class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 z-0 pointer-events-none">
+                </div>
+
+                <!-- 头部标题区 -->
+                <header class="relative z-20 mb-10 shrink-0">
+                    <div class="flex items-center gap-3 mb-2">
+                        <!-- 品牌竖条 -->
+                        <div class="w-1.5 h-8 bg-[#C00000] rounded-full"></div>
+                        <h1 class="text-4xl font-bold tracking-tight text-gray-900">
+                            财务部门 · <span class="text-[#C00000]">痛点</span>
+                        </h1>
+                    </div>
+                    <p class="text-gray-500 ml-5 text-sm font-medium tracking-wide">
+                        CHALLENGES IN FINANCIAL MANAGEMENT
+                    </p>
+                </header>
+
+                <!-- 主要内容：三列布局 -->
+                <!-- 调整：pb-12 增加底部空间，使视觉重心稍微上移一点点，避免沉底 -->
+                <div class="flex-1 grid grid-cols-3 gap-8 relative z-20 h-full min-h-0 items-center pb-12">
+
+                    <!-- 痛点 1 -->
+                    <!-- 调整：移除 max-h限制，让卡片高度自适应但保持统一。使用 h-[420px] 固定高度确保整齐 -->
+                    <!-- 布局调整：flex flex-col justify-center 确保内容垂直居中 -->
+                    <div class="h-[420px] bg-white rounded-2xl shadow-sm border border-gray-200 px-8 flex flex-col justify-center items-center text-center relative overflow-hidden group hover:shadow-lg hover:-translate-y-2 transition-all duration-300 animate-item"
+                        style="animation-delay: 0.1s;">
+                        <div class="absolute top-0 w-full h-1.5 bg-red-400"></div>
+
+                        <!-- Icon -->
+                        <div
+                            class="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center text-[#C00000] text-4xl mb-8 group-hover:scale-110 transition-transform duration-300 shadow-sm border border-red-100">
+                            <i class="fa-solid fa-hourglass-half"></i>
+                        </div>
+
+                        <h3 class="text-3xl font-bold text-gray-800 mb-6">数据处理效率低</h3>
+
+                        <!-- 描述文字：放大字体，增加行高，减少留白 -->
+                        <p class="text-gray-600 leading-relaxed text-lg font-medium px-2">
+                            财务数据来源多样，格式不统一，<br>
+                            导致<span class="font-bold text-red-700 bg-red-50 px-1 rounded">人工处理耗时长</span>，<br>
+                            时效性差。
+                        </p>
+                    </div>
+
+                    <!-- 痛点 2 -->
+                    <div class="h-[420px] bg-white rounded-2xl shadow-sm border border-gray-200 px-8 flex flex-col justify-center items-center text-center relative overflow-hidden group hover:shadow-lg hover:-translate-y-2 transition-all duration-300 animate-item"
+                        style="animation-delay: 0.2s;">
+                        <div class="absolute top-0 w-full h-1.5 bg-orange-400"></div>
+
+                        <!-- Icon -->
+                        <div
+                            class="w-24 h-24 bg-orange-50 rounded-full flex items-center justify-center text-orange-600 text-4xl mb-8 group-hover:scale-110 transition-transform duration-300 shadow-sm border border-orange-100">
+                            <i class="fa-solid fa-network-wired"></i>
+                        </div>
+
+                        <h3 class="text-3xl font-bold text-gray-800 mb-6">系统整合难度大</h3>
+
+                        <p class="text-gray-600 leading-relaxed text-lg font-medium px-2">
+                            跨系统整合和 API 开发成本高，<br>
+                            周期长，难以满足<br>
+                            <span class="font-bold text-orange-700 bg-orange-50 px-1 rounded">快速发展的市场需求</span>。
+                        </p>
+                    </div>
+
+                    <!-- 痛点 3 -->
+                    <div class="h-[420px] bg-white rounded-2xl shadow-sm border border-gray-200 px-8 flex flex-col justify-center items-center text-center relative overflow-hidden group hover:shadow-lg hover:-translate-y-2 transition-all duration-300 animate-item"
+                        style="animation-delay: 0.3s;">
+                        <div class="absolute top-0 w-full h-1.5 bg-blue-400"></div>
+
+                        <!-- Icon -->
+                        <div
+                            class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 text-4xl mb-8 group-hover:scale-110 transition-transform duration-300 shadow-sm border border-blue-100">
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                        </div>
+
+                        <h3 class="text-3xl font-bold text-gray-800 mb-6">运营成本上升</h3>
+
+                        <p class="text-gray-600 leading-relaxed text-lg font-medium px-2">
+                            人力成本优势减弱，<br>
+                            业务量增长导致<span class="font-bold text-blue-700 bg-blue-50 px-1 rounded">人工处理成本</span><br>
+                            难以控制，效益下降。
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/slide-core.js"></script>
+</body>
+
+</html>
