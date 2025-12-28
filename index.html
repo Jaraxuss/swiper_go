@@ -59,6 +59,93 @@
         .swiper-pagination-bullet {
             background: #fff;
         }
+
+        /* Page Overview Dock Styles */
+        #dock-trigger {
+            position: fixed;
+            right: 0;
+            top: 20%;
+            height: 60%;
+            width: 50px;
+            z-index: 9998;
+            /* background: rgba(255, 0, 0, 0.1); Debugging */
+        }
+
+        #page-dock {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%) translateX(120%);
+            /* Initially hidden */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            z-index: 9999;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            align-items: center;
+        }
+
+        #page-dock.active {
+            transform: translateY(-50%) translateX(0);
+        }
+
+        .dock-item {
+            position: relative;
+            width: 60px;
+            height: 33.75px;
+            /* 16:9 Aspect Ratio */
+            background: #000;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: width 0.1s ease, height 0.1s ease;
+            transform-origin: center right;
+            flex-shrink: 0;
+            border: 1px solid #666;
+        }
+
+        /* Tooltip for page name */
+        .dock-item::after {
+            content: attr(data-title);
+            position: absolute;
+            right: 120%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .dock-item:hover::after {
+            opacity: 1;
+        }
+
+        .dock-item.current-page {
+            border: 2px solid #007aff;
+        }
+
+        .dock-item iframe {
+            width: 1280px;
+            /* Base resolution for thumbs */
+            height: 720px;
+            transform: scale(0.0468);
+            /* 60 / 1280 */
+            transform-origin: 0 0;
+            border: none;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -73,6 +160,12 @@
         <!-- Add Navigation -->
         <div class="swiper-button-next"></div>
         <div class="swiper-button-prev"></div>
+    </div>
+
+    <!-- Config JS -->
+    <div id="dock-trigger"></div>
+    <div id="page-dock">
+        <!-- Dock items injected here -->
     </div>
 
     <!-- Config JS -->
@@ -146,6 +239,148 @@
                 swiper.slidePrev();
             }
         });
+
+        /* --- Page Overview Dock Implementation --- */
+        const dockTrigger = document.getElementById('dock-trigger');
+        const pageDock = document.getElementById('page-dock');
+        let dockTimeout;
+
+        function updateDock() {
+            pageDock.innerHTML = '';
+            const totalSlides = slideConfig.length;
+            const currentIndex = swiper.activeIndex;
+            const maxItems = 10;
+
+            // Calculate range: try to center current index
+            let start = Math.max(0, currentIndex - Math.floor(maxItems / 2));
+            let end = Math.min(totalSlides, start + maxItems);
+
+            // Adjust if at the end
+            if (end - start < maxItems) {
+                start = Math.max(0, end - maxItems);
+            }
+
+            for (let i = start; i < end; i++) {
+                const pageUrl = slideConfig[i];
+                // Extract filename for title
+                const pageTitle = pageUrl.split('/').pop().replace('.html', '');
+
+                const item = document.createElement('div');
+                item.className = 'dock-item';
+                if (i === currentIndex) item.classList.add('current-page');
+                item.dataset.index = i; // Save index for click
+                item.dataset.title = pageTitle;
+
+                const iframe = document.createElement('iframe');
+                iframe.src = encodeURI(pageUrl);
+                // Note: Loading many iframes can be heavy.
+                // Optimally we might want to use images, but user asked for "pages".
+                // We rely on browser caching.
+
+                item.appendChild(iframe);
+
+                item.onclick = (e) => {
+                    e.stopPropagation(); // Prevent bubbling issues
+                    swiper.slideTo(i);
+                    // focus current frame
+                    const activeSlide = swiper.slides[i];
+                    const activeIframe = activeSlide.querySelector('iframe');
+                    if (activeIframe && activeIframe.contentWindow) {
+                        activeIframe.contentWindow.focus();
+                    }
+                };
+
+                pageDock.appendChild(item);
+            }
+        }
+
+        // Show dock on hover right area
+        dockTrigger.addEventListener('mouseenter', () => {
+            clearTimeout(dockTimeout);
+            updateDock(); // Refresh content
+            pageDock.classList.add('active');
+        });
+
+        // Also keep open if hovering the dock itself
+        pageDock.addEventListener('mouseenter', () => {
+            clearTimeout(dockTimeout);
+        });
+
+        // Hide when leaving both
+        const hideDock = () => {
+            dockTimeout = setTimeout(() => {
+                pageDock.classList.remove('active');
+            }, 300);
+        };
+
+        dockTrigger.addEventListener('mouseleave', hideDock);
+        pageDock.addEventListener('mouseleave', hideDock);
+
+
+        // Fisheye / Magnification Effect
+        // Base size: 60px width
+        // Max size: 120px;
+        // Range: 150px vertical distance
+
+        pageDock.addEventListener('mousemove', (e) => {
+            const dockItems = pageDock.querySelectorAll('.dock-item');
+            const dockRect = pageDock.getBoundingClientRect();
+            const mouseY = e.clientY;
+
+            dockItems.forEach(item => {
+                const itemRect = item.getBoundingClientRect();
+                const itemCenterY = itemRect.top + itemRect.height / 2;
+                const dist = Math.abs(mouseY - itemCenterY);
+
+                let scale = 1;
+                // Max distance to affect
+                const maxDist = 150;
+
+                if (dist < maxDist) {
+                    // Calculate extra scale based on distance (using a sine curve for smoothness)
+                    // 0 dist => max scale (e.g. 2.0)
+                    // maxDist => 1.0 (no extra scale)
+                    const normalized = 1 - (dist / maxDist); // 0 to 1
+                    // Ease
+                    const ease = Math.sin(normalized * Math.PI / 2);
+                    scale = 1 + (ease * 1.5); // Max scale 2.5x
+                }
+
+                const baseWidth = 60;
+                const baseHeight = 33.75;
+
+                item.style.width = `${baseWidth * scale}px`;
+                item.style.height = `${baseHeight * scale}px`;
+
+                // Also scale the inner iframe so it fills the new size
+                // Current scale logic: transform: scale(0.0468);
+                // We need to adjust this scale or just let CSS width/height handle container
+                // but iframe transform is fixed.
+                // Actually, if we just resize the container, the iframe is still fixed size 1280x720 scaled down.
+                // We need to update iframe scale to match container size.
+                // Standard: 60px container -> 0.0468 scale.
+                // New Width container -> New Scale.
+                const newScale = (baseWidth * scale) / 1280;
+                const iframe = item.querySelector('iframe');
+                if (iframe) {
+                    iframe.style.transform = `scale(${newScale})`;
+                }
+            });
+        });
+
+        // Reset sizes when leaving
+        pageDock.addEventListener('mouseleave', () => {
+            const dockItems = pageDock.querySelectorAll('.dock-item');
+            dockItems.forEach(item => {
+                item.style.width = '';
+                item.style.height = '';
+                const iframe = item.querySelector('iframe');
+                if (iframe) {
+                    iframe.style.transform = 'scale(0.0468)';
+                }
+            });
+        });
+
     </script>
 </body>
 
