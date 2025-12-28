@@ -34,6 +34,7 @@ const slideConfig = [
     "pages/如何提需求1.html",
     "pages/如何提需求2.html",
 
+    "pages/里程碑.html",
     "pages/下一步行动.html",
     "pages/QA.html",
     "pages/感谢观看.html",

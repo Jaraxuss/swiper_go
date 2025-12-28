@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2026 春节前：自动化“核心链路”攻坚战</title>
+    <script src="../lib/tailwind@4.js"></script>
+    <link href="../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        /* 隐藏滚动条 */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Fragment 基础动画 (复用 slide-core.js 逻辑) */
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* 聚焦状态特效 - 使用变量 --theme-color */
+        .milestone-card {
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-color: rgba(0, 0, 0, 0.05);
+            /* 默认极淡边框 */
+        }
+
+        .fragment.focused .milestone-card {
+            transform: scale(1.05);
+            border-color: var(--theme-color);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .fragment.focused .milestone-icon-wrapper {
+            background-color: var(--theme-color);
+            color: white !important;
+            border-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 强制覆盖图标颜色，当聚焦时 */
+        .fragment.focused .milestone-icon-wrapper i {
+            color: white !important;
+        }
+
+        .fragment.focused .focus-tag {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            background-color: var(--theme-color);
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-900 bg-[#F8F9FA] overflow-hidden">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px] bg-white shadow-2xl">
+            <div id="slide-container" class="w-full h-full p-12 flex flex-col relative overflow-hidden bg-[#F8F9FA]">
+
+                <!-- Background Decoration -->
+                <div
+                    class="absolute -top-[100px] -right-[100px] w-[400px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(0,0,0,0.02)_0%,rgba(255,255,255,0)_70%)] z-0">
+                </div>
+
+                <!-- Header: 参考 直播自动化.html 的垂直红线风格 -->
+                <header class="relative z-20 mb-12 shrink-0">
+                    <div class="flex items-center gap-4 mb-2">
+                        <div class="w-1.5 h-10 bg-[#C00000] rounded-full"></div>
+                        <h1 class="text-4xl font-black text-gray-900 tracking-tight">
+                            2026 春节前自动化“核心链路”攻坚战
+                        </h1>
+                    </div>
+                    <p class="text-gray-500 ml-6 text-sm font-medium tracking-wide uppercase flex items-center gap-3">
+                        <span>Strategic Battle Plan</span>
+                        <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                        <span class="italic text-gray-400">“先跑通核心链路，后迭代效能产出”</span>
+                    </p>
+                </header>
+
+                <!-- Main Content: Milestone Steps (参考 学习路径规划.html 的卡片设计) -->
+                <main class="relative z-10 flex-1 flex items-center justify-center w-full">
+                    <div class="grid grid-cols-4 gap-8 w-full relative">
+
+                        <!-- Step 1: 人才筑基 -->
+                        <div class="fragment flex flex-col items-center group" style="--theme-color: #16A34A;">
+                            <div
+                                class="milestone-icon-wrapper w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-6 border border-gray-100 shadow-sm relative z-20 transition-all duration-500">
+                                <i class="fas fa-seedling text-2xl text-green-600 transition-colors"></i>
+                            </div>
+                            <div
+                                class="milestone-card bg-white p-7 rounded-[2rem] border border-gray-100 shadow-sm w-full text-center relative overflow-hidden">
+                                <h3 class="font-bold text-xl text-gray-900 mb-2">人才筑基</h3>
+                                <p class="font-bold text-xs mb-5 opacity-80 uppercase tracking-widest"
+                                    style="color: var(--theme-color);">
+                                    Seeds Program</p>
+                                <ul class="text-left text-sm text-gray-500 space-y-3">
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle mt-1" style="color: var(--theme-color);"></i>
+                                        <span>核心骨干100%初级认证</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle mt-1" style="color: var(--theme-color);"></i>
+                                        <span>掌握影刀基础逻辑操作</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: 大脑联调 -->
+                        <div class="fragment flex flex-col items-center group" style="--theme-color: #2563EB;">
+                            <div
+                                class="milestone-icon-wrapper w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-6 border border-gray-100 shadow-sm relative z-20 transition-all duration-500">
+                                <i class="fas fa-microchip text-2xl text-blue-600 transition-colors"></i>
+                            </div>
+                            <div
+                                class="milestone-card bg-white p-7 rounded-[2rem] border border-gray-100 shadow-sm w-full text-center relative overflow-hidden">
+                                <h3 class="font-bold text-xl text-gray-900 mb-2">大脑联调</h3>
+                                <p class="font-bold text-xs mb-5 opacity-80 uppercase tracking-widest"
+                                    style="color: var(--theme-color);">AI
+                                    Integration</p>
+                                <ul class="text-left text-sm text-gray-500 space-y-3">
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle mt-1" style="color: var(--theme-color);"></i>
+                                        <span>Gemini 3 Pro、MiniMax API 集成</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle mt-1" style="color: var(--theme-color);"></i>
+                                        <span>告别所有网页版人工搬运</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: 链路闭环 -->
+                        <div class="fragment flex flex-col items-center group" style="--theme-color: #0EA5E9;">
+                            <div
+                                class="milestone-icon-wrapper w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-6 border border-gray-100 shadow-sm relative z-20 transition-all duration-500">
+                                <i class="fas fa-sync text-2xl text-sky-500 transition-colors"></i>
+                            </div>
+                            <div
+                                class="milestone-card bg-white p-7 rounded-[2rem] border border-gray-100 shadow-sm w-full text-center relative overflow-hidden">
+                                <h3 class="font-bold text-xl text-gray-900 mb-2">链路闭环</h3>
+                                <p class="font-bold text-xs mb-5 opacity-80 uppercase tracking-widest"
+                                    style="color: var(--theme-color);">
+                                    Full Loop MVP</p>
+                                <ul class="text-left text-sm text-gray-500 space-y-3">
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle mt-1" style="color: var(--theme-color);"></i>
+                                        <span>全链路自动化内容发布</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle mt-1" style="color: var(--theme-color);"></i>
+                                        <span>采集-生成-剪辑-发布闭环原型</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: 数据归航 -->
+                        <div class="fragment flex flex-col items-center group" style="--theme-color: #9333EA;">
+                            <div
+                                class="milestone-icon-wrapper w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-6 border border-gray-100 shadow-sm relative z-20 transition-all duration-500">
+                                <i class="fas fa-rocket text-2xl text-purple-600 transition-colors"></i>
+                            </div>
+                            <div
+                                class="milestone-card bg-white p-7 rounded-[2rem] border border-gray-100 shadow-sm w-full text-center relative overflow-hidden">
+                                <h3 class="font-bold text-xl text-gray-900 mb-2">数据归航</h3>
+                                <p class="font-bold text-xs mb-5 opacity-80 uppercase tracking-widest"
+                                    style="color: var(--theme-color);">
+                                    Data Control Center</p>
+                                <ul class="text-left text-sm text-gray-500 space-y-3">
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle mt-1" style="color: var(--theme-color);"></i>
+                                        <span>数据自动回流飞书看板</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle mt-1" style="color: var(--theme-color);"></i>
+                                        <span>循环迭代，质量提升</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </main>
+
+                <!-- Footer Spacer -->
+                <footer class="mt-8 flex justify-end shrink-0">
+                    <div class="text-[10px] text-gray-300 font-bold tracking-widest uppercase flex items-center gap-2">
+                        <span class="w-8 h-px bg-gray-100"></span>
+                        Milestone 2026
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/slide-core.js"></script>
+    <script>
+        /**
+         * 聚焦特效逻辑：
+         * 监听 fragment 的 visible 变化，确保只有最后一个产生的 fragment 获得 'focused' 类。
+         */
+        function updateFocus() {
+            const fragments = document.querySelectorAll('.fragment');
+            let lastVisibleIdx = -1;
+
+            fragments.forEach((f, i) => {
+                if (f.classList.contains('visible')) {
+                    lastVisibleIdx = i;
+                }
+                f.classList.remove('focused');
+            });
+
+            if (lastVisibleIdx !== -1) {
+                fragments[lastVisibleIdx].classList.add('focused');
+
+                // 特殊处理 Step 3 的旋转动画
+                const icon = fragments[lastVisibleIdx].querySelector('i.fa-sync');
+                if (icon) {
+                    icon.classList.add('animate-spin');
+                    icon.style.animationDuration = '4s';
+                }
+            }
+        }
+
+        // 使用 MutationObserver 监听 class 变化
+        const observer = new MutationObserver((mutations) => {
+            const hasClassChange = mutations.some(m => m.attributeName === 'class');
+            if (hasClassChange) {
+                observer.disconnect();
+                updateFocus();
+                document.querySelectorAll('.fragment').forEach(f => {
+                    observer.observe(f, { attributes: true, attributeFilter: ['class'] });
+                });
+            }
+        });
+
+        document.querySelectorAll('.fragment').forEach(f => {
+            observer.observe(f, { attributes: true, attributeFilter: ['class'] });
+        });
+
+        window.addEventListener('DOMContentLoaded', updateFocus);
+    </script>
+</body>
+
+</html>
