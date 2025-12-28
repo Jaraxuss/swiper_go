@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>小试影刀</title>
+    <script src="https://unpkg.com/@t-agent/cdn@0.0.1/tailwind@4.js"></script>
+    <link href="https://unpkg.com/@t-agent/cdn@0.0.1/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../lib/fonts/fonts.css" rel="stylesheet" />
+    <style>
+        /* 字体设置 */
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        /* 隐藏滚动条 */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 影刀品牌色 */
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        /* 入场动画 */
+        @keyframes fade-in-up {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-enter {
+            animation: fade-in-up 0.8s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gray-900 flex items-center justify-center h-screen w-screen selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="flex items-center justify-center h-full w-full">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+
+            <!-- 画布容器 -->
+            <div id="slide-container"
+                class="w-full h-full box-border flex flex-col relative overflow-hidden bg-[#F8F9FA] p-12">
+
+                <!-- 极简背景装饰 (左上角红色光晕，还原原图氛围) -->
+                <div
+                    class="absolute -top-20 -left-20 w-[500px] h-[500px] bg-gradient-to-br from-red-500/5 to-transparent rounded-full blur-3xl pointer-events-none">
+                </div>
+
+                <!-- 主要内容区：居中展示 -->
+                <div class="flex-1 flex flex-col items-center justify-center z-10 relative">
+
+                    <!-- 主标题 -->
+                    <h1 class="text-[100px] font-black text-[#1F2937] tracking-tight leading-none mb-8 animate-enter">
+                        如何提需求
+                    </h1>
+
+                    <!-- 装饰线 -->
+                    <div class="w-32 h-2 bg-red-100 rounded-full mb-10 animate-enter" style="animation-delay: 0.1s;">
+                    </div>
+
+                    <!-- 副标题 (小字) -->
+                    <p class="text-4xl text-gray-500 font-medium tracking-widest animate-enter"
+                        style="animation-delay: 0.2s;">
+                        「不怕需求难，就怕需求“猜”」
+                    </p>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function fitSlide() {
+            const shell = document.getElementById('page-shell');
+            const wrap = document.getElementById('slide-scale-wrapper');
+            if (!shell || !wrap) return;
+            const sw = 1280, sh = 720;
+            const ww = shell.clientWidth, wh = shell.clientHeight;
+            const scale = Math.min(ww / sw, wh / sh);
+            wrap.style.transform = `scale(${scale})`;
+            wrap.style.transformOrigin = 'center center';
+        }
+        fitSlide();
+        window.addEventListener('resize', fitSlide);
+
+        document.addEventListener('keydown', (event) => {
+            const isNextKey = event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ';
+            const isPrevKey = event.key === 'ArrowLeft' || event.key === 'PageUp';
+            if (!isNextKey && !isPrevKey) return;
+            const currentURL = window.location.href;
+            const url = new URL(currentURL);
+            const pathParts = url.pathname.split('/');
+            const filenameWithExt = pathParts[pathParts.length - 1];
+            const match = filenameWithExt.match(/^(\d+)\.html$/);
+            if (!match) return;
+            let currentPageNumber = parseInt(match[1], 10);
+            let targetPageNumber;
+            if (isNextKey) targetPageNumber = currentPageNumber + 1;
+            else if (isPrevKey) targetPageNumber = Math.max(1, currentPageNumber - 1);
+            if (targetPageNumber === currentPageNumber) return;
+            const newFilename = `${targetPageNumber}.html`;
+            const newURL = currentURL.replace(filenameWithExt, newFilename);
+            window.location.href = newURL;
+            if (event.key === ' ') event.preventDefault();
+        });
+    </script>
+</body>
+
+</html>
