@@ -75,8 +75,11 @@
             position: fixed;
             right: 20px;
             top: 50%;
-            transform: translateY(-50%) translateX(120%);
-            /* Initially hidden */
+            /* Ghost Strategy: Always in position, just invisible */
+            transform: translateY(-50%);
+            opacity: 0.01;
+            pointer-events: none;
+
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -85,14 +88,17 @@
             backdrop-filter: blur(10px);
             border-radius: 16px;
             z-index: 9999;
-            transition: transform 0.3s ease;
+            transition: opacity 0.3s ease;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3);
             align-items: center;
+
+            will-change: opacity;
         }
 
         #page-dock.active {
-            transform: translateY(-50%) translateX(0);
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .dock-item {
@@ -114,6 +120,21 @@
 
             /* Performance */
             will-change: width, height;
+        }
+
+        /* Ghost Strategy for Items: Keep them rendered but invisible */
+        .dock-item.item-hidden {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            opacity: 0.01;
+            pointer-events: none;
+            z-index: -1;
+            /* Ensure dimensions are kept for browser painting */
+            width: 60px;
+            height: 33.75px;
+            margin: 0;
+            border: none;
         }
 
         /* Tooltip for page name */
@@ -256,73 +277,74 @@
             }
         });
 
-        /* --- Page Overview Dock Implementation --- */
+        /* --- Page Overview Dock Implementation (Ghost Strategy) --- */
         const dockTrigger = document.getElementById('dock-trigger');
         const pageDock = document.getElementById('page-dock');
         let dockTimeout;
 
-        // Caching: store iframe elements by page index or URL
-        const iframeCache = new Map();
+        // Persistent Pool: All items are created ONCE and kept alive.
+        const dockItemsPool = [];
 
-        function getCachedIframe(pageUrl) {
-            if (iframeCache.has(pageUrl)) {
-                return iframeCache.get(pageUrl);
-            }
-            const iframe = document.createElement('iframe');
-            iframe.src = encodeURI(pageUrl);
-            iframeCache.set(pageUrl, iframe);
-            return iframe;
-        }
+        function initDockPool() {
+            if (typeof slideConfig === 'undefined') return;
 
-        function updateDock() {
-            // Note: We are rebuilding dock content. 
-            // Better optimization would be to diff, but for <10 items, clearing and re-appending cached nodes is okay.
-            pageDock.innerHTML = '';
-
-            const totalSlides = slideConfig.length;
-            const currentIndex = swiper.activeIndex;
-            const maxItems = 10;
-
-            // Calculate range: try to center current index
-            let start = Math.max(0, currentIndex - Math.floor(maxItems / 2));
-            let end = Math.min(totalSlides, start + maxItems);
-
-            // Adjust if at the end
-            if (end - start < maxItems) {
-                start = Math.max(0, end - maxItems);
-            }
-
-            for (let i = start; i < end; i++) {
-                const pageUrl = slideConfig[i];
+            slideConfig.forEach((pageUrl, i) => {
                 const pageTitle = pageUrl.split('/').pop().replace('.html', '');
 
                 const item = document.createElement('div');
-                item.className = 'dock-item';
-                if (i === currentIndex) item.classList.add('current-page');
+                item.className = 'dock-item item-hidden'; // Start hidden (opacity 0)
                 item.dataset.index = i;
                 item.dataset.title = pageTitle;
 
-                // Use Cached Iframe
-                const iframe = getCachedIframe(pageUrl);
+                const iframe = document.createElement('iframe');
+                iframe.src = encodeURI(pageUrl);
                 item.appendChild(iframe);
 
                 item.onclick = (e) => {
                     e.stopPropagation();
                     swiper.slideTo(i);
-                    const activeSlide = swiper.slides[i];
-                    const activeIframe = activeSlide.querySelector('iframe');
-                    if (activeIframe && activeIframe.contentWindow) {
-                        activeIframe.contentWindow.focus();
-                    }
                 };
+
                 pageDock.appendChild(item);
-            }
+                dockItemsPool.push(item);
+            });
         }
+
+        function updateDock() {
+            const totalSlides = slideConfig.length;
+            const currentIndex = swiper.activeIndex;
+            const maxItems = 10;
+
+            let start = Math.max(0, currentIndex - Math.floor(maxItems / 2));
+            let end = Math.min(totalSlides, start + maxItems);
+
+            if (end - start < maxItems) {
+                start = Math.max(0, end - maxItems);
+            }
+
+            dockItemsPool.forEach((item, i) => {
+                // Ghost Logic: Toggle visibility via class (opacity/z-index)
+                // We DO NOT remove from DOM.
+                if (i >= start && i < end) {
+                    item.classList.remove('item-hidden');
+                    if (i === currentIndex) {
+                        item.classList.add('current-page');
+                    } else {
+                        item.classList.remove('current-page');
+                    }
+                } else {
+                    item.classList.add('item-hidden');
+                    item.classList.remove('current-page');
+                }
+            });
+        }
+
+        // Initialize once immediately
+        initDockPool();
 
         // Show dock on hover right area
         dockTrigger.addEventListener('mouseenter', () => {
             clearTimeout(dockTimeout);
-            // Docker is already populated by slideChange/init
             pageDock.classList.add('active');
         });
 
@@ -349,10 +371,14 @@
             if (rafId) cancelAnimationFrame(rafId);
 
             rafId = requestAnimationFrame(() => {
-                const dockItems = pageDock.querySelectorAll('.dock-item');
+                // Optimization: Ignore hidden items in calculation
+                // Note: querySelectorAll('.dock-item') gets all.
+                // We use our pool and check class for speed.
                 const mouseY = e.clientY;
 
-                dockItems.forEach(item => {
+                dockItemsPool.forEach(item => {
+                    if (item.classList.contains('item-hidden')) return;
+
                     const itemRect = item.getBoundingClientRect();
                     const itemCenterY = itemRect.top + itemRect.height / 2;
                     const dist = Math.abs(mouseY - itemCenterY);
@@ -366,7 +392,6 @@
                         scale = 1 + (ease * 1.5); // Max scale 2.5x
                     }
 
-                    // Update CSS variable instead of separate width/height/transform
                     item.style.setProperty('--scale', scale);
                 });
             });
@@ -375,8 +400,7 @@
         // Reset sizes when leaving
         pageDock.addEventListener('mouseleave', () => {
             if (rafId) cancelAnimationFrame(rafId);
-            const dockItems = pageDock.querySelectorAll('.dock-item');
-            dockItems.forEach(item => {
+            dockItemsPool.forEach(item => {
                 item.style.setProperty('--scale', 1);
             });
         });
