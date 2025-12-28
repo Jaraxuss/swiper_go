@@ -85,41 +85,7 @@
         </div>
     </div>
 
-    <script>
-        function fitSlide() {
-            const shell = document.getElementById('page-shell');
-            const wrap = document.getElementById('slide-scale-wrapper');
-            if (!shell || !wrap) return;
-            const sw = 1280, sh = 720;
-            const ww = shell.clientWidth, wh = shell.clientHeight;
-            const scale = Math.min(ww / sw, wh / sh);
-            wrap.style.transform = `scale(${scale})`;
-            wrap.style.transformOrigin = 'center center';
-        }
-        fitSlide();
-        window.addEventListener('resize', fitSlide);
-
-        document.addEventListener('keydown', (event) => {
-            const isNextKey = event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ';
-            const isPrevKey = event.key === 'ArrowLeft' || event.key === 'PageUp';
-            if (!isNextKey && !isPrevKey) return;
-            const currentURL = window.location.href;
-            const url = new URL(currentURL);
-            const pathParts = url.pathname.split('/');
-            const filenameWithExt = pathParts[pathParts.length - 1];
-            const match = filenameWithExt.match(/^(\d+)\.html$/);
-            if (!match) return;
-            let currentPageNumber = parseInt(match[1], 10);
-            let targetPageNumber;
-            if (isNextKey) targetPageNumber = currentPageNumber + 1;
-            else if (isPrevKey) targetPageNumber = Math.max(1, currentPageNumber - 1);
-            if (targetPageNumber === currentPageNumber) return;
-            const newFilename = `${targetPageNumber}.html`;
-            const newURL = currentURL.replace(filenameWithExt, newFilename);
-            window.location.href = newURL;
-            if (event.key === ' ') event.preventDefault();
-        });
-    </script>
+    <script src="../js/slide-core.js"></script>
 </body>
 
 </html>
