@@ -27,6 +27,12 @@ const slideConfig = [
 
     "pages/从何开始.html",
     "pages/学习路径规划.html",
+
+    "pages/答疑体系介绍1.html",
+    "pages/答疑体系介绍2.html",
+
+    "pages/如何提需求1.html",
+    "pages/如何提需求2.html",
 ];
 
 // If you need to export this for potential build tools, you can add:
