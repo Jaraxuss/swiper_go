@@ -1,323 +1,362 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>提出好需求</title>
-  <script src="https://unpkg.com/@t-agent/cdn@0.0.1/tailwind@4.js"></script>
-  <link href="https://unpkg.com/@t-agent/cdn@0.0.1/font-awesome/all.min.css" rel="stylesheet" />
-  <link href="../lib/fonts/fonts.css" rel="stylesheet" />
-  <style>
-    /* Custom Font Stacks */
-    .font-sans { font-family: 'Inter', 'Noto Sans SC', sans-serif; }
-    .font-mono { font-family: 'JetBrains Mono', monospace; }
-    
-    /* Hide scrollbars for clean presentation */
-    ::-webkit-scrollbar { display: none; }
-    
-    /* Custom Red Color */
-    .text-rpa-red { color: #C00000; }
-    .bg-rpa-red-light { background-color: #FEF2F2; }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>提出好需求</title>
+    <script src="https://unpkg.com/@t-agent/cdn@0.0.1/tailwind@4.js"></script>
+    <link href="https://unpkg.com/@t-agent/cdn@0.0.1/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../lib/fonts/fonts.css" rel="stylesheet" />
+    <style>
+        /* Custom Font Stacks */
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
 
-    /* Custom Animations */
-    @keyframes float-question {
-      0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
-      50% { transform: translateY(-10px) rotate(10deg); opacity: 1; }
-    }
-    .animate-float-q1 { animation: float-question 3s ease-in-out infinite; }
-    .animate-float-q2 { animation: float-question 4s ease-in-out infinite 1s; }
-    
-    /* Speech Bubble Triangle */
-    .speech-bubble::before {
-      content: '';
-      position: absolute;
-      left: -20px;
-      top: 50%;
-      transform: translateY(-50%);
-      border-width: 10px;
-      border-style: solid;
-      border-color: transparent white transparent transparent;
-      filter: drop-shadow(-2px 0 1px rgba(0,0,0,0.05));
-    }
-  </style>
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Hide scrollbars for clean presentation */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Custom Red Color */
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red-light {
+            background-color: #FEF2F2;
+        }
+
+        /* Custom Animations */
+        @keyframes float-question {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.6;
+            }
+
+            50% {
+                transform: translateY(-10px) rotate(10deg);
+                opacity: 1;
+            }
+        }
+
+        .animate-float-q1 {
+            animation: float-question 3s ease-in-out infinite;
+        }
+
+        .animate-float-q2 {
+            animation: float-question 4s ease-in-out infinite 1s;
+        }
+
+        /* Speech Bubble Triangle */
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 10px;
+            border-style: solid;
+            border-color: transparent white transparent transparent;
+            filter: drop-shadow(-2px 0 1px rgba(0, 0, 0, 0.05));
+        }
+    </style>
 </head>
+
 <body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
-  <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-gray-900">
-    <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
-      
-      <!-- Surface Background -->
-      <div id="slide-container" class="w-[1280px] h-[720px] box-border flex flex-col relative overflow-hidden bg-[#F8F9FA] p-12">
-        
-        <!-- Global Layer (Decorative) -->
-        <div class='absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-[#C00000]/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 z-0 pointer-events-none'></div>
-        
-        <!-- Header -->
-        <header class="relative z-20 mb-6 shrink-0">
-           <h1 class="text-4xl font-bold tracking-tight text-gray-900">
-             提出好需求：请给我们一张 <span class="text-rpa-red">「处方」</span>，而不是一句「我病了」
-           </h1>
-        </header>
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-gray-900">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
 
-        <!-- Main Content Grid -->
-        <div class="flex-1 flex flex-col relative z-20 h-full min-h-0">
-            
-            <div class="grid grid-cols-2 gap-8 h-full">
+            <!-- Surface Background -->
+            <div id="slide-container"
+                class="w-[1280px] h-[720px] box-border flex flex-col relative overflow-hidden bg-[#F8F9FA] p-12">
 
-                <!-- Left Column: Vague Requirement (模糊的需求) -->
-                <div class="bg-white rounded-xl border-t-4 border-red-500 shadow-lg p-6 flex flex-col">
-                    <div class="flex items-center gap-3 mb-4">
-                        <i class="fa-solid fa-circle-xmark text-2xl text-red-500"></i>
-                        <h2 class="text-2xl font-bold text-gray-800">模糊的需求</h2>
-                    </div>
-
-                    <!-- Scene Container -->
-                    <div class="flex-1 bg-red-50 rounded-lg p-4 border border-red-100 relative overflow-hidden flex items-center justify-center">
-                        
-                        <!-- Decorative Background Blob -->
-                        <div class="absolute w-64 h-64 bg-red-100/50 rounded-full blur-3xl -top-10 -left-10"></div>
-
-                        <div class="flex items-center gap-6 relative z-10 w-full px-4">
-                            <!-- Character: Confused Nurse (Icon Construction) -->
-                            <div class="flex flex-col items-center relative shrink-0">
-                                <!-- Question Marks -->
-                                <i class="fa-solid fa-question absolute -top-4 -left-4 text-3xl text-red-400 animate-float-q1"></i>
-                                <i class="fa-solid fa-question absolute top-0 -right-4 text-xl text-red-300 animate-float-q2"></i>
-                                
-                                <!-- Nurse Icon -->
-                                <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-md border-2 border-red-100">
-                                    <i class="fa-solid fa-user-nurse text-6xl text-gray-700"></i>
-                                </div>
-                                <!-- Expression -->
-                                <div class="absolute bottom-6 right-6 bg-white rounded-full w-8 h-8 flex items-center justify-center border border-red-100 shadow-sm">
-                                    <i class="fa-solid fa-face-frown text-xl text-red-500"></i>
-                                </div>
-                            </div>
-
-                            <!-- Speech Bubble -->
-                            <div class="speech-bubble relative bg-white p-5 rounded-2xl shadow-sm border border-red-200 flex-1">
-                                <p class="text-lg font-bold text-gray-700 leading-snug">
-                                    帮我做一个<br>
-                                    <span class="text-red-600">“自动办理出院结算”</span><br>
-                                    的机器人。
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <span class="font-bold text-lg text-gray-700">问题：</span>
-                        <p class="text-gray-600 text-base">就像对医生说“我难受”一样，信息太模糊，开发人员无法“对症下药”。</p>
-                    </div>
+                <!-- Global Layer (Decorative) -->
+                <div
+                    class='absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-[#C00000]/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 z-0 pointer-events-none'>
                 </div>
 
-                <!-- Right Column: Clear Requirement (清晰的需求) -->
-                <div class="bg-white rounded-xl border-t-4 border-green-500 shadow-lg p-6 flex flex-col">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-3">
-                            <i class="fa-solid fa-circle-check text-2xl text-green-500"></i>
-                            <h2 class="text-2xl font-bold text-gray-800">清晰的需求</h2>
+                <!-- Header -->
+                <header class="relative z-20 mb-6 shrink-0">
+                    <h1 class="text-4xl font-bold tracking-tight text-gray-900">
+                        提出好需求：请给我们一张 <span class="text-rpa-red">「处方」</span>，而不是一句「我病了」
+                    </h1>
+                </header>
+
+                <!-- Main Content Grid -->
+                <div class="flex-1 flex flex-col relative z-20 h-full min-h-0">
+
+                    <div class="grid grid-cols-2 gap-8 h-full">
+
+                        <!-- Left Column: Vague Requirement (模糊的需求) -->
+                        <div class="bg-white rounded-xl border-t-4 border-red-500 shadow-lg p-6 flex flex-col">
+                            <div class="flex items-center gap-3 mb-4">
+                                <i class="fa-solid fa-circle-xmark text-2xl text-red-500"></i>
+                                <h2 class="text-2xl font-bold text-gray-800">模糊的需求</h2>
+                            </div>
+
+                            <!-- Scene Container -->
+                            <div
+                                class="flex-1 bg-red-50 rounded-lg p-4 border border-red-100 relative overflow-hidden flex items-center justify-center">
+
+                                <!-- Decorative Background Blob -->
+                                <div class="absolute w-64 h-64 bg-red-100/50 rounded-full blur-3xl -top-10 -left-10">
+                                </div>
+
+                                <div class="flex items-center gap-6 relative z-10 w-full px-4">
+                                    <!-- Character: Confused Nurse (Icon Construction) -->
+                                    <div class="flex flex-col items-center relative shrink-0">
+                                        <!-- Question Marks -->
+                                        <i
+                                            class="fa-solid fa-question absolute -top-4 -left-4 text-3xl text-red-400 animate-float-q1"></i>
+                                        <i
+                                            class="fa-solid fa-question absolute top-0 -right-4 text-xl text-red-300 animate-float-q2"></i>
+
+                                        <!-- Nurse Icon -->
+                                        <div
+                                            class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-md border-2 border-red-100">
+                                            <i class="fa-solid fa-user-nurse text-6xl text-gray-700"></i>
+                                        </div>
+                                        <!-- Expression -->
+                                        <div
+                                            class="absolute bottom-6 right-6 bg-white rounded-full w-8 h-8 flex items-center justify-center border border-red-100 shadow-sm">
+                                            <i class="fa-solid fa-face-frown text-xl text-red-500"></i>
+                                        </div>
+                                    </div>
+
+                                    <!-- Speech Bubble -->
+                                    <div
+                                        class="speech-bubble relative bg-white p-5 rounded-2xl shadow-sm border border-red-200 flex-1">
+                                        <p class="text-lg font-bold text-gray-700 leading-snug">
+                                            帮我做一个<br>
+                                            <span class="text-red-600">“自动办理出院结算”</span><br>
+                                            的机器人。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <span class="font-bold text-lg text-gray-700">问题：</span>
+                                <p class="text-gray-600 text-base">就像对医生说“我难受”一样，信息太模糊，开发人员无法“对症下药”。</p>
+                            </div>
                         </div>
+
+                        <!-- Right Column: Clear Requirement (清晰的需求) -->
+                        <div class="bg-white rounded-xl border-t-4 border-green-500 shadow-lg p-6 flex flex-col">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <i class="fa-solid fa-circle-check text-2xl text-green-500"></i>
+                                    <h2 class="text-2xl font-bold text-gray-800">清晰的需求</h2>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-10 gap-4 flex-1 min-h-0">
+                                <!-- MOCK HIS SYSTEM UI (Left 60%) -->
+                                <div class="col-span-6 relative">
+                                    <!-- Browser Window -->
+                                    <div
+                                        class="w-full h-full bg-gray-100 rounded-lg border border-gray-300 shadow-inner flex flex-col overflow-hidden relative text-[10px]">
+                                        <!-- Browser Header -->
+                                        <div class="bg-[#2c5282] h-8 w-full flex items-center px-2 gap-2 shrink-0">
+                                            <div class="flex gap-1">
+                                                <div class="w-2 h-2 rounded-full bg-red-400"></div>
+                                                <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                                                <div class="w-2 h-2 rounded-full bg-green-400"></div>
+                                            </div>
+                                            <div
+                                                class="bg-white/20 h-5 w-2/3 rounded ml-2 flex items-center px-2 text-white/70 truncate">
+                                                his.hospital.com/login...
+                                            </div>
+                                        </div>
+
+                                        <!-- App Body -->
+                                        <div class="flex flex-1 min-h-0">
+                                            <!-- Sidebar -->
+                                            <div
+                                                class="w-16 bg-[#2d3748] flex flex-col gap-2 pt-2 items-center shrink-0">
+                                                <div class="w-10 h-2 bg-gray-600 rounded"></div>
+                                                <div class="w-10 h-2 bg-gray-600 rounded"></div>
+                                                <!-- Active Menu Item (Step 2 target) -->
+                                                <div
+                                                    class="w-full h-6 bg-[#4a5568] border-l-2 border-green-400 flex items-center justify-center">
+                                                    <div class="w-8 h-2 bg-white/50 rounded"></div>
+                                                </div>
+                                                <div class="w-10 h-2 bg-gray-600 rounded"></div>
+                                            </div>
+
+                                            <!-- Main Content -->
+                                            <div class="flex-1 bg-white p-3 relative">
+                                                <!-- Header Field (Step 1 target) -->
+                                                <div class="flex justify-between items-center mb-4 border-b pb-1">
+                                                    <div class="text-gray-500 font-bold">住院结算中心</div>
+                                                    <div class="flex items-center gap-1 text-gray-400">
+                                                        <i class="fa-solid fa-user"></i> Admin
+                                                    </div>
+                                                </div>
+
+                                                <!-- Form -->
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <div class="text-gray-500 mb-0.5">患者信息</div>
+                                                        <div
+                                                            class="w-full h-5 bg-gray-100 border border-gray-200 rounded">
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="text-gray-500 mb-0.5">床位号</div>
+                                                        <!-- Input (Step 3 target) -->
+                                                        <div
+                                                            class="w-2/3 h-6 bg-white border border-green-200 rounded shadow-sm ring-1 ring-green-100 flex items-center px-2 text-gray-600">
+                                                            A-102
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Button (Step 4 target) -->
+                                                    <div class="pt-2">
+                                                        <div
+                                                            class="w-16 h-6 bg-[#3182ce] rounded text-white flex items-center justify-center shadow-md">
+                                                            结算
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Popup Modal (Step 5 target) -->
+                                                <div
+                                                    class="absolute bottom-2 right-2 w-32 bg-white rounded shadow-lg border border-gray-200 p-2 z-10">
+                                                    <div class="flex justify-between items-center mb-1">
+                                                        <span class="font-bold text-red-500">余额不足</span>
+                                                        <i class="fa-solid fa-xmark text-gray-300"></i>
+                                                    </div>
+                                                    <div class="w-full h-1 bg-gray-100 mb-1"></div>
+                                                    <div class="text-gray-500 scale-90 origin-left">账户余额 &lt; 0</div>
+                                                    <div
+                                                        class="mt-2 w-full h-4 bg-red-50 text-red-600 border border-red-100 rounded flex items-center justify-center font-bold">
+                                                        打印催款单
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- OVERLAYS: SVG Arrows & Numbers -->
+                                    <div class="absolute inset-0 pointer-events-none z-20">
+                                        <!-- 1. Login/URL -->
+                                        <div
+                                            class="absolute top-1 left-28 bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow-md">
+                                            1</div>
+
+                                        <!-- 2. Sidebar -->
+                                        <div class="absolute top-16 -left-2 flex items-center">
+                                            <div
+                                                class="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow-md z-10">
+                                                2</div>
+                                            <svg class="w-8 h-8 text-green-500 -ml-1" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                            </svg>
+                                        </div>
+
+                                        <!-- 3. Bed No input -->
+                                        <div class="absolute top-28 left-40 flex items-center">
+                                            <svg class="w-12 h-6 text-green-500 rotate-180" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                            </svg>
+                                            <div
+                                                class="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow-md -ml-2">
+                                                3</div>
+                                        </div>
+
+                                        <!-- 4. Button -->
+                                        <div class="absolute top-40 left-12 flex items-center flex-col">
+                                            <div
+                                                class="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow-md mb-1">
+                                                4</div>
+                                            <svg class="w-4 h-6 text-green-500" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                                            </svg>
+                                        </div>
+
+                                        <!-- 5. Popup -->
+                                        <div class="absolute bottom-16 right-0 flex items-center">
+                                            <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                            </svg>
+                                            <div
+                                                class="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow-md -ml-1">
+                                                5</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Text Description (Right 40%) -->
+                                <div
+                                    class="col-span-4 text-sm text-gray-700 space-y-2 bg-green-50 rounded-lg p-3 font-medium border border-green-200 h-fit self-center">
+                                    <p class="font-bold text-green-700 mb-1 border-b border-green-200 pb-1">配文（如同开处方）：
+                                    </p>
+                                    <div class="flex gap-2">
+                                        <span
+                                            class="bg-green-100 text-green-700 rounded-full w-4 h-4 flex items-center justify-center text-[10px] shrink-0 mt-0.5">1</span>
+                                        <p class="leading-tight">登录 HIS 系统（网址...）</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <span
+                                            class="bg-green-100 text-green-700 rounded-full w-4 h-4 flex items-center justify-center text-[10px] shrink-0 mt-0.5">2</span>
+                                        <p class="leading-tight">点击左侧菜单「住院管理」</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <span
+                                            class="bg-green-100 text-green-700 rounded-full w-4 h-4 flex items-center justify-center text-[10px] shrink-0 mt-0.5">3</span>
+                                        <p class="leading-tight">在「床位号」输入框中，输入 Excel 里的床位号</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <span
+                                            class="bg-green-100 text-green-700 rounded-full w-4 h-4 flex items-center justify-center text-[10px] shrink-0 mt-0.5">4</span>
+                                        <p class="leading-tight">点击「结算」按钮</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <span
+                                            class="bg-green-100 text-green-700 rounded-full w-4 h-4 flex items-center justify-center text-[10px] shrink-0 mt-0.5">5</span>
+                                        <p class="leading-tight"><span class="text-rpa-red font-bold">判断</span>：若余额 &lt;
+                                            0，点击「打印催款单」</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
 
-                    <div class="grid grid-cols-10 gap-4 flex-1 min-h-0">
-                        <!-- MOCK HIS SYSTEM UI (Left 60%) -->
-                        <div class="col-span-6 relative">
-                            <!-- Browser Window -->
-                            <div class="w-full h-full bg-gray-100 rounded-lg border border-gray-300 shadow-inner flex flex-col overflow-hidden relative text-[10px]">
-                                <!-- Browser Header -->
-                                <div class="bg-[#2c5282] h-8 w-full flex items-center px-2 gap-2 shrink-0">
-                                    <div class="flex gap-1">
-                                        <div class="w-2 h-2 rounded-full bg-red-400"></div>
-                                        <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
-                                        <div class="w-2 h-2 rounded-full bg-green-400"></div>
-                                    </div>
-                                    <div class="bg-white/20 h-5 w-2/3 rounded ml-2 flex items-center px-2 text-white/70 truncate">
-                                        his.hospital.com/login...
-                                    </div>
-                                </div>
-                                
-                                <!-- App Body -->
-                                <div class="flex flex-1 min-h-0">
-                                    <!-- Sidebar -->
-                                    <div class="w-16 bg-[#2d3748] flex flex-col gap-2 pt-2 items-center shrink-0">
-                                        <div class="w-10 h-2 bg-gray-600 rounded"></div>
-                                        <div class="w-10 h-2 bg-gray-600 rounded"></div>
-                                        <!-- Active Menu Item (Step 2 target) -->
-                                        <div class="w-full h-6 bg-[#4a5568] border-l-2 border-green-400 flex items-center justify-center">
-                                            <div class="w-8 h-2 bg-white/50 rounded"></div>
-                                        </div>
-                                        <div class="w-10 h-2 bg-gray-600 rounded"></div>
-                                    </div>
-                                    
-                                    <!-- Main Content -->
-                                    <div class="flex-1 bg-white p-3 relative">
-                                        <!-- Header Field (Step 1 target) -->
-                                        <div class="flex justify-between items-center mb-4 border-b pb-1">
-                                            <div class="text-gray-500 font-bold">住院结算中心</div>
-                                            <div class="flex items-center gap-1 text-gray-400">
-                                                <i class="fa-solid fa-user"></i> Admin
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Form -->
-                                        <div class="space-y-3">
-                                            <div>
-                                                <div class="text-gray-500 mb-0.5">患者信息</div>
-                                                <div class="w-full h-5 bg-gray-100 border border-gray-200 rounded"></div>
-                                            </div>
-                                            <div>
-                                                <div class="text-gray-500 mb-0.5">床位号</div>
-                                                <!-- Input (Step 3 target) -->
-                                                <div class="w-2/3 h-6 bg-white border border-green-200 rounded shadow-sm ring-1 ring-green-100 flex items-center px-2 text-gray-600">
-                                                    A-102
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- Button (Step 4 target) -->
-                                            <div class="pt-2">
-                                                <div class="w-16 h-6 bg-[#3182ce] rounded text-white flex items-center justify-center shadow-md">
-                                                    结算
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Popup Modal (Step 5 target) -->
-                                        <div class="absolute bottom-2 right-2 w-32 bg-white rounded shadow-lg border border-gray-200 p-2 z-10">
-                                            <div class="flex justify-between items-center mb-1">
-                                                <span class="font-bold text-red-500">余额不足</span>
-                                                <i class="fa-solid fa-xmark text-gray-300"></i>
-                                            </div>
-                                            <div class="w-full h-1 bg-gray-100 mb-1"></div>
-                                            <div class="text-gray-500 scale-90 origin-left">账户余额 &lt; 0</div>
-                                            <div class="mt-2 w-full h-4 bg-red-50 text-red-600 border border-red-100 rounded flex items-center justify-center font-bold">
-                                                打印催款单
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- OVERLAYS: SVG Arrows & Numbers -->
-                            <div class="absolute inset-0 pointer-events-none z-20">
-                                <!-- 1. Login/URL -->
-                                <div class="absolute top-1 left-28 bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow-md">1</div>
-                                
-                                <!-- 2. Sidebar -->
-                                <div class="absolute top-16 -left-2 flex items-center">
-                                    <div class="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow-md z-10">2</div>
-                                    <svg class="w-8 h-8 text-green-500 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                                </div>
-
-                                <!-- 3. Bed No input -->
-                                <div class="absolute top-28 left-40 flex items-center">
-                                    <svg class="w-12 h-6 text-green-500 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                    <div class="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow-md -ml-2">3</div>
-                                </div>
-
-                                <!-- 4. Button -->
-                                <div class="absolute top-40 left-12 flex items-center flex-col">
-                                    <div class="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow-md mb-1">4</div>
-                                    <svg class="w-4 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-                                </div>
-
-                                <!-- 5. Popup -->
-                                <div class="absolute bottom-16 right-0 flex items-center">
-                                     <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                                     <div class="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow-md -ml-1">5</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Text Description (Right 40%) -->
-                        <div class="col-span-4 text-sm text-gray-700 space-y-2 bg-green-50 rounded-lg p-3 font-medium border border-green-200 h-fit self-center">
-                            <p class="font-bold text-green-700 mb-1 border-b border-green-200 pb-1">配文（如同开处方）：</p>
-                            <div class="flex gap-2">
-                                <span class="bg-green-100 text-green-700 rounded-full w-4 h-4 flex items-center justify-center text-[10px] shrink-0 mt-0.5">1</span>
-                                <p class="leading-tight">登录 HIS 系统（网址...）</p>
-                            </div>
-                            <div class="flex gap-2">
-                                <span class="bg-green-100 text-green-700 rounded-full w-4 h-4 flex items-center justify-center text-[10px] shrink-0 mt-0.5">2</span>
-                                <p class="leading-tight">点击左侧菜单「住院管理」</p>
-                            </div>
-                            <div class="flex gap-2">
-                                <span class="bg-green-100 text-green-700 rounded-full w-4 h-4 flex items-center justify-center text-[10px] shrink-0 mt-0.5">3</span>
-                                <p class="leading-tight">在「床位号」输入框中，输入 Excel 里的床位号</p>
-                            </div>
-                            <div class="flex gap-2">
-                                <span class="bg-green-100 text-green-700 rounded-full w-4 h-4 flex items-center justify-center text-[10px] shrink-0 mt-0.5">4</span>
-                                <p class="leading-tight">点击「结算」按钮</p>
-                            </div>
-                            <div class="flex gap-2">
-                                <span class="bg-green-100 text-green-700 rounded-full w-4 h-4 flex items-center justify-center text-[10px] shrink-0 mt-0.5">5</span>
-                                <p class="leading-tight"><span class="text-rpa-red font-bold">判断</span>：若余额 &lt; 0，点击「打印催款单」</p>
-                            </div>
-                        </div>
+                    <!-- Conclusion -->
+                    <div class="mt-6 mb-2">
+                        <span class="font-bold text-lg text-rpa-red tracking-wider">结论：</span>
+                        <p class="text-xl text-gray-700 mt-1">
+                            提供的操作步骤<span class="font-extrabold text-rpa-red">越清晰、越详细</span>，影刀RPA就<span
+                                class="font-extrabold text-rpa-red">越精准、越高效</span>。
+                        </p>
                     </div>
 
                 </div>
 
             </div>
-            
-            <!-- Conclusion -->
-            <div class="mt-6 mb-2">
-                <span class="font-bold text-lg text-rpa-red tracking-wider">结论：</span>
-                <p class="text-xl text-gray-700 mt-1">
-                    提供的操作步骤<span class="font-extrabold text-rpa-red">越清晰、越详细</span>，影刀RPA就<span class="font-extrabold text-rpa-red">越精准、越高效</span>。
-                </p>
-            </div>
-
         </div>
-        
-      </div>
     </div>
-  </div>
 
-  <script>
-    // === 1. 动态缩放逻辑 ===
-    function fitSlide(){
-      const shell = document.getElementById('page-shell');
-      const wrap = document.getElementById('slide-scale-wrapper');
-      if(!shell || !wrap) return;
-      const sw = 1280, sh = 720;
-      const ww = shell.clientWidth, wh = shell.clientHeight;
-      const scale = Math.min(ww / sw, wh / sh);
-      wrap.style.transform = `scale(${scale})`;
-      wrap.style.transformOrigin = 'center center';
-    }
-    window.addEventListener('resize', fitSlide);
-    window.addEventListener('load', fitSlide);
-    
-    // 立即执行一次 fitSlide()
-    fitSlide(); 
-
-    // === 2. 键盘切换逻辑 ===
-    document.addEventListener('keydown', (event) => {
-        const isNextKey = event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ';
-        const isPrevKey = event.key === 'ArrowLeft' || event.key === 'PageUp';
-
-        if (!isNextKey && !isPrevKey) return;
-        
-        const currentURL = window.location.href;
-        const url = new URL(currentURL);
-        const pathParts = url.pathname.split('/');
-        const filenameWithExt = pathParts[pathParts.length - 1];
-        const match = filenameWithExt.match(/^(\d+)\.html$/);
-
-        if (!match) return;
-
-        let currentPageNumber = parseInt(match[1], 10);
-        let targetPageNumber;
-
-        if (isNextKey) targetPageNumber = currentPageNumber + 1;
-        else if (isPrevKey) targetPageNumber = Math.max(1, currentPageNumber - 1);
-        
-        if (targetPageNumber === currentPageNumber) return;
-
-        const newFilename = `${targetPageNumber}.html`;
-        const newURL = currentURL.replace(filenameWithExt, newFilename);
-        window.location.href = newURL;
-        if (event.key === ' ') event.preventDefault();
-    });
-</script>
+    <script src="../js/slide-core.js"></script>
 </body>
+
 </html>
