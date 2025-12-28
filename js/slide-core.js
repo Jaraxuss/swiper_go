@@ -44,10 +44,32 @@
         });
     }
 
-    // 3. Lifecycle Hooks
+    // 3. Wheel Event Forwarding
+    let lastWheelTime = 0;
+    const WHEEL_THROTTLE = 500; // ms
+
+    function initWheelForwarding() {
+        window.addEventListener('wheel', (event) => {
+            const now = Date.now();
+            if (now - lastWheelTime < WHEEL_THROTTLE) return;
+
+            if (Math.abs(event.deltaY) < 10) return; // Ignore small movements
+
+            if (event.deltaY > 0) {
+                window.parent.postMessage({ type: 'SWIPER_NEXT' }, '*');
+                lastWheelTime = now;
+            } else if (event.deltaY < 0) {
+                window.parent.postMessage({ type: 'SWIPER_PREV' }, '*');
+                lastWheelTime = now;
+            }
+        }, { passive: true });
+    }
+
+    // 4. Lifecycle Hooks
     window.addEventListener('load', () => {
         fitSlide();
         initNavigation();
+        initWheelForwarding();
     });
     window.addEventListener('resize', fitSlide);
 
@@ -55,5 +77,6 @@
     if (document.readyState === 'complete') {
         fitSlide();
         initNavigation();
+        initWheelForwarding();
     }
 })();
