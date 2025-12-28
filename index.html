@@ -97,17 +97,23 @@
 
         .dock-item {
             position: relative;
-            width: 60px;
-            height: 33.75px;
-            /* 16:9 Aspect Ratio */
+            /* Base dimensions: 60px * 16:9 = 33.75 */
+            --scale: 1;
+            /* Use a variable for width/height */
+            width: calc(60px * var(--scale));
+            height: calc(33.75px * var(--scale));
             background: #000;
             border-radius: 4px;
             overflow: hidden;
             cursor: pointer;
-            transition: width 0.1s ease, height 0.1s ease;
+            /* Remove transition for width/height to follow mouse instantly */
+            /* transition: width 0.1s ease, height 0.1s ease; */
             transform-origin: center right;
             flex-shrink: 0;
             border: 1px solid #666;
+
+            /* Performance */
+            will-change: width, height;
         }
 
         /* Tooltip for page name */
@@ -138,13 +144,19 @@
 
         .dock-item iframe {
             width: 1280px;
-            /* Base resolution for thumbs */
             height: 720px;
-            transform: scale(0.0468);
-            /* 60 / 1280 */
-            transform-origin: 0 0;
             border: none;
             pointer-events: none;
+            transform-origin: 0 0;
+
+            /* 
+               Base Scale needed to fit 1280 into 60px: 60 / 1280 = 0.046875 
+               Total Scale = Base Scale * Dock Scale
+            */
+            transform: scale(calc(0.046875 * var(--scale)));
+
+            /* Performance */
+            will-change: transform;
         }
     </style>
 </head>
@@ -210,7 +222,7 @@
             },
             speed: 800, // 设置切换速度，让动画更丝滑
             on: {
-                // 初始化时，确保第一个 iframe 获得焦点
+                // 初始化时
                 init: function () {
                     setTimeout(() => {
                         const activeSlide = this.slides[this.activeIndex];
@@ -218,9 +230,13 @@
                         if (iframe && iframe.contentWindow) {
                             iframe.contentWindow.focus();
                         }
-                    }, 500); // 稍微延迟，等 iframe 加载完成
+                        updateDock(); // Initial populate
+                    }, 500);
                 },
-                // 每当切换动画结束，自动把焦点给到当前的 iframe
+                // Slide changes
+                slideChange: function () {
+                    updateDock(); // Update dock on slide change
+                },
                 slideChangeTransitionEnd: function () {
                     const activeSlide = this.slides[this.activeIndex];
                     const iframe = activeSlide.querySelector('iframe');
@@ -245,8 +261,24 @@
         const pageDock = document.getElementById('page-dock');
         let dockTimeout;
 
+        // Caching: store iframe elements by page index or URL
+        const iframeCache = new Map();
+
+        function getCachedIframe(pageUrl) {
+            if (iframeCache.has(pageUrl)) {
+                return iframeCache.get(pageUrl);
+            }
+            const iframe = document.createElement('iframe');
+            iframe.src = encodeURI(pageUrl);
+            iframeCache.set(pageUrl, iframe);
+            return iframe;
+        }
+
         function updateDock() {
+            // Note: We are rebuilding dock content. 
+            // Better optimization would be to diff, but for <10 items, clearing and re-appending cached nodes is okay.
             pageDock.innerHTML = '';
+
             const totalSlides = slideConfig.length;
             const currentIndex = swiper.activeIndex;
             const maxItems = 10;
@@ -262,34 +294,27 @@
 
             for (let i = start; i < end; i++) {
                 const pageUrl = slideConfig[i];
-                // Extract filename for title
                 const pageTitle = pageUrl.split('/').pop().replace('.html', '');
 
                 const item = document.createElement('div');
                 item.className = 'dock-item';
                 if (i === currentIndex) item.classList.add('current-page');
-                item.dataset.index = i; // Save index for click
+                item.dataset.index = i;
                 item.dataset.title = pageTitle;
 
-                const iframe = document.createElement('iframe');
-                iframe.src = encodeURI(pageUrl);
-                // Note: Loading many iframes can be heavy.
-                // Optimally we might want to use images, but user asked for "pages".
-                // We rely on browser caching.
-
+                // Use Cached Iframe
+                const iframe = getCachedIframe(pageUrl);
                 item.appendChild(iframe);
 
                 item.onclick = (e) => {
-                    e.stopPropagation(); // Prevent bubbling issues
+                    e.stopPropagation();
                     swiper.slideTo(i);
-                    // focus current frame
                     const activeSlide = swiper.slides[i];
                     const activeIframe = activeSlide.querySelector('iframe');
                     if (activeIframe && activeIframe.contentWindow) {
                         activeIframe.contentWindow.focus();
                     }
                 };
-
                 pageDock.appendChild(item);
             }
         }
@@ -297,7 +322,7 @@
         // Show dock on hover right area
         dockTrigger.addEventListener('mouseenter', () => {
             clearTimeout(dockTimeout);
-            updateDock(); // Refresh content
+            // Docker is already populated by slideChange/init
             pageDock.classList.add('active');
         });
 
@@ -318,69 +343,43 @@
 
 
         // Fisheye / Magnification Effect
-        // Base size: 60px width
-        // Max size: 120px;
-        // Range: 150px vertical distance
+        let rafId;
 
         pageDock.addEventListener('mousemove', (e) => {
-            const dockItems = pageDock.querySelectorAll('.dock-item');
-            const dockRect = pageDock.getBoundingClientRect();
-            const mouseY = e.clientY;
+            if (rafId) cancelAnimationFrame(rafId);
 
-            dockItems.forEach(item => {
-                const itemRect = item.getBoundingClientRect();
-                const itemCenterY = itemRect.top + itemRect.height / 2;
-                const dist = Math.abs(mouseY - itemCenterY);
+            rafId = requestAnimationFrame(() => {
+                const dockItems = pageDock.querySelectorAll('.dock-item');
+                const mouseY = e.clientY;
 
-                let scale = 1;
-                // Max distance to affect
-                const maxDist = 150;
+                dockItems.forEach(item => {
+                    const itemRect = item.getBoundingClientRect();
+                    const itemCenterY = itemRect.top + itemRect.height / 2;
+                    const dist = Math.abs(mouseY - itemCenterY);
 
-                if (dist < maxDist) {
-                    // Calculate extra scale based on distance (using a sine curve for smoothness)
-                    // 0 dist => max scale (e.g. 2.0)
-                    // maxDist => 1.0 (no extra scale)
-                    const normalized = 1 - (dist / maxDist); // 0 to 1
-                    // Ease
-                    const ease = Math.sin(normalized * Math.PI / 2);
-                    scale = 1 + (ease * 1.5); // Max scale 2.5x
-                }
+                    let scale = 1;
+                    const maxDist = 150;
 
-                const baseWidth = 60;
-                const baseHeight = 33.75;
+                    if (dist < maxDist) {
+                        const normalized = 1 - (dist / maxDist);
+                        const ease = Math.sin(normalized * Math.PI / 2);
+                        scale = 1 + (ease * 1.5); // Max scale 2.5x
+                    }
 
-                item.style.width = `${baseWidth * scale}px`;
-                item.style.height = `${baseHeight * scale}px`;
-
-                // Also scale the inner iframe so it fills the new size
-                // Current scale logic: transform: scale(0.0468);
-                // We need to adjust this scale or just let CSS width/height handle container
-                // but iframe transform is fixed.
-                // Actually, if we just resize the container, the iframe is still fixed size 1280x720 scaled down.
-                // We need to update iframe scale to match container size.
-                // Standard: 60px container -> 0.0468 scale.
-                // New Width container -> New Scale.
-                const newScale = (baseWidth * scale) / 1280;
-                const iframe = item.querySelector('iframe');
-                if (iframe) {
-                    iframe.style.transform = `scale(${newScale})`;
-                }
+                    // Update CSS variable instead of separate width/height/transform
+                    item.style.setProperty('--scale', scale);
+                });
             });
         });
 
         // Reset sizes when leaving
         pageDock.addEventListener('mouseleave', () => {
+            if (rafId) cancelAnimationFrame(rafId);
             const dockItems = pageDock.querySelectorAll('.dock-item');
             dockItems.forEach(item => {
-                item.style.width = '';
-                item.style.height = '';
-                const iframe = item.querySelector('iframe');
-                if (iframe) {
-                    iframe.style.transform = 'scale(0.0468)';
-                }
+                item.style.setProperty('--scale', 1);
             });
         });
-
     </script>
 </body>
 
