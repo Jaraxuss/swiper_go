@@ -213,13 +213,39 @@
 
         // Dynamically create slides using global slideConfig
         if (typeof slideConfig !== 'undefined') {
-            slideConfig.forEach(page => {
+            slideConfig.forEach((page, index) => {
                 const slide = document.createElement('div');
                 slide.className = 'swiper-slide';
                 const iframe = document.createElement('iframe');
-                iframe.src = encodeURI(page);
+                // Lazy Load Strategy: Only load the first slide immediately
+                if (index === 0) {
+                    iframe.src = encodeURI(page);
+                    iframe.setAttribute('data-loaded', 'true');
+                } else {
+                    iframe.setAttribute('data-src', encodeURI(page));
+                }
                 slide.appendChild(iframe);
                 wrapper.appendChild(slide);
+            });
+        }
+
+        // Lazy Load Logic for Main Slides
+        function loadActiveSlides(swiper) {
+            const activeIndex = swiper.activeIndex;
+            const slides = swiper.slides;
+
+            // Load Current, Prev, Next
+            [activeIndex, activeIndex - 1, activeIndex + 1].forEach(index => {
+                if (index >= 0 && index < slides.length) {
+                    const iframe = slides[index].querySelector('iframe');
+                    if (iframe && !iframe.getAttribute('data-loaded')) {
+                        const src = iframe.getAttribute('data-src');
+                        if (src) {
+                            iframe.src = src;
+                            iframe.setAttribute('data-loaded', 'true');
+                        }
+                    }
+                }
             });
         }
 
@@ -245,6 +271,9 @@
             on: {
                 // 初始化时
                 init: function () {
+                    // Load initial adjacent slides
+                    loadActiveSlides(this);
+
                     setTimeout(() => {
                         const activeSlide = this.slides[this.activeIndex];
                         const iframe = activeSlide.querySelector('iframe');
@@ -256,6 +285,7 @@
                 },
                 // Slide changes
                 slideChange: function () {
+                    loadActiveSlides(this);
                     updateDock(); // Update dock on slide change
                 },
                 slideChangeTransitionEnd: function () {
@@ -297,7 +327,8 @@
                 item.dataset.title = pageTitle;
 
                 const iframe = document.createElement('iframe');
-                iframe.src = encodeURI(pageUrl);
+                // Lazy Load: Do NOT set src here. Store in data-src.
+                iframe.dataset.src = encodeURI(pageUrl);
                 item.appendChild(iframe);
 
                 item.onclick = (e) => {
@@ -327,6 +358,17 @@
                 // We DO NOT remove from DOM.
                 if (i >= start && i < end) {
                     item.classList.remove('item-hidden');
+
+                    // Lazy Load Logic for Dock Items
+                    const iframe = item.querySelector('iframe');
+                    if (iframe && !iframe.getAttribute('data-loaded')) {
+                        const src = iframe.dataset.src;
+                        if (src) {
+                            iframe.src = src;
+                            iframe.setAttribute('data-loaded', 'true');
+                        }
+                    }
+
                     if (i === currentIndex) {
                         item.classList.add('current-page');
                     } else {
