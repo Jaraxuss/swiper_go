@@ -36,6 +36,7 @@ const slideConfig = [
 
     "pages/下一步行动.html",
     "pages/QA.html",
+    "pages/感谢观看.html",
 ];
 
 // If you need to export this for potential build tools, you can add:
