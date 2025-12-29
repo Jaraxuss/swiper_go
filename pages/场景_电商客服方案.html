@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>电商客服方案</title>
+    <script src="../lib/tailwind@4.js"></script>
+    <link href="../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        /* 隐藏滚动条 */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Fragment 基础动画 */
+        .fragment {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 卡片悬浮与聚焦特效 */
+        .case-card {
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+            border-color: #C00000;
+        }
+
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-900 bg-[#F8F9FA] overflow-hidden">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px] bg-white shadow-2xl">
+            <div id="slide-container" class="w-full h-full p-12 flex flex-col relative overflow-hidden bg-[#F8F9FA]">
+
+                <!-- 背景装饰 -->
+                <div class="absolute -top-40 -left-40 w-96 h-96 bg-red-500/5 rounded-full blur-3xl"></div>
+
+                <!-- Header -->
+                <header class="relative z-20 mb-8 shrink-0 flex justify-between items-end">
+                    <div>
+                        <div class="flex items-center gap-4 mb-2">
+                            <div class="w-1.5 h-10 bg-[#C00000] rounded-full"></div>
+                            <h1 class="text-4xl font-black text-gray-900 tracking-tight">
+                                电商客服方案高频场景
+                            </h1>
+                        </div>
+                        <p
+                            class="text-gray-500 ml-6 text-sm font-medium tracking-wide uppercase flex items-center gap-3">
+                            <span>Customer Service & Operations Roadmap</span>
+                            <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                            <span class="italic text-gray-400">“全自动化流程，释放客服生产力”</span>
+                        </p>
+                    </div>
+
+                    <!-- Jump Link (Task 2) -->
+                    <a href="https://ying-dao.feishu.cn/wiki/KThhwYKBDisFRUkmBx0cR0tAnxf?from=from_copylink"
+                        target="_blank"
+                        class="flex items-center gap-2 bg-white hover:bg-red-50 text-[#C00000] border border-red-100 px-5 py-2.5 rounded-full text-sm font-bold shadow-sm hover:shadow transition-all group">
+                        <i class="fas fa-file-lines group-hover:scale-110 transition-transform"></i>
+                        <span>影刀RPA【电商客服】提效资料包</span>
+                        <i class="fas fa-arrow-up-right-from-square text-[10px] opacity-50"></i>
+                    </a>
+                </header>
+
+                <!-- Grid Content (4x2) -->
+                <main class="relative z-10 flex-1 min-h-0">
+                    <div class="grid grid-cols-4 grid-rows-2 gap-5 h-full">
+
+                        <!-- 01 客服接待 -->
+                        <div class="fragment case-card bg-white rounded-2xl p-4.5 flex flex-col">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-2xl font-black text-gray-200">01</span>
+                                <i class="fas fa-headset text-xl text-rpa-red"></i>
+                            </div>
+                            <h3 class="font-bold text-lg mb-3 border-b pb-2">客服接待</h3>
+                            <ul class="text-[13px] space-y-1.5 text-gray-600">
+                                <li class="flex items-start gap-2 text-rpa-red font-bold">
+                                    <span class="mt-1.5 w-1 h-1 bg-current rounded-full shrink-0"></span>
+                                    <span>售前批量发消息</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>客服聊天记录获取</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-rpa-red font-bold">
+                                    <span class="mt-1.5 w-1 h-1 bg-current rounded-full shrink-0"></span>
+                                    <span>赤兔名品绩效下载</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>买家秀发货&备注</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 02 订单管理 -->
+                        <div class="fragment case-card bg-white rounded-2xl p-4.5 flex flex-col"
+                            style="transition-delay: 0.1s">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-2xl font-black text-gray-200">02</span>
+                                <i class="fas fa-cart-flatbed text-xl text-rpa-red"></i>
+                            </div>
+                            <h3 class="font-bold text-lg mb-3 border-b pb-2">订单管理</h3>
+                            <ul class="text-[13px] space-y-1 text-gray-600">
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>平台订单下载处理</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>平台订单发货处理</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-rpa-red font-bold">
+                                    <span class="mt-1.5 w-1 h-1 bg-current rounded-full shrink-0"></span>
+                                    <span>ERP审单/建补发单</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>异常单插旗备注</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-rpa-red font-bold">
+                                    <span class="mt-1.5 w-1 h-1 bg-current rounded-full shrink-0"></span>
+                                    <span>订单加密信息获取</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 03 物流监控 -->
+                        <div class="fragment case-card bg-white rounded-2xl p-4.5 flex flex-col"
+                            style="transition-delay: 0.2s">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-2xl font-black text-gray-200">03</span>
+                                <i class="fas fa-truck-fast text-xl text-rpa-red"></i>
+                            </div>
+                            <h3 class="font-bold text-lg mb-3 border-b pb-2">物流监控</h3>
+                            <ul class="text-[13px] space-y-1 text-gray-600">
+                                <li class="flex items-start gap-2 text-rpa-red font-bold">
+                                    <span class="mt-1.5 w-1 h-1 bg-current rounded-full shrink-0"></span>
+                                    <span>发货/揽收预警监控</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>延迟发货报备</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>问题件申诉</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>异常件建工单(班牛)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>异常件截图给快递</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 04 退款处理 -->
+                        <div class="fragment case-card bg-white rounded-2xl p-4.5 flex flex-col"
+                            style="transition-delay: 0.3s">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-2xl font-black text-gray-200">04</span>
+                                <i class="fas fa-hand-holding-dollar text-xl text-rpa-red"></i>
+                            </div>
+                            <h3 class="font-bold text-lg mb-3 border-b pb-2">退款处理</h3>
+                            <ul class="text-[13px] space-y-1.5 text-gray-600">
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>未发货仅退款处理</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>已发货仅退款处理</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>退款拦截单创建</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>批量拒绝退款申请</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 05 退货处理 -->
+                        <div class="fragment case-card bg-white rounded-2xl p-4.5 flex flex-col"
+                            style="transition-delay: 0.4s">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-2xl font-black text-gray-200">05</span>
+                                <i class="fas fa-box-open text-xl text-rpa-red"></i>
+                            </div>
+                            <h3 class="font-bold text-lg mb-3 border-b pb-2">退货处理</h3>
+                            <ul class="text-[13px] space-y-1.5 text-gray-600">
+                                <li class="flex items-start gap-2 text-rpa-red font-bold">
+                                    <span class="mt-1.5 w-1 h-1 bg-current rounded-full shrink-0"></span>
+                                    <span>退货物流爬取监控</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>退货入库批量退款</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>退款退货登记</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-rpa-red font-bold">
+                                    <span class="mt-1.5 w-1 h-1 bg-current rounded-full shrink-0"></span>
+                                    <span>退货不明件查询关联</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 06 评价管理 -->
+                        <div class="fragment case-card bg-white rounded-2xl p-4.5 flex flex-col"
+                            style="transition-delay: 0.5s">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-2xl font-black text-gray-200">06</span>
+                                <i class="fas fa-star text-xl text-rpa-red"></i>
+                            </div>
+                            <h3 class="font-bold text-lg mb-3 border-b pb-2">评价管理</h3>
+                            <ul class="text-[13px] space-y-1 text-gray-600">
+                                <li class="flex items-start gap-2 text-rpa-red font-bold">
+                                    <span class="mt-1.5 w-1 h-1 bg-current rounded-full shrink-0"></span>
+                                    <span>签收自动邀评</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>待好评自动回复</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-rpa-red font-bold">
+                                    <span class="mt-1.5 w-1 h-1 bg-current rounded-full shrink-0"></span>
+                                    <span>店铺后台评价抓取</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>商品详情评论获取</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-rpa-red font-bold">
+                                    <span class="mt-1.5 w-1 h-1 bg-current rounded-full shrink-0"></span>
+                                    <span>淘宝问大家获取</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 07 客服赔付 -->
+                        <div class="fragment case-card bg-white rounded-2xl p-4.5 flex flex-col"
+                            style="transition-delay: 0.6s">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-2xl font-black text-gray-200">07</span>
+                                <i class="fas fa-file-invoice-dollar text-xl text-rpa-red"></i>
+                            </div>
+                            <h3 class="font-bold text-lg mb-3 border-b pb-2">客服赔付</h3>
+                            <ul class="text-[13px] space-y-1.5 text-gray-600">
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>获取发票信息</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-rpa-red font-bold">
+                                    <span class="mt-1.5 w-1 h-1 bg-current rounded-full shrink-0"></span>
+                                    <span>自动开发票</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-rpa-red font-bold">
+                                    <span class="mt-1.5 w-1 h-1 bg-current rounded-full shrink-0"></span>
+                                    <span>发票自动回传</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>旺旺红包群发</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 08 客服数据 -->
+                        <div class="fragment case-card bg-white rounded-2xl p-4.5 flex flex-col"
+                            style="transition-delay: 0.7s">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-2xl font-black text-gray-200">08</span>
+                                <i class="fas fa-chart-line text-xl text-rpa-red"></i>
+                            </div>
+                            <h3 class="font-bold text-lg mb-3 border-b pb-2">客服数据</h3>
+                            <ul class="text-[13px] space-y-1 text-gray-600">
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>客服日报表制作</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-rpa-red font-bold">
+                                    <span class="mt-1.5 w-1 h-1 bg-current rounded-full shrink-0"></span>
+                                    <span>多店铺DSR等登记</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>客户之声数据提取</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-rpa-red font-bold">
+                                    <span class="mt-1.5 w-1 h-1 bg-current rounded-full shrink-0"></span>
+                                    <span>商品退款理由登记</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                                    <span>售后工单数据报表</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </main>
+
+                <!-- Footer -->
+                <footer class="mt-5 flex justify-between items-center shrink-0">
+                    <div class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                        Department of E-commerce Operations
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/slide-core.js"></script>
+</body>
+
+</html>
