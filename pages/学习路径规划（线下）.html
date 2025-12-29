@@ -21,7 +21,7 @@
             display: none;
         }
 
-        /* 影刀品牌色 */
+        /* {{BRAND_NAME}}品牌色 */
         .text-rpa-red {
             color: #C00000;
         }
@@ -154,7 +154,7 @@
                                     <div class="flex items-center gap-2 mb-1">
                                         <span
                                             class="bg-teal-50 text-teal-600 text-[10px] font-bold px-2 py-0.5 rounded border border-teal-100">阶段一</span>
-                                        <h3 class="text-lg font-bold text-gray-800">影刀线上初级认证</h3>
+                                        <h3 class="text-lg font-bold text-gray-800">{{BRAND_NAME}}线上初级认证</h3>
                                     </div>
                                     <p class="text-gray-500 text-sm mb-3">掌握基础软件操作</p>
 
@@ -211,7 +211,7 @@
                                 class="h-8 border-b border-gray-100 flex items-center px-3 mb-1 shrink-0 bg-gray-50/50 rounded-t-lg mx-[-12px] mt-[-12px] px-4 pt-3 pb-2 border-b-gray-100">
                                 <div class="flex items-center gap-2 text-xs font-medium text-gray-500">
                                     <div class="w-2 h-2 rounded-full bg-teal-500"></div>
-                                    <span>影刀学院 · 课程体系全景</span>
+                                    <span>{{BRAND_NAME}}学院 · 课程体系全景</span>
                                 </div>
                                 <div class="ml-auto flex gap-1.5 opacity-50">
                                     <div class="w-2 h-2 rounded-full bg-gray-300"></div>
@@ -223,9 +223,9 @@
                             <!-- 图片容器 -->
                             <div class="flex-1 relative bg-white rounded-lg overflow-hidden flex items-center justify-center cursor-zoom-in"
                                 onclick="openFullscreen()">
-                                <img src="../assets/影刀课程体系.jpg" alt="影刀课程体系图"
+                                <img src="../assets/{{BRAND_NAME}}课程体系.jpg" alt="{{BRAND_NAME}}课程体系图"
                                     class="w-full h-full object-contain hover:scale-[1.01] transition-transform duration-500"
-                                    onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex flex-col items-center justify-center text-gray-400 h-full w-full\'><i class=\'fa-regular fa-image text-5xl mb-2\'></i><span class=\'text-sm\'>请放入影刀课程体系.jpg</span></div>'">
+                                    onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex flex-col items-center justify-center text-gray-400 h-full w-full\'><i class=\'fa-regular fa-image text-5xl mb-2\'></i><span class=\'text-sm\'>请放入{{BRAND_NAME}}课程体系.jpg</span></div>'">
                             </div>
 
                             <!-- 底部悬浮标签 -->
@@ -248,7 +248,7 @@
         <div class="close-btn" onclick="event.stopPropagation(); closeFullscreen();">
             <i class="fa-solid fa-xmark text-xl"></i>
         </div>
-        <img src="../assets/影刀课程体系.jpg" class="max-w-[90%] max-h-[90%] object-contain" alt="全屏图">
+        <img src="../assets/{{BRAND_NAME}}课程体系.jpg" class="max-w-[90%] max-h-[90%] object-contain" alt="全屏图">
     </div>
 
     <script src="../js/slide-core.js"></script>

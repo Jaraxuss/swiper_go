@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yingdao Presentation</title>
+    <title></title>
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="lib/swiper-bundle.min.css" />
     <style>
@@ -209,6 +209,11 @@
 
     <!-- Initialize Swiper -->
     <script>
+        // Set page title
+        if (typeof brandConfig !== 'undefined') {
+            document.title = brandConfig.presentationTitle || 'Presentation';
+        }
+
         const wrapper = document.getElementById('swiper-wrapper');
 
         // Dynamically create slides using global slideConfig
