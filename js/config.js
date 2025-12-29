@@ -1,4 +1,16 @@
 /**
+ * Project Configuration
+ */
+var brandConfig = {
+    name: "影刀",
+    englishName: "ShadowBot",
+    fullName: "影刀RPA",
+    clientName: "严料坊",
+    presentationTitle: "影刀演示文稿"
+};
+window.brandConfig = brandConfig; // Explicitly attach to window for iframe access
+
+/**
  * Slide Show Configuration
  * Add or remove slides here. Supports comments and easy reordering.
  */
