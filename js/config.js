@@ -23,6 +23,7 @@ const slideConfig = [
 
     "pages/更多场景案例2.html",
     "pages/场景_运营部方案.html",
+    "pages/场景_客服运营案例.html",
     "pages/场景_财务部痛点.html",
     "pages/场景_财务部方案.html",
 
