@@ -7,9 +7,7 @@
     <title>02 影刀RPA能做什么？</title>
     <script src="../lib/tailwind@4.js"></script>
     <link href="../lib/font-awesome/all.min.css" rel="stylesheet" />
-    <link
-        href="../lib/fonts.css"
-        rel="stylesheet" />
+    <link href="../lib/fonts.css" rel="stylesheet" />
     <style>
         /* Custom Font Stacks */
         .font-sans {
@@ -117,6 +115,20 @@
         .animate-data-flow {
             animation: flow-data 1.5s linear infinite;
         }
+
+        /* Fragment Animations */
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
     </style>
 </head>
 
@@ -154,7 +166,7 @@
                 <div class="flex-1 grid grid-cols-3 gap-8 relative z-20 h-full min-h-0 items-start">
 
                     <!-- 1. Mouse & Keyboard Automation -->
-                    <div class="flex flex-col items-center group h-full">
+                    <div class="fragment flex flex-col items-center group h-full">
                         <!-- Visual Container -->
                         <div class="w-full h-56 relative mb-8 flex items-center justify-center">
                             <!-- Background Soft Glow -->
@@ -211,7 +223,7 @@
                     </div>
 
                     <!-- 2. Excel Automation -->
-                    <div class="flex flex-col items-center group h-full">
+                    <div class="fragment flex flex-col items-center group h-full" style="transition-delay: 0.1s">
                         <!-- Visual Container -->
                         <div class="w-full h-56 relative mb-8 flex items-center justify-center">
                             <!-- Excel File Icon (Background Decor) -->
@@ -294,7 +306,7 @@
                     </div>
 
                     <!-- 3. Database & SQL Automation -->
-                    <div class="flex flex-col items-center group h-full">
+                    <div class="fragment flex flex-col items-center group h-full" style="transition-delay: 0.2s">
                         <!-- Visual Container -->
                         <div class="w-full h-56 relative mb-8 flex items-center justify-center">
 
