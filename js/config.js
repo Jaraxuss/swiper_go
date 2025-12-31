@@ -2,9 +2,6 @@
  * Project Configuration
  */
 var brandConfig = {
-    name: "影刀",
-    englishName: "ShadowBot",
-    fullName: "影刀RPA",
     clientName: "严料坊",
     presentationTitle: "影刀演示文稿"
 };
