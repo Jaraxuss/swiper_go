@@ -31,7 +31,6 @@ const slideConfig = [
 
     // 痛点场景案例
     // "pages/核心场景相关案例1.html",
-    // "pages/影刀AI Power介绍.html",
 
     // 核心场景场景案例
     "pages/核心场景相关案例1.html",
@@ -42,6 +41,13 @@ const slideConfig = [
 
     // 核心场景场景案例
     "pages/核心场景相关案例2.html",
+    "pages/BOM物料清单自动化.html",
+    "pages/BOM数据自动化维护.html",
+
+    // 核心场景场景案例
+    "pages/核心场景相关案例3.html",
+    "pages/BOM物料清单自动化.html",
+    "pages/BOM数据自动化维护.html",
 
     // 通用场景案例
     "pages/更多场景案例2.html",
