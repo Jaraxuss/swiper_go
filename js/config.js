@@ -31,6 +31,7 @@ const slideConfig = [
 
     // 痛点场景案例
     "pages/核心场景相关案例1.html",
+    "pages/生产日报自动化汇总.html",
     "pages/小红书笔记批量采集.html",
     "pages/影刀AI Power介绍.html",
     "pages/AI音频克隆.html",
