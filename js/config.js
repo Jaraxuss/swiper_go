@@ -46,8 +46,8 @@ const slideConfig = [
 
     // 核心场景场景案例
     "pages/核心场景相关案例3.html",
-    "pages/BOM物料清单自动化.html",
-    "pages/BOM数据自动化维护.html",
+    "pages/自动化创建销售订单.html",
+    "pages/采购入库自动化.html",
 
     // 通用场景案例
     "pages/更多场景案例2.html",
