@@ -17,6 +17,7 @@ const slideConfig = [
     "pages/影刀RPA简介.html",
     "pages/影刀能做什么.html",
     "pages/影刀能做什么2.html",
+    "pages/RPA制造业挑战.html",
     "pages/RPA制造业间接价值.html",
     "pages/RPA制造业直接价值.html",
 

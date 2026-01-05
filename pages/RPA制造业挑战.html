@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>制造业在数字化转型中面临多方挑战</title>
+    <script src="../lib/tailwind@4.js"></script>
+    <link href="../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .text-rpa-yellow {
+            color: #FFB300;
+        }
+
+        .fragment {
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(192, 0, 0, 0.1);
+            border-color: rgba(192, 0, 0, 0.2);
+        }
+
+        /* Connecting Lines Overlay */
+        .connector-dot {
+            width: 12px;
+            height: 12px;
+            background: #C00000;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 15px rgba(192, 0, 0, 0.5);
+        }
+
+        .connector-line {
+            height: 2px;
+            background: linear-gradient(90deg, #C00000, transparent);
+            flex-grow: 1;
+        }
+
+        /* Abstract Image Background */
+        .bg-img-overlay {
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(192, 0, 0, 0.08) 0%, transparent 70%);
+            z-index: 1;
+        }
+
+        .pillar-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(192, 0, 0, 0.1);
+            color: #C00000;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .central-bridge {
+            position: relative;
+            height: 4px;
+            background: #e2e8f0;
+            width: 100%;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .central-bridge-active {
+            position: absolute;
+            height: 100%;
+            width: 50%;
+            background: linear-gradient(90deg, transparent, #C00000, transparent);
+            animation: moveBridge 3s infinite linear;
+        }
+
+        @keyframes moveBridge {
+            0% {
+                left: -50%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container"
+                class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-16 py-12">
+
+                <!-- Background Graphic -->
+                <div class="bg-img-overlay pointer-events-none"></div>
+                <img src="./industrial_transformation_bg_1767583665353.png"
+                    class="absolute bottom-0 right-0 w-[550px] opacity-20 grayscale pointer-events-none z-0"
+                    alt="Futuristic Industrial Background" />
+
+                <!-- Header -->
+                <header class="relative z-20 mb-10 shrink-0">
+                    <div class="flex items-center gap-4 mb-2">
+                        <span class="w-2 h-8 bg-rpa-red rounded-full"></span>
+                        <h1 class="text-4xl font-extrabold tracking-tight text-slate-900">
+                            制造业在数字化转型中面临多方挑战
+                        </h1>
+                    </div>
+                    <p class="text-xl text-slate-500 font-medium ml-6">
+                        RPA 赋能企业突破瓶颈，构建次世代生产力
+                    </p>
+                </header>
+
+                <!-- Challenges Section -->
+                <div class="grid grid-cols-3 gap-8 relative z-10 mb-12">
+                    <!-- Challenge 01 -->
+                    <div class="fragment glass-card p-8 flex flex-col" style="transition-delay: 0.1s">
+                        <div class="pillar-icon">
+                            <i class="fa-solid fa-gauge-high"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4">效能瓶颈</h3>
+                        <p class="text-slate-500 leading-relaxed">
+                            跨系统重复性手工劳动占据员工 70% 以上时间，严重拖累业务响应速度。缺乏 AI 融合能力，无法应对复杂决策任务。
+                        </p>
+                    </div>
+
+                    <!-- Challenge 02 -->
+                    <div class="fragment glass-card p-8 flex flex-col" style="transition-delay: 0.2s">
+                        <div class="pillar-icon">
+                            <i class="fa-solid fa-server"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4">数据孤岛</h3>
+                        <p class="text-slate-500 leading-relaxed">
+                            烟囱式系统架构林立，数据集成成本极高。异构数据源难以打通，导致管理层决策缺乏及时、准确的数据支撑。
+                        </p>
+                    </div>
+
+                    <!-- Challenge 03 -->
+                    <div class="fragment glass-card p-8 flex flex-col" style="transition-delay: 0.3s">
+                        <div class="pillar-icon">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4">创新瓶颈</h3>
+                        <p class="text-slate-500 leading-relaxed">
+                            传统系统改造周期以“月”计，无法满足快速迭代的市场需求。各条业务线独立建设，缺乏跨部门的流程优化手段。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Bridge & Solutions (Combined Animation) -->
+                <div class="fragment z-10" style="transition-delay: 0.4s">
+                    <!-- Bridge Animation -->
+                    <div class="central-bridge">
+                        <div class="central-bridge-active"></div>
+                    </div>
+
+                    <!-- Solutions Section -->
+                    <div class="flex items-center justify-between gap-16 relative">
+
+                        <div class="flex-1 flex items-start gap-6 group">
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-slate-900 flex items-center justify-center text-white shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-bolt-lightning text-3xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-extrabold text-slate-900 mb-2">自动化 (Automation)</h4>
+                                <p class="text-slate-500">零侵入式接入，屏蔽系统改造门槛，将业务流程从数小时缩短至秒级执行。</p>
+                            </div>
+                        </div>
+
+                        <div class="flex-grow-0 shrink-0">
+                            <div
+                                class="px-8 py-3 bg-rpa-red rounded-full text-white font-black text-xl shadow-xl shadow-red-200">
+                                影刀 RPA
+                            </div>
+                        </div>
+
+                        <div class="flex-1 flex items-start flex-row-reverse text-right gap-6 group">
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-blue-600 flex items-center justify-center text-white shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-brain text-3xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-extrabold text-slate-900 mb-2">智能化 (Intelligence)</h4>
+                                <p class="text-slate-500">结合影刀 AI Power，将人工智能无缝植入制造业一线场景。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/slide-core.js"></script>
+</body>
+
+</html>
