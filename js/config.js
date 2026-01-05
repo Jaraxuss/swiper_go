@@ -2,7 +2,7 @@
  * Project Configuration
  */
 var brandConfig = {
-    clientName: "严料坊",
+    clientName: "华孚精密科技",
     presentationTitle: "影刀演示文稿"
 };
 window.brandConfig = brandConfig; // Explicitly attach to window for iframe access
@@ -17,6 +17,8 @@ const slideConfig = [
     "pages/影刀RPA简介.html",
     "pages/影刀能做什么.html",
     "pages/影刀能做什么2.html",
+    "pages/RPA制造业间接价值.html",
+    "pages/RPA制造业直接价值.html",
 
     "pages/小试影刀.html",
 
