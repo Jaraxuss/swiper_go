@@ -22,19 +22,20 @@ const slideConfig = [
 
     // 行业挑战和 RPA 价值
     "pages/RPA制造业挑战.html",
+    "pages/RPA制造业场景列表.html",
     "pages/RPA制造业间接价值.html",
     "pages/RPA制造业直接价值.html",
 
     // 简单实操
     "pages/小试影刀.html",
 
-    // 核心场景案例
+    // 痛点场景案例
     "pages/核心场景相关案例1.html",
     "pages/小红书笔记批量采集.html",
     "pages/影刀AI Power介绍.html",
     "pages/AI音频克隆.html",
 
-    // 非核心场景场景案例
+    // 核心场景场景案例
     "pages/更多场景案例1.html",
     "pages/小红书达人批量采集.html",
     "pages/直播自动化.html",

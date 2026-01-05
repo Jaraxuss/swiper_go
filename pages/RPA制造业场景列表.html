@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>智能制造中可实施RPA的场景列表</title>
+    <script src="../lib/tailwind@4.js"></script>
+    <link href="../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../lib/fonts.css" rel="stylesheet" />
+    <style>
+        /* Custom Font Stacks */
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        /* Hide scrollbars for clean presentation */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Custom Colors */
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        /* Card Styles */
+        .card-shadow {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .category-header {
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px 8px 0 0;
+            font-size: 1.25rem;
+        }
+
+        .list-container {
+            background-color: #FFF9E1;
+            padding: 16px;
+            border-radius: 0 0 8px 8px;
+            flex-grow: 1;
+        }
+
+        /* Fragment Animations */
+        .fragment {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Bullet Item Style */
+        .bullet-item {
+            position: relative;
+            padding-left: 1.25rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .bullet-item::before {
+            content: "•";
+            position: absolute;
+            left: 0.25rem;
+            top: 0;
+            color: #fb8c00;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Hierarchy Lines */
+        .hierarchy-line-h {
+            position: absolute;
+            top: -30px;
+            left: 8.33%;
+            right: 8.33%;
+            height: 2px;
+            background: #e5e7eb;
+        }
+
+        .hierarchy-line-v {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            width: 2px;
+            height: 30px;
+            background: #e5e7eb;
+            transform: translateX(-50%);
+        }
+
+        .root-line-v {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            width: 2px;
+            height: 30px;
+            background: #e5e7eb;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-gray-900">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container" class="w-full h-full bg-white relative overflow-hidden flex flex-col px-12 py-8">
+
+                <!-- Decorative Background Element -->
+                <div
+                    class="absolute -top-24 -right-24 w-96 h-96 bg-gray-50 rounded-full blur-3xl opacity-50 pointer-events-none">
+                </div>
+
+                <!-- Header Section -->
+                <header class="relative z-20 mb-16 shrink-0">
+                    <div>
+                        <h1 class="text-4xl font-bold tracking-tight text-gray-900 relative inline-block">
+                            智能制造中可实施RPA的场景列表
+                            <!-- Decorative Red Underline -->
+                            <span class="absolute -bottom-3 left-0 w-16 h-1.5 bg-rpa-red rounded-full"></span>
+                        </h1>
+                        <p class="text-gray-500 font-medium mt-6 text-xl">「 部分典型场景 」</p>
+                    </div>
+                </header>
+
+                <!-- Grid Content with Hierarchy Lines -->
+                <div class="relative flex-1 z-20 mt-12">
+                    <!-- Global Connector (Horizontal) -->
+                    <div class="absolute -top-10 left-[8.33%] right-[8.33%] h-[1px] bg-gray-200"></div>
+                    <!-- Root vertical line -->
+                    <div class="absolute -top-20 left-1/2 w-[1px] h-10 bg-gray-200 -translate-x-1/2"></div>
+
+                    <div class="grid grid-cols-6 gap-4 h-full items-start relative">
+                        <!-- Card 01: 生产制造 -->
+                        <div class="fragment flex flex-col relative" style="transition-delay: 0.1s">
+                            <div class="absolute -top-10 left-1/2 w-[1px] h-10 bg-gray-200 -translate-x-1/2"></div>
+                            <div
+                                class="bg-white rounded-sm card-shadow flex flex-col h-full overflow-hidden border border-gray-100">
+                                <div class="h-12 bg-[#9ea7ad] flex items-center justify-center">
+                                    <span class="text-white font-bold">生产制造</span>
+                                </div>
+                                <div class="p-5 flex-1 bg-[#FFF9E1]/50">
+                                    <div class="space-y-4">
+                                        <div class="bullet-item">生产管理</div>
+                                        <div class="bullet-item">质量管理</div>
+                                        <div class="bullet-item">设备管理</div>
+                                        <div class="bullet-item">ESH管理</div>
+                                        <div class="bullet-item">生产统计</div>
+                                        <div class="bullet-item">KPI分析</div>
+                                        <div class="bullet-item text-gray-300">......</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 02: 研发工程 -->
+                        <div class="fragment flex flex-col relative" style="transition-delay: 0.2s">
+                            <div class="absolute -top-10 left-1/2 w-[1px] h-10 bg-gray-200 -translate-x-1/2"></div>
+                            <div
+                                class="bg-white rounded-sm card-shadow flex flex-col h-full overflow-hidden border border-gray-100">
+                                <div class="h-12 bg-[#ffca28] flex items-center justify-center">
+                                    <span class="text-gray-800 font-bold">研发工程</span>
+                                </div>
+                                <div class="p-5 flex-1 bg-[#FFF9E1]/50">
+                                    <div class="space-y-4">
+                                        <div class="bullet-item">研发管理</div>
+                                        <div class="bullet-item">BOM管理</div>
+                                        <div class="bullet-item">工艺工序</div>
+                                        <div class="bullet-item">资产管理</div>
+                                        <div class="bullet-item">成本管理</div>
+                                        <div class="bullet-item">项目管理</div>
+                                        <div class="bullet-item text-gray-300">......</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 03: 销售采购 -->
+                        <div class="fragment flex flex-col relative" style="transition-delay: 0.3s">
+                            <div class="absolute -top-10 left-1/2 w-[1px] h-10 bg-gray-200 -translate-x-1/2"></div>
+                            <div
+                                class="bg-white rounded-sm card-shadow flex flex-col h-full overflow-hidden border border-gray-100">
+                                <div class="h-12 bg-[#66bb6a] flex items-center justify-center">
+                                    <span class="text-gray-800 font-bold">销售采购</span>
+                                </div>
+                                <div class="p-5 flex-1 bg-[#FFF9E1]/50">
+                                    <div class="space-y-4">
+                                        <div class="bullet-item">创建销售订单</div>
+                                        <div class="bullet-item">采购入库</div>
+                                        <div class="bullet-item">合同录入</div>
+                                        <div class="bullet-item text-[13px]">客户采购需求核对</div>
+                                        <div class="bullet-item">供应商管理</div>
+                                        <div class="bullet-item">佣金管理</div>
+                                        <div class="bullet-item text-gray-300">......</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 04: 仓储物流 -->
+                        <div class="fragment flex flex-col relative" style="transition-delay: 0.4s">
+                            <div class="absolute -top-10 left-1/2 w-[1px] h-10 bg-gray-200 -translate-x-1/2"></div>
+                            <div
+                                class="bg-white rounded-sm card-shadow flex flex-col h-full overflow-hidden border border-gray-100">
+                                <div class="h-12 bg-[#42a5f5] flex items-center justify-center">
+                                    <span class="text-white font-bold">仓储物流</span>
+                                </div>
+                                <div class="p-5 flex-1 bg-[#FFF9E1]/50">
+                                    <div class="space-y-4">
+                                        <div class="bullet-item">出入库管理</div>
+                                        <div class="bullet-item">供应商库存</div>
+                                        <div class="bullet-item">海关进出口申报</div>
+                                        <div class="bullet-item">库存盘点</div>
+                                        <div class="bullet-item">物流进度监控</div>
+                                        <div class="bullet-item">物流费用结算</div>
+                                        <div class="bullet-item text-gray-300">......</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 05: 财务人事 -->
+                        <div class="fragment flex flex-col relative" style="transition-delay: 0.5s">
+                            <div class="absolute -top-10 left-1/2 w-[1px] h-10 bg-gray-200 -translate-x-1/2"></div>
+                            <div
+                                class="bg-white rounded-sm card-shadow flex flex-col h-full overflow-hidden border border-gray-100">
+                                <div class="h-12 bg-[#78909c] flex items-center justify-center">
+                                    <span class="text-white font-bold">财务人事</span>
+                                </div>
+                                <div class="p-5 flex-1 bg-[#FFF9E1]/50">
+                                    <div class="space-y-4">
+                                        <div class="bullet-item">发票管理</div>
+                                        <div class="bullet-item">报销管理</div>
+                                        <div class="bullet-item">纳税申报</div>
+                                        <div class="bullet-item">自动对账</div>
+                                        <div class="bullet-item">招聘管理</div>
+                                        <div class="bullet-item">工资核算</div>
+                                        <div class="bullet-item text-gray-300">......</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 06: IT运维 -->
+                        <div class="fragment flex flex-col relative" style="transition-delay: 0.6s">
+                            <div class="absolute -top-10 left-1/2 w-[1px] h-10 bg-gray-200 -translate-x-1/2"></div>
+                            <div
+                                class="bg-white rounded-sm card-shadow flex flex-col h-full overflow-hidden border border-gray-100">
+                                <div class="h-12 bg-[#ff7043] flex items-center justify-center">
+                                    <span class="text-white font-bold">IT运维</span>
+                                </div>
+                                <div class="p-5 flex-1 bg-[#FFF9E1]/50">
+                                    <div class="space-y-4">
+                                        <div class="bullet-item">用户管理</div>
+                                        <div class="bullet-item">基础设施管理</div>
+                                        <div class="bullet-item">故障处置</div>
+                                        <div class="bullet-item">系统测试</div>
+                                        <div class="bullet-item">合规管理</div>
+                                        <div class="bullet-item">云服务管理</div>
+                                        <div class="bullet-item text-gray-300">......</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/slide-core.js"></script>
+</body>
+
+</html>
