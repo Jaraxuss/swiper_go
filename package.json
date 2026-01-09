@@ -1,4 +1,7 @@
 {
+  "name": "swiper_go",
+  "version": "1.0.0",
+  "description": "An interactive RPA solution showcase and presentation deck powered by Swiper.js.",
   "dependencies": {
     "swiper": "^12.0.3"
   }
