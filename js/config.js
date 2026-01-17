@@ -13,12 +13,12 @@ window.brandConfig = brandConfig; // Explicitly attach to window for iframe acce
  */
 const slideConfig = [
     // 首页
-    "pages/启动会首页.html",
+    "pages/common/启动会首页.html",
 
     // RPA简介
-    "pages/影刀RPA简介.html",
-    "pages/影刀能做什么.html",
-    "pages/影刀能做什么2.html",
+    "pages/common/影刀RPA简介.html",
+    "pages/common/影刀能做什么.html",
+    "pages/common/影刀能做什么2.html",
 
     // 行业挑战和 RPA 价值
     "pages/RPA制造业挑战.html",
@@ -27,7 +27,7 @@ const slideConfig = [
     "pages/RPA制造业直接价值.html",
 
     // 简单实操
-    "pages/小试影刀.html",
+    "pages/common/小试影刀.html",
 
     // 痛点场景案例
     // "pages/核心场景相关案例1.html",
@@ -57,24 +57,24 @@ const slideConfig = [
     "pages/场景_财务部方案.html",
 
     // 课程体系介绍
-    "pages/从何开始.html",
-    "pages/学习路径规划.html",
+    "pages/common/从何开始.html",
+    "pages/common/学习路径规划.html",
 
     // 答疑体系介绍
-    "pages/答疑体系介绍1.html",
-    "pages/答疑体系介绍2.html",
+    "pages/common/答疑体系介绍1.html",
+    "pages/common/答疑体系介绍2.html",
 
     // 如何提需求
-    "pages/如何提需求1.html",
-    "pages/如何提需求2.html",
+    "pages/common/如何提需求1.html",
+    "pages/common/如何提需求2.html",
 
     // 时间节点
-    "pages/里程碑.html",
-    "pages/下一步行动.html",
+    "pages/common/里程碑.html",
+    "pages/common/下一步行动.html",
 
     // 结束
-    "pages/QA.html",
-    "pages/感谢观看.html",
+    "pages/common/QA.html",
+    "pages/common/感谢观看.html",
 ];
 
 // If you need to export this for potential build tools, you can add:
