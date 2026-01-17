@@ -21,10 +21,10 @@ const slideConfig = [
     "pages/common/影刀能做什么2.html",
 
     // 行业挑战和 RPA 价值
-    "pages/RPA制造业挑战.html",
-    "pages/RPA制造业场景列表.html",
-    "pages/RPA制造业间接价值.html",
-    "pages/RPA制造业直接价值.html",
+    "pages/custom/RPA制造业挑战.html",
+    "pages/custom/RPA制造业场景列表.html",
+    "pages/custom/RPA制造业间接价值.html",
+    "pages/custom/RPA制造业直接价值.html",
 
     // 简单实操
     "pages/common/小试影刀.html",
@@ -33,28 +33,28 @@ const slideConfig = [
     // "pages/核心场景相关案例1.html",
 
     // 核心场景场景案例
-    "pages/核心场景相关案例1.html",
-    "pages/生产日报自动化汇总.html",
-    "pages/工单自动化批量管理.html",
-    "pages/影刀AI Power介绍.html",
-    "pages/AI音频克隆.html",
+    "pages/custom/核心场景相关案例1.html",
+    "pages/custom/生产日报自动化汇总.html",
+    "pages/custom/工单自动化批量管理.html",
+    "pages/custom/影刀AI Power介绍.html",
+    "pages/custom/AI音频克隆.html",
 
     // 核心场景场景案例
-    "pages/核心场景相关案例2.html",
-    "pages/BOM物料清单自动化.html",
-    "pages/BOM数据自动化维护.html",
+    "pages/custom/核心场景相关案例2.html",
+    "pages/custom/BOM物料清单自动化.html",
+    "pages/custom/BOM数据自动化维护.html",
 
     // 核心场景场景案例
-    "pages/核心场景相关案例3.html",
-    "pages/自动化创建销售订单.html",
-    "pages/采购入库自动化.html",
+    "pages/custom/核心场景相关案例3.html",
+    "pages/custom/自动化创建销售订单.html",
+    "pages/custom/采购入库自动化.html",
 
     // 通用场景案例
-    "pages/更多场景案例2.html",
-    "pages/场景_运营部方案.html",
-    "pages/场景_电商客服方案.html",
-    "pages/场景_财务部痛点.html",
-    "pages/场景_财务部方案.html",
+    "pages/custom/更多场景案例2.html",
+    "pages/custom/场景_运营部方案.html",
+    "pages/custom/场景_电商客服方案.html",
+    "pages/custom/场景_财务部痛点.html",
+    "pages/custom/场景_财务部方案.html",
 
     // 课程体系介绍
     "pages/common/从何开始.html",
