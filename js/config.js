@@ -13,7 +13,7 @@ window.brandConfig = brandConfig; // Explicitly attach to window for iframe acce
  */
 const slideConfig = [
     // 首页
-    "pages/common/启动会首页.html",
+    "pages/启动会首页.html",
 
     // RPA简介
     "pages/common/影刀RPA简介.html",
