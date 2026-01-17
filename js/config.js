@@ -26,6 +26,14 @@ const slideConfig = [
     "pages/custom/RPA制造业间接价值.html",
     "pages/custom/RPA制造业直接价值.html",
 
+    // 制造业数字化与RPA场景
+    "pages/custom/制造业的数字化地图.html",
+    "pages/custom/业务挑战_流程断点多海量非结构数据.html",
+    "pages/custom/制造业RPA场景地图.html",
+    "pages/custom/RPA+AI文件处理助手_案例1_文件内容对比.html",
+    "pages/custom/RPA+AI文件处理助手_案例2_表单识别填写.html",
+    "pages/custom/制造业RPA场景地图_PMC部.html",
+
     // 简单实操
     "pages/common/小试影刀.html",
 
@@ -48,6 +56,7 @@ const slideConfig = [
     "pages/custom/核心场景相关案例3.html",
     "pages/custom/自动化创建销售订单.html",
     "pages/custom/采购入库自动化.html",
+    "pages/custom/ap_rpa_file_assistant.html",
 
     // 通用场景案例
     "pages/custom/更多场景案例2.html",

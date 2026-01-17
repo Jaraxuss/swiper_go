@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>超复杂表单识别并填写 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border-radius: 16px;
+        }
+
+        /* Benefit Card Stats */
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Workflow Connector */
+        .workflow-box {
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+            position: relative;
+            padding: 2rem 1.5rem;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .workflow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+            width: 90px;
+        }
+
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 0.5rem;
+            color: #3b82f6;
+            font-size: 1.5rem;
+        }
+
+        .connector-arrow {
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        /* Background Graphic */
+        .bg-img-overlay {
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(192, 0, 0, 0.05) 0%, transparent 70%);
+            z-index: 1;
+        }
+
+        /* Pain Point List Item */
+        .pain-point-item {
+            position: relative;
+            padding-left: 1rem;
+            font-size: 11px;
+            line-height: 1.5;
+            color: #475569;
+        }
+
+        .pain-point-item::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: #64748b;
+        }
+
+        /* Value Card */
+        .value-card {
+            background: linear-gradient(135deg, #fff 0%, #fef2f2 100%);
+            border: 1px solid rgba(192, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(192, 0, 0, 0.1);
+        }
+
+        .value-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #C00000 0%, #ff4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Excel Preview */
+        .excel-preview {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .excel-header {
+            background: #f1f5f9;
+            padding: 4px 8px;
+            font-size: 10px;
+            color: #64748b;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .excel-cell {
+            border: 1px solid #e2e8f0;
+            padding: 3px 6px;
+            font-size: 8px;
+            color: #475569;
+            text-align: center;
+        }
+
+        .excel-cell-header {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #334155;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container"
+                class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+                <!-- Background Graphic -->
+                <div class="bg-img-overlay pointer-events-none"></div>
+
+                <!-- Header -->
+                <header class="relative z-20 mb-6 shrink-0">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="text-rpa-red font-bold text-lg">通用场景3：AP+RPA，文件处理助手</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="w-2 h-8 bg-rpa-red rounded-full"></span>
+                        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
+                            CASE2：超复杂表单识别并填写
+                            <span class="text-rpa-red ml-2">（AP智能体）</span>
+                        </h1>
+                    </div>
+                </header>
+
+                <!-- Content Layout -->
+                <div class="flex gap-8 flex-1 relative z-10 min-h-0">
+
+                    <!-- Left Section: Details -->
+                    <div class="w-1/2 flex flex-col gap-4">
+
+                        <!-- Pain Points Card with Background & Business Pains -->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group"
+                            style="transition-delay: 0.1s">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2">
+                            </div>
+                            <div class="flex gap-6">
+                                <!-- 需求背景 -->
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div
+                                            class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 shadow-sm">
+                                            <i class="fa-solid fa-file-lines text-sm"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">需求背景：</h3>
+                                    </div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                                        制造业采购过程中产生的数据量日益庞大，包括供应商信息、产品规格、价格等。这些数据分散在各种表单中，需要高效的处理和分析，以便为采购决策提供支持。
+                                    </p>
+                                </div>
+                                <!-- 业务痛点 -->
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div
+                                            class="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm">
+                                            <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">业务痛点：</h3>
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <div class="pain-point-item">1. 表单字段多、格式复杂，填写繁琐易出错。</div>
+                                        <div class="pain-point-item">2. 不同来源表单数据格式不一，整合分析难。</div>
+                                        <div class="pain-point-item">3. 采购合同条款多，审查、管理及跟踪执行易疏忽，存在风险。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Solution -->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group flex-1"
+                            style="transition-delay: 0.2s">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2">
+                            </div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <div
+                                    class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
+                                    <i class="fa-solid fa-robot text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900 tracking-tight">影刀RPA解决方案</h3>
+                            </div>
+
+                            <!-- Workflow Diagram -->
+                            <div class="workflow-box mt-2">
+                                <div class="flex items-center justify-between px-2">
+                                    <!-- Step 1 -->
+                                    <div class="workflow-step group">
+                                        <div
+                                            class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
+                                            打开智能体<br>上传pdf/Excel原件
+                                        </div>
+                                    </div>
+
+                                    <div class="connector-arrow text-slate-300">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+
+                                    <!-- Step 2 -->
+                                    <div class="workflow-step group">
+                                        <div
+                                            class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
+                                            调用AI工作流<br>提取数据
+                                        </div>
+                                    </div>
+
+                                    <div class="connector-arrow text-slate-300">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+
+                                    <!-- Step 3 -->
+                                    <div class="workflow-step group">
+                                        <div
+                                            class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-table-cells"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
+                                            RPA将提取出的数据<br>填入excel模板
+                                        </div>
+                                    </div>
+
+                                    <div class="connector-arrow text-slate-300">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+
+                                    <!-- Step 4 -->
+                                    <div class="workflow-step group">
+                                        <div
+                                            class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-download"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
+                                            业务员下载填<br>写完成的Excel
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Benefits / Value -->
+                        <div class="fragment mt-auto" style="transition-delay: 0.3s">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="w-1 h-3.5 bg-rpa-red"></span>
+                                <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="value-card">
+                                    <div class="value-number">95%</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-2">
+                                        将合同条款比对的<span class="text-rpa-red font-bold">准确率</span>从人工的70%-80%大幅提升至95%以上
+                                    </p>
+                                </div>
+                                <div class="value-card">
+                                    <div class="value-number">85%</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-2">
+                                        而AI可在数分钟内完成合同关键信息提取与条款比对，<span class="text-rpa-red font-bold">效率</span>提升85%
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Section: Excel Preview & Demo -->
+                    <div class="fragment w-1/2 flex flex-col gap-4" style="transition-delay: 0.4s">
+                        <!-- Excel Template Preview -->
+                        <div class="glass-card p-4 flex-1 flex flex-col">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
+                                        <i class="fa-solid fa-file-excel text-sm"></i>
+                                    </div>
+                                    <h3 class="text-sm font-bold text-slate-900">选型明细表</h3>
+                                </div>
+                                <a href="#" class="text-rpa-red text-xs font-semibold hover:underline">点我查看更多 →</a>
+                            </div>
+
+                            <!-- Excel Preview Table -->
+                            <div class="excel-preview flex-1 overflow-hidden">
+                                <div class="excel-header flex items-center gap-2">
+                                    <i class="fa-solid fa-table text-xs"></i>
+                                    <span>选型明细表.xlsx</span>
+                                </div>
+                                <table class="w-full border-collapse">
+                                    <thead>
+                                        <tr>
+                                            <td class="excel-cell excel-cell-header" style="width: 30px;"></td>
+                                            <td class="excel-cell excel-cell-header">G</td>
+                                            <td class="excel-cell excel-cell-header">H</td>
+                                            <td class="excel-cell excel-cell-header">I</td>
+                                            <td class="excel-cell excel-cell-header">J</td>
+                                            <td class="excel-cell excel-cell-header">K</td>
+                                            <td class="excel-cell excel-cell-header">L</td>
+                                            <td class="excel-cell excel-cell-header">M</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="excel-cell excel-cell-header">1</td>
+                                            <td class="excel-cell" colspan="7"
+                                                style="text-align: right; font-weight: 600; color: #C00000;">选型明细表</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="excel-cell excel-cell-header">2</td>
+                                            <td class="excel-cell"></td>
+                                            <td class="excel-cell"></td>
+                                            <td class="excel-cell"></td>
+                                            <td class="excel-cell"></td>
+                                            <td class="excel-cell"></td>
+                                            <td class="excel-cell"></td>
+                                            <td class="excel-cell"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="excel-cell excel-cell-header">3</td>
+                                            <td class="excel-cell excel-cell-header">公称压力</td>
+                                            <td class="excel-cell excel-cell-header">法兰标准/连接形式</td>
+                                            <td class="excel-cell excel-cell-header">上阀盖形式</td>
+                                            <td class="excel-cell excel-cell-header">阀体材质</td>
+                                            <td class="excel-cell excel-cell-header">阀内件材质</td>
+                                            <td class="excel-cell excel-cell-header">填料材质</td>
+                                            <td class="excel-cell excel-cell-header">额定KV值*</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="excel-cell excel-cell-header">4</td>
+                                            <td class="excel-cell">PN16</td>
+                                            <td class="excel-cell">GB/T 9113</td>
+                                            <td class="excel-cell">标准型</td>
+                                            <td class="excel-cell">WCB</td>
+                                            <td class="excel-cell">304</td>
+                                            <td class="excel-cell">PTFE</td>
+                                            <td class="excel-cell">25</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="excel-cell excel-cell-header">5</td>
+                                            <td class="excel-cell">PN25</td>
+                                            <td class="excel-cell">HG/T 20592</td>
+                                            <td class="excel-cell">散热型</td>
+                                            <td class="excel-cell">CF8</td>
+                                            <td class="excel-cell">316</td>
+                                            <td class="excel-cell">石墨</td>
+                                            <td class="excel-cell">40</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="excel-cell excel-cell-header">6</td>
+                                            <td class="excel-cell">PN40</td>
+                                            <td class="excel-cell">ANSI B16.5</td>
+                                            <td class="excel-cell">长颈型</td>
+                                            <td class="excel-cell">CF8M</td>
+                                            <td class="excel-cell">316L</td>
+                                            <td class="excel-cell">柔性石墨</td>
+                                            <td class="excel-cell">63</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="excel-cell excel-cell-header">7</td>
+                                            <td class="excel-cell">PN63</td>
+                                            <td class="excel-cell">JIS B2220</td>
+                                            <td class="excel-cell">波纹管密封</td>
+                                            <td class="excel-cell">LCB</td>
+                                            <td class="excel-cell">哈氏合金</td>
+                                            <td class="excel-cell">编织填料</td>
+                                            <td class="excel-cell">100</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="excel-cell excel-cell-header">8</td>
+                                            <td class="excel-cell">PN100</td>
+                                            <td class="excel-cell">DIN 2501</td>
+                                            <td class="excel-cell">低温型</td>
+                                            <td class="excel-cell">CF3M</td>
+                                            <td class="excel-cell">蒙乃尔</td>
+                                            <td class="excel-cell">O型圈</td>
+                                            <td class="excel-cell">160</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Document Preview Placeholder -->
+                        <div class="glass-card p-4 h-40">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div
+                                    class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
+                                    <i class="fa-solid fa-file-pdf text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900">原始表单文档</h3>
+                            </div>
+                            <div class="flex gap-3 h-20">
+                                <!-- PDF Preview -->
+                                <div
+                                    class="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400">
+                                    <div class="text-center">
+                                        <i class="fa-solid fa-file-pdf text-3xl mb-1"></i>
+                                        <div class="text-[10px]">采购合同.pdf</div>
+                                    </div>
+                                </div>
+                                <!-- Excel Preview -->
+                                <div
+                                    class="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400">
+                                    <div class="text-center">
+                                        <i class="fa-solid fa-file-excel text-3xl mb-1 text-emerald-400"></i>
+                                        <div class="text-[10px]">供应商报价.xlsx</div>
+                                    </div>
+                                </div>
+                                <!-- Image Preview -->
+                                <div
+                                    class="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400">
+                                    <div class="text-center">
+                                        <i class="fa-solid fa-file-image text-3xl mb-1 text-purple-400"></i>
+                                        <div class="text-[10px]">表单扫描件.png</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>

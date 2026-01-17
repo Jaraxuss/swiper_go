@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>业务挑战 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border-radius: 16px;
+        }
+
+        .challenge-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f3f4f6;
+            transition: all 0.3s ease;
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .solution-card {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+            border: 2px solid #fecaca;
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #C00000 0%, #ff6b6b 100%);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .ai-badge {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #b45309;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container"
+                class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-12 py-10">
+
+                <!-- 头部标题 -->
+                <header class="relative z-20 mb-8 shrink-0">
+                    <div class="flex items-center gap-4 mb-2">
+                        <span class="w-2 h-10 bg-rpa-red rounded-full"></span>
+                        <h1 class="text-4xl font-extrabold tracking-tight text-slate-900">
+                            业务挑战：流程断点多、海量非结构数据
+                        </h1>
+                    </div>
+                </header>
+
+                <!-- 主内容区 -->
+                <div class="flex-1 flex flex-col gap-6 relative z-10">
+
+                    <!-- 上方：业务挑战卡片 -->
+                    <div class="fragment grid grid-cols-4 gap-4" style="transition-delay: 0.1s">
+                        <!-- 挑战1 -->
+                        <div class="challenge-card">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-rpa-red">
+                                    <i class="fa-solid fa-layer-group text-lg"></i>
+                                </div>
+                                <h3 class="font-bold text-gray-800">大量的基础事务性工作</h3>
+                            </div>
+                            <p class="text-sm text-gray-500 leading-relaxed">
+                                审批、确认、分发
+                            </p>
+                        </div>
+
+                        <!-- 挑战2 -->
+                        <div class="challenge-card">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-500">
+                                    <i class="fa-solid fa-link-slash text-lg"></i>
+                                </div>
+                                <h3 class="font-bold text-gray-800">流程断点堵点多</h3>
+                            </div>
+                            <p class="text-sm text-gray-500 leading-relaxed">
+                                应用隔离、数据隔离、打通依赖人员介入耗时
+                            </p>
+                        </div>
+
+                        <!-- 挑战3 -->
+                        <div class="challenge-card">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500">
+                                    <i class="fa-solid fa-puzzle-piece text-lg"></i>
+                                </div>
+                                <h3 class="font-bold text-gray-800">部分系统无法集成</h3>
+                            </div>
+                            <p class="text-sm text-gray-500 leading-relaxed">
+                                无法或难API，接口少、慢
+                            </p>
+                        </div>
+
+                        <!-- 挑战4 -->
+                        <div class="challenge-card">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-500">
+                                    <i class="fa-solid fa-file-lines text-lg"></i>
+                                </div>
+                                <h3 class="font-bold text-gray-800">海量非结构数据难处理</h3>
+                            </div>
+                            <p class="text-sm text-gray-500 leading-relaxed">
+                                人工识别、提取
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 下方：RPA优势解决方案 -->
+                    <div class="fragment flex-1 grid grid-cols-4 gap-4" style="transition-delay: 0.2s">
+                        <!-- RPA优势1 -->
+                        <div class="solution-card">
+                            <div class="flex items-center gap-2 mb-3">
+                                <i class="fa-solid fa-check-circle text-rpa-red"></i>
+                                <h4 class="font-bold text-rpa-red text-sm">RPA优势1：</h4>
+                            </div>
+                            <h3 class="font-bold text-gray-800 mb-3 text-lg">自动执行预定流程</h3>
+                            <p class="text-sm text-gray-600 leading-relaxed">
+                                针对高重复性、标准化、规则明确、大批量的日常事务，设定自动化操作，优化企业基础流程
+                            </p>
+                        </div>
+
+                        <!-- RPA优势2 -->
+                        <div class="solution-card">
+                            <div class="flex items-center gap-2 mb-3">
+                                <i class="fa-solid fa-check-circle text-rpa-red"></i>
+                                <h4 class="font-bold text-rpa-red text-sm">RPA优势2：</h4>
+                            </div>
+                            <h3 class="font-bold text-gray-800 mb-3 text-lg">跨系统协同，实现系统互联&数据集成</h3>
+                            <p class="text-sm text-gray-600 leading-relaxed">
+                                在不同系统中定ERP、Excel、数据库、网页、API等管理流程、自动进行信息收集和整理、生成数据
+                            </p>
+                        </div>
+
+                        <!-- RPA优势3 -->
+                        <div class="solution-card">
+                            <div class="flex items-center gap-2 mb-3">
+                                <i class="fa-solid fa-check-circle text-rpa-red"></i>
+                                <h4 class="font-bold text-rpa-red text-sm">RPA优势3：</h4>
+                            </div>
+                            <h3 class="font-bold text-gray-800 mb-3 text-lg">非侵入式，部署灵活敏捷</h3>
+                            <p class="text-sm text-gray-600 leading-relaxed">
+                                具备强灵活性能性，根据企业业务可以操作、跨平台系统数据采集、RPA高灵活、部署时不需要改变有系统信息、避开现留系统的痛点
+                            </p>
+                        </div>
+
+                        <!-- RPA优势4 + AI Power -->
+                        <div class="solution-card">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-check-circle text-rpa-red"></i>
+                                    <h4 class="font-bold text-rpa-red text-sm">RPA优势4：</h4>
+                                </div>
+                            </div>
+                            <h3 class="font-bold text-gray-800 mb-3 text-lg">RPA+AI有效处理海量非结构数据</h3>
+                            <p class="text-sm text-gray-600 leading-relaxed mb-4">
+                                AI从各类文件中精准提取反关键信息、辅助中更精确关键词识别点，RPA依照AI处理后的数据后续按规则判断、行分类、转换等批量操作，大幅提高数据处理效率与准确性，为决策提供有力数据支撑
+                            </p>
+                            <div class="ai-badge">
+                                <i class="fa-solid fa-sparkles"></i>
+                                Ai Power
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>

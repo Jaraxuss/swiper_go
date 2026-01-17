@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>制造业的数字化地图 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border-radius: 16px;
+        }
+
+        .flow-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .flow-node {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .flow-arrow {
+            color: #C00000;
+            font-size: 0.9rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #C00000 0%, #ff4444 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .soft-row {
+            border-left: 4px solid #C00000;
+            background: linear-gradient(90deg, rgba(192, 0, 0, 0.05) 0%, transparent 100%);
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-row {
+            border-left: 4px solid #e5e7eb;
+            background: #f9fafb;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container"
+                class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-12 py-8">
+
+                <!-- 头部标题 -->
+                <header class="relative z-20 mb-6 shrink-0">
+                    <div class="flex items-center gap-4 mb-2">
+                        <span class="w-2 h-10 bg-rpa-red rounded-full"></span>
+                        <h1 class="text-4xl font-extrabold tracking-tight text-slate-900">
+                            制造业的数字化地图
+                        </h1>
+                    </div>
+                    <p class="text-sm text-slate-500 font-medium ml-6">
+                        ERP：企业资源管理、抓财务、抓资源、管订单、定计划等，与其他企业软件如CRM、MES等息息相关
+                    </p>
+                </header>
+
+                <!-- 主内容区 -->
+                <div class="fragment flex-1 flex flex-col gap-4 relative z-10" style="transition-delay: 0.1s">
+
+                    <!-- 上方流程图区域 -->
+                    <div class="glass-card p-6 flex-1">
+                        <!-- 顶部流程节点 -->
+                        <div class="flex items-center justify-between mb-6">
+                            <!-- 左侧步骤 -->
+                            <div class="flex items-center gap-4">
+                                <div class="flow-node bg-gray-50 border border-gray-200 text-gray-600">
+                                    <div class="text-xs text-gray-400 mb-1">物料</div>
+                                    <div>采购、消耗</div>
+                                </div>
+                                <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                <div class="flow-node bg-gray-50 border border-gray-200 text-gray-600">
+                                    <div class="text-xs text-gray-400 mb-1">生产计划</div>
+                                    <div>物料数据</div>
+                                </div>
+                                <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                            </div>
+
+                            <!-- 中心高亮区 -->
+                            <div class="highlight-box shadow-lg shadow-red-200/50">
+                                <div class="text-sm opacity-80">物料</div>
+                                <div class="text-xl">生产制造</div>
+                            </div>
+
+                            <!-- 右侧步骤 -->
+                            <div class="flex items-center gap-4">
+                                <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                <div class="flow-node bg-gray-50 border border-gray-200 text-gray-600">
+                                    <div class="text-xs text-gray-400 mb-1">物料消耗信息</div>
+                                    <div>生产数据、良品数据</div>
+                                </div>
+                                <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                <div class="flow-node bg-gray-50 border border-gray-200 text-gray-600">
+                                    <div class="text-xs text-gray-400 mb-1">物量</div>
+                                    <div>数据</div>
+                                </div>
+                                <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                <div class="flow-node bg-gray-50 border border-gray-200 text-gray-600">
+                                    <div class="text-xs text-gray-400 mb-1">库存</div>
+                                    <div>数据</div>
+                                </div>
+                                <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                <div class="flow-node bg-gray-50 border border-gray-200 text-gray-600">
+                                    <div class="text-xs text-gray-400 mb-1">订单</div>
+                                    <div>安排</div>
+                                </div>
+                                <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                <div class="flow-node bg-gray-50 border border-gray-200 text-gray-600">
+                                    <div class="text-xs text-gray-400 mb-1">销售</div>
+                                    <div>订单、完成</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 流程图中部文字标注 -->
+                        <div class="flex items-center justify-center gap-8 mb-6 text-sm">
+                            <span class="text-gray-400">研发</span>
+                            <span class="text-gray-400">采购</span>
+                            <span class="text-gray-400">排产计划</span>
+                            <span class="px-3 py-1 bg-red-50 text-rpa-red rounded-lg font-semibold">安全</span>
+                            <span class="px-3 py-1 bg-red-50 text-rpa-red rounded-lg font-semibold">仓储</span>
+                            <span class="text-gray-400">设备</span>
+                            <span class="text-gray-400">仓储物流</span>
+                            <span class="text-gray-400">销售</span>
+                            <span class="text-gray-400">用户</span>
+                        </div>
+
+                        <!-- 底部分栏标注 -->
+                        <div class="flex items-center justify-center gap-4 text-sm mb-4">
+                            <span class="px-3 py-1 bg-red-50 text-rpa-red rounded font-medium">质检</span>
+                            <span class="px-3 py-1 bg-red-50 text-rpa-red rounded font-medium">环境</span>
+                        </div>
+                    </div>
+
+                    <!-- 下方详细说明区 -->
+                    <div class="fragment grid grid-cols-3 gap-4" style="transition-delay: 0.2s">
+                        <!-- 主要软件 -->
+                        <div class="flow-section">
+                            <div class="soft-row">
+                                <span class="text-rpa-red font-bold text-sm">主要软件</span>
+                            </div>
+                            <div class="grid grid-cols-6 gap-2 mt-3 text-center text-sm">
+                                <div class="p-2 bg-gray-50 rounded">CAD、<br>CAM等</div>
+                                <div class="p-2 bg-gray-50 rounded">SCM</div>
+                                <div class="p-2 bg-gray-50 rounded">APS</div>
+                                <div class="p-2 bg-gray-50 rounded">MES、EMS、QMS等</div>
+                                <div class="p-2 bg-gray-50 rounded">WMS、<br>TMS等</div>
+                                <div class="p-2 bg-gray-50 rounded">CRM</div>
+                            </div>
+                        </div>
+
+                        <!-- 主要作用 -->
+                        <div class="flow-section col-span-2">
+                            <div class="soft-row">
+                                <span class="text-rpa-red font-bold text-sm">主要作用</span>
+                            </div>
+                            <div class="grid grid-cols-6 gap-3 mt-3 text-xs leading-relaxed text-gray-600">
+                                <div class="p-2 bg-gray-50 rounded">
+                                    产品及工艺研发设计、降低成本、研发成本、周期
+                                </div>
+                                <div class="p-2 bg-gray-50 rounded">
+                                    供应链相关的供应、制造、分销、零售等管理和评估
+                                </div>
+                                <div class="p-2 bg-gray-50 rounded">
+                                    计划与排程
+                                </div>
+                                <div class="p-2 bg-gray-50 rounded">
+                                    MES：生产计划、生产现场、生产质量的管理<br>
+                                    QMS：质量管理系统、和成品检验<br>
+                                    EMS：生产环境管理
+                                </div>
+                                <div class="p-2 bg-gray-50 rounded">
+                                    出入库管理、库内管理、拣发等
+                                </div>
+                                <div class="p-2 bg-gray-50 rounded">
+                                    销售管理
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>

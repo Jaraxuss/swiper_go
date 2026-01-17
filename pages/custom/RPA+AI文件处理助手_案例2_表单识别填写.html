@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RPA+AI文件处理助手-案例2 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            border-radius: 16px;
+        }
+
+        .workflow-step {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f3f4f6;
+        }
+
+        .workflow-arrow {
+            color: #C00000;
+            font-size: 1.25rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            border: 1px solid #fecaca;
+        }
+
+        .ai-tag {
+            background: linear-gradient(135deg, #C00000 0%, #ef4444 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .section-label {
+            background: #C00000;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .info-block {
+            background: #f9fafb;
+            border-left: 3px solid #e5e7eb;
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .pain-point {
+            background: #fef2f2;
+            border-left: 3px solid #C00000;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.85rem;
+        }
+
+        .table-preview {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: #f3f4f6;
+            padding: 0.5rem;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container"
+                class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-10 py-8">
+
+                <!-- 头部标题 -->
+                <header class="relative z-20 mb-4 shrink-0">
+                    <div class="flex items-center gap-4 mb-2">
+                        <span class="w-1.5 h-8 bg-rpa-red rounded-full"></span>
+                        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
+                            通用场景3：AP+RPA，文件处理助手
+                        </h1>
+                    </div>
+                    <p class="text-rpa-red font-bold ml-5">
+                        CASE2: 超复杂表单识别并填写 <span class="text-orange-500">(AP智能体)</span>
+                    </p>
+                </header>
+
+                <!-- 主内容区 -->
+                <div class="flex-1 flex flex-col gap-4 relative z-10">
+
+                    <!-- 上方：需求背景和业务痛点 -->
+                    <div class="fragment grid grid-cols-2 gap-6" style="transition-delay: 0.1s">
+                        <!-- 需求背景 -->
+                        <div class="glass-card p-4">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="section-label">项目背景</div>
+                            </div>
+                            <div class="info-block">
+                                <p class="text-gray-600 text-sm leading-relaxed">
+                                    需求背景：<br>
+                                    制造业采购过程中产生的数据量日益庞大，包括供应商信息、产品规格、价格等，这些数据分散在各种表单中，需要高效的处理和分析，以便为采购决策提供支持。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 业务痛点 -->
+                        <div class="glass-card p-4">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="section-label">业务痛点</div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="pain-point">
+                                    1. 表单字段多，格式复杂、合同等文档易出错。
+                                </div>
+                                <div class="pain-point">
+                                    2. 不同渠道表单数据格式不一，整合分析难。
+                                </div>
+                                <div class="pain-point">
+                                    3. 采购合同非款多，审查、管理及跟踪执行易疏忽，存在风险。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 中间：工作流程图 -->
+                    <div class="fragment glass-card p-4 flex-1" style="transition-delay: 0.2s">
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="section-label">影刀RPA解决方案</div>
+                        </div>
+
+                        <div class="flex gap-6">
+                            <!-- 左侧：工作流程 -->
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between gap-2">
+                                    <!-- 步骤1 -->
+                                    <div class="workflow-step flex-1">
+                                        <div
+                                            class="w-8 h-8 mx-auto mb-2 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500">
+                                            <i class="fa-solid fa-file-pdf text-sm"></i>
+                                        </div>
+                                        <p class="text-xs font-medium">打开脚本拖动<br>上传pdf/Excel图片</p>
+                                    </div>
+
+                                    <div class="workflow-arrow"><i class="fa-solid fa-chevron-right text-sm"></i></div>
+
+                                    <!-- 步骤2 -->
+                                    <div class="workflow-step flex-1 relative">
+                                        <div class="ai-tag absolute -top-2 right-1 text-xs px-2">AI</div>
+                                        <div
+                                            class="w-8 h-8 mx-auto mb-2 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500">
+                                            <i class="fa-solid fa-brain text-sm"></i>
+                                        </div>
+                                        <p class="text-xs font-medium">调用AI识别<br>提取数据</p>
+                                    </div>
+
+                                    <div class="workflow-arrow"><i class="fa-solid fa-chevron-right text-sm"></i></div>
+
+                                    <!-- 步骤3 -->
+                                    <div class="workflow-step flex-1">
+                                        <div
+                                            class="w-8 h-8 mx-auto mb-2 rounded-lg bg-green-50 flex items-center justify-center text-green-500">
+                                            <i class="fa-solid fa-table text-sm"></i>
+                                        </div>
+                                        <p class="text-xs font-medium">RPA将提取出的数<br>据填入excel模板</p>
+                                    </div>
+
+                                    <div class="workflow-arrow"><i class="fa-solid fa-chevron-right text-sm"></i></div>
+
+                                    <!-- 步骤4 -->
+                                    <div class="workflow-step flex-1">
+                                        <div
+                                            class="w-8 h-8 mx-auto mb-2 rounded-lg bg-purple-50 flex items-center justify-center text-purple-500">
+                                            <i class="fa-solid fa-download text-sm"></i>
+                                        </div>
+                                        <p class="text-xs font-medium">业务员下载填<br>写完成的Excel</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 右侧：表格预览 -->
+                            <div class="w-64">
+                                <div class="table-preview">
+                                    <div class="table-header">选型明细表</div>
+                                    <div class="p-2 text-xs">
+                                        <div class="grid grid-cols-4 gap-1 text-center text-gray-500 mb-1">
+                                            <span>分配信息</span>
+                                            <span>选型数量</span>
+                                            <span>供应商信息</span>
+                                            <span>商品数据</span>
+                                        </div>
+                                        <div
+                                            class="h-16 bg-gray-50 rounded flex items-center justify-center text-gray-400">
+                                            表格数据区
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-rpa-red mt-2 text-right cursor-pointer hover:underline">
+                                    点击查看更多 →
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 下方：方案价值 -->
+                    <div class="fragment" style="transition-delay: 0.3s">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="w-1 h-4 bg-rpa-red"></span>
+                            <h3 class="font-bold text-slate-900">方案价值：</h3>
+                        </div>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="stat-card">
+                                <div class="text-4xl font-black text-rpa-red mb-2">95%</div>
+                                <p class="text-sm text-gray-600">
+                                    将合同条款比对的<span class="font-bold text-rpa-red">准确率</span>从人工的<br>
+                                    70%-80% 大幅提升至 95% 以上
+                                </p>
+                            </div>
+                            <div class="stat-card">
+                                <div class="text-4xl font-black text-rpa-red mb-2">85%</div>
+                                <p class="text-sm text-gray-600">
+                                    而 AI 可在数分钟内完成合同关键信息提取<br>
+                                    与条款比对，<span class="font-bold text-rpa-red">效率提升85%</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>
