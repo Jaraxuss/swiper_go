@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RPA+AI 文件内容对比 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border-radius: 16px;
+        }
+
+        /* Workflow Connector */
+        .workflow-box {
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+            position: relative;
+            padding: 2rem 1.5rem;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .workflow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+            width: 90px;
+        }
+
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 0.5rem;
+            color: #C00000;
+            font-size: 1.5rem;
+        }
+
+        .connector-arrow {
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        /* Background Graphic */
+        .bg-img-overlay {
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(192, 0, 0, 0.05) 0%, transparent 70%);
+            z-index: 1;
+        }
+
+        /* Pain Point List Item */
+        .pain-point-item {
+            position: relative;
+            padding-left: 1rem;
+            font-size: 11px;
+            line-height: 1.5;
+            color: #475569;
+        }
+
+        .pain-point-item::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: #64748b;
+        }
+
+        /* Value Card */
+        .value-card {
+            background: linear-gradient(135deg, #fff 0%, #fef2f2 100%);
+            border: 1px solid rgba(192, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(192, 0, 0, 0.1);
+        }
+
+        .value-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #C00000 0%, #ff4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Document Preview */
+        .doc-preview {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .doc-header {
+            background: #f1f5f9;
+            padding: 6px 10px;
+            font-size: 11px;
+            color: #64748b;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .doc-content {
+            padding: 12px;
+            font-size: 9px;
+            color: #475569;
+            line-height: 1.6;
+            max-height: 160px;
+            overflow: hidden;
+        }
+
+        .doc-content p {
+            margin-bottom: 6px;
+        }
+
+        .highlight-box {
+            background: rgba(192, 0, 0, 0.05);
+            border-left: 3px solid #C00000;
+            padding: 8px 10px;
+            margin: 8px 0;
+            font-size: 9px;
+        }
+
+        /* Result Preview */
+        .result-preview {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .result-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 10px;
+        }
+
+        .result-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container"
+                class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+                <!-- Background Graphic -->
+                <div class="bg-img-overlay pointer-events-none"></div>
+
+                <!-- Header -->
+                <header class="relative z-20 mb-6 shrink-0">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="text-rpa-red font-bold text-lg">通用场景3：RPA+AI，文件处理助手</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="w-2 h-8 bg-rpa-red rounded"></span>
+                        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
+                            CASE1: 文件内容对比
+                            <span class="text-rpa-red ml-2">（Ai Power 工作流）</span>
+                        </h1>
+                    </div>
+                </header>
+
+                <!-- Content Layout -->
+                <div class="flex gap-8 flex-1 relative z-10 min-h-0">
+
+                    <!-- Left Section: Details -->
+                    <div class="w-1/2 flex flex-col gap-4">
+
+                        <!-- Pain Points Card with Background & Business Pains -->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2">
+                            </div>
+                            <div class="flex gap-6">
+                                <!-- 需求背景 -->
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div
+                                            class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 shadow-sm">
+                                            <i class="fa-solid fa-file-lines text-sm"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">需求背景：</h3>
+                                    </div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                                        制造业采购业务高频、品类多、跨地域，合同条款复杂且模板多样，市场变化快，传统人工管理难以满足需求。
+                                    </p>
+                                </div>
+                                <!-- 业务痛点 -->
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div
+                                            class="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm">
+                                            <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">业务痛点：</h3>
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <div class="pain-point-item">1、人工比对合同效率低、准确性差</div>
+                                        <div class="pain-point-item">2、缺乏风险预警且管理成本高</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Solution -->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2">
+                            </div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <div
+                                    class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
+                                    <i class="fa-solid fa-robot text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900 tracking-tight">影刀RPA解决方案</h3>
+                            </div>
+
+                            <!-- Workflow Diagram -->
+                            <div class="workflow-box mt-2 !py-4">
+                                <div class="flex items-center justify-between px-2">
+                                    <!-- Step 1: 上传本次合同 -->
+                                    <div class="workflow-step group">
+                                        <div
+                                            class="step-icon transition-all group-hover:bg-rpa-red group-hover:text-white">
+                                            <i class="fa-solid fa-file-upload"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
+                                            上传本次合同<br><span
+                                                class="font-normal text-slate-500">格式不限<br>(PDF/Word...)</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="connector-arrow text-slate-300">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+
+                                    <!-- Step 2: 上传参考合同 -->
+                                    <div class="workflow-step group">
+                                        <div
+                                            class="step-icon transition-all group-hover:bg-rpa-red group-hover:text-white">
+                                            <i class="fa-solid fa-file-circle-plus"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
+                                            上传参考合同<br><span
+                                                class="font-normal text-slate-500">格式不限<br>(PDF/Word...)</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="connector-arrow text-slate-300">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+
+                                    <!-- Step 3: 运行AP工作流 -->
+                                    <div class="workflow-step group">
+                                        <div
+                                            class="step-icon transition-all group-hover:bg-rpa-red group-hover:text-white">
+                                            <i class="fa-solid fa-gears"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
+                                            运行AP工作流
+                                        </div>
+                                    </div>
+
+                                    <div class="connector-arrow text-slate-300">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+
+                                    <!-- Step 4: 查看对比结果 -->
+                                    <div class="workflow-step group">
+                                        <div
+                                            class="step-icon transition-all group-hover:bg-rpa-red group-hover:text-white">
+                                            <i class="fa-solid fa-magnifying-glass-chart"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
+                                            查看AP给出的<br>最后对比结果
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Benefits / Value -->
+                        <div class="fragment mt-auto" animation_step="3">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="w-1 h-3.5 bg-rpa-red"></span>
+                                <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="value-card">
+                                    <div class="value-number">95%</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-2">
+                                        将合同条款比对的<span class="text-rpa-red font-bold">准确率</span>从人工的70%-80%大幅提升至95%以上
+                                    </p>
+                                </div>
+                                <div class="value-card">
+                                    <div class="value-number">85%</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-2">
+                                        AI可在数分钟内完成合同关键信息提取与条款比对，<span class="text-rpa-red font-bold">效率</span>提升85%
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Section: Preview & Demo -->
+                    <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
+                        <!-- Contract Comparison Result Preview -->
+                        <!-- AI Power Workflow Implementation -->
+                        <div class="glass-card p-4 flex-1 flex flex-col">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
+                                        <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+                                    </div>
+                                    <h3 class="text-sm font-bold text-slate-900">AI Power 工作流实现细节</h3>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                    <span class="text-[10px] text-slate-500 font-medium">运行中 (Production)</span>
+                                </div>
+                            </div>
+
+                            <!-- Workflow Visualizer -->
+                            <!-- Workflow Implementation Screenshot -->
+                            <div
+                                class="flex-1 flex items-center justify-center bg-white rounded-xl border border-slate-100 overflow-hidden shadow-inner">
+                                <img src="../../assets/AI工作流_文件内容对比.jpg" alt="AI Power 工作流"
+                                    class="max-w-full max-h-full object-contain">
+                            </div>
+                        </div>
+
+
+                        <!-- Document Upload Preview -->
+                        <div class="glass-card p-4 h-44">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div
+                                    class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
+                                    <i class="fa-solid fa-file-contract text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900">合同文件上传</h3>
+                            </div>
+                            <div class="flex gap-4 h-24">
+                                <!-- 本次合同 -->
+                                <div
+                                    class="flex-1 bg-gradient-to-br from-blue-50 to-slate-50 rounded-xl border-2 border-dashed border-blue-200 flex flex-col items-center justify-center text-blue-400 hover:border-blue-400 hover:bg-blue-50 transition-all cursor-pointer group">
+                                    <i
+                                        class="fa-solid fa-file-pdf text-3xl mb-2 group-hover:scale-110 transition-transform"></i>
+                                    <div class="text-[11px] font-semibold text-slate-600">本次合同</div>
+                                    <div class="text-[9px] text-slate-400">PDF/Word/图片</div>
+                                </div>
+                                <!-- VS图标 -->
+                                <div class="flex items-center justify-center">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-rpa-red text-white flex items-center justify-center font-bold text-sm shadow-lg">
+                                        VS
+                                    </div>
+                                </div>
+                                <!-- 参考合同 -->
+                                <div
+                                    class="flex-1 bg-gradient-to-br from-emerald-50 to-slate-50 rounded-xl border-2 border-dashed border-emerald-200 flex flex-col items-center justify-center text-emerald-400 hover:border-emerald-400 hover:bg-emerald-50 transition-all cursor-pointer group">
+                                    <i
+                                        class="fa-solid fa-file-pdf text-3xl mb-2 group-hover:scale-110 transition-transform"></i>
+                                    <div class="text-[11px] font-semibold text-slate-600">参考合同</div>
+                                    <div class="text-[9px] text-slate-400">PDF/Word/图片</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>
