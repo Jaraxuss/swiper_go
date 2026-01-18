@@ -16,26 +16,66 @@
     }
 
     // 2. Fragment & Navigation Logic
-    let currentFragmentIndex = -1;
+    let currentStepIndex = -1;
+    let steps = []; // Array of arrays of elements
+
     function initNavigation() {
-        const fragments = document.querySelectorAll('.fragment');
+        const fragments = Array.from(document.querySelectorAll('.fragment'));
+        steps = [];
+
+        // Separation: Explicitly ordered vs Implicit (DOM order)
+        const explicitFragments = [];
+        const implicitFragments = [];
+
+        fragments.forEach(el => {
+            if (el.hasAttribute('animation_step')) {
+                explicitFragments.push(el);
+            } else {
+                implicitFragments.push(el);
+            }
+        });
+
+        // Part 1: Process Explicit Steps
+        // Group by step value
+        const explicitGroups = {};
+        explicitFragments.forEach(el => {
+            const stepVal = parseFloat(el.getAttribute('animation_step'));
+            if (!explicitGroups[stepVal]) {
+                explicitGroups[stepVal] = [];
+            }
+            explicitGroups[stepVal].push(el);
+        });
+
+        // Sort keys and add to main steps
+        Object.keys(explicitGroups)
+            .sort((a, b) => a - b)
+            .forEach(key => {
+                steps.push(explicitGroups[key]);
+            });
+
+        // Part 2: Process Implicit Steps (Play last, one by one)
+        implicitFragments.forEach(el => {
+            steps.push([el]);
+        });
 
         document.addEventListener('keydown', (event) => {
             const isNextKey = ['ArrowRight', 'PageDown', ' ', 'ArrowDown'].includes(event.key);
             const isPrevKey = ['ArrowLeft', 'PageUp', 'ArrowUp'].includes(event.key);
 
             if (isNextKey) {
-                if (currentFragmentIndex < fragments.length - 1) {
-                    currentFragmentIndex++;
-                    fragments[currentFragmentIndex].classList.add('visible');
+                if (currentStepIndex < steps.length - 1) {
+                    currentStepIndex++;
+                    // Activate all elements in this step
+                    steps[currentStepIndex].forEach(el => el.classList.add('visible'));
                 } else {
                     window.parent.postMessage({ type: 'SWIPER_NEXT' }, '*');
                 }
                 if ([' ', 'ArrowDown'].includes(event.key)) event.preventDefault();
             } else if (isPrevKey) {
-                if (currentFragmentIndex >= 0) {
-                    fragments[currentFragmentIndex].classList.remove('visible');
-                    currentFragmentIndex--;
+                if (currentStepIndex >= 0) {
+                    // Deactivate all elements in this step
+                    steps[currentStepIndex].forEach(el => el.classList.remove('visible'));
+                    currentStepIndex--;
                 } else {
                     window.parent.postMessage({ type: 'SWIPER_PREV' }, '*');
                 }
