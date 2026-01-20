@@ -20,43 +20,19 @@ const slideConfig = [
     "pages/common/影刀能做什么.html",
     "pages/common/影刀能做什么2.html",
 
-    // 行业挑战和 RPA 价值
-    "pages/custom/RPA制造业挑战.html",
-    "pages/custom/RPA制造业场景列表.html",
-    "pages/custom/RPA制造业间接价值.html",
-    "pages/custom/RPA制造业直接价值.html",
-
-    // 制造业数字化与RPA场景
-    "pages/custom/制造业的数字化地图.html",
-    "pages/custom/业务挑战_流程断点多海量非结构数据.html",
-    "pages/custom/制造业RPA场景地图.html",
-    "pages/custom/RPA+AI文件处理助手_案例1_文件内容对比.html",
-    "pages/custom/RPA+AI文件处理助手_案例2_表单识别填写.html",
-    "pages/custom/制造业RPA场景地图_PMC部.html",
+    // 跨境RPA+AI场景
+    "pages/common/影刀RPA简介.html",
+    "pages/custom/跨境_广告智能投手.html",
+    "pages/custom/跨境_运营规则动态知识库.html",
+    "pages/custom/跨境_物流多模态单据识别.html",
+    "pages/custom/跨境_视觉全自动化工坊.html",
+    "pages/custom/跨境_AI标题优化.html",
 
     // 简单实操
     "pages/common/小试影刀.html",
 
     // 痛点场景案例
     // "pages/核心场景相关案例1.html",
-
-    // 核心场景场景案例
-    "pages/custom/核心场景相关案例1.html",
-    "pages/custom/生产日报自动化汇总.html",
-    "pages/custom/工单自动化批量管理.html",
-    "pages/custom/影刀AI Power介绍.html",
-    "pages/custom/AI音频克隆.html",
-
-    // 核心场景场景案例
-    "pages/custom/核心场景相关案例2.html",
-    "pages/custom/BOM物料清单自动化.html",
-    "pages/custom/BOM数据自动化维护.html",
-
-    // 核心场景场景案例
-    "pages/custom/核心场景相关案例3.html",
-    "pages/custom/自动化创建销售订单.html",
-    "pages/custom/采购入库自动化.html",
-    "pages/custom/ap_rpa_file_assistant.html",
 
     // 通用场景案例
     "pages/custom/更多场景案例2.html",

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>跨境电商AI标题优化 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border-radius: 16px;
+        }
+
+        .workflow-box {
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+            position: relative;
+            padding: 2rem 1.5rem;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .workflow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+            width: 90px;
+        }
+
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 0.5rem;
+            color: #3b82f6;
+            font-size: 1.5rem;
+        }
+
+        .connector-arrow {
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        .bg-img-overlay {
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(192, 0, 0, 0.05) 0%, transparent 70%);
+            z-index: 1;
+        }
+
+        .pain-point-item {
+            position: relative;
+            padding-left: 1rem;
+            font-size: 11px;
+            line-height: 1.5;
+            color: #475569;
+        }
+
+        .pain-point-item::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: #64748b;
+        }
+
+        .value-card {
+            background: linear-gradient(135deg, #fff 0%, #fef2f2 100%);
+            border: 1px solid rgba(192, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(192, 0, 0, 0.1);
+        }
+
+        .value-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #C00000 0%, #ff4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .title-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .keyword-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .keyword-chip.hot {
+            background: #fef2f2;
+            color: #C00000;
+            border-color: #fecaca;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container"
+                class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+                <div class="bg-img-overlay pointer-events-none"></div>
+                <header class="relative z-20 mb-6 shrink-0">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="text-rpa-red font-bold text-lg">跨境电商：Listing优化自动化</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="w-2 h-8 bg-rpa-red rounded"></span>
+                        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">AI 标题优化<span
+                                class="text-rpa-red ml-2">（智能生成 + 策略演进）</span></h1>
+                    </div>
+                </header>
+                <div class="flex gap-8 flex-1 relative z-10 min-h-0">
+                    <div class="w-1/2 flex flex-col gap-4">
+                        <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2">
+                            </div>
+                            <div class="flex gap-6">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div
+                                            class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 shadow-sm">
+                                            <i class="fa-solid fa-file-lines text-sm"></i></div>
+                                        <h3 class="text-sm font-bold text-slate-900">需求背景：</h3>
+                                    </div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed">运营每天面对几十个相似SKU，写出的标题<span
+                                            class="text-rpa-red font-bold">千篇一律</span>。为SEO生硬堆砌关键词，用户体验极差。</p>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div
+                                            class="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm">
+                                            <i class="fa-solid fa-triangle-exclamation text-sm"></i></div>
+                                        <h3 class="text-sm font-bold text-slate-900">业务痛点：</h3>
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <div class="pain-point-item">思维枯竭：标题千篇一律，难有"新鲜感"</div>
+                                        <div class="pain-point-item">关键词堆砌：生硬堆砌流量词，逻辑不通</div>
+                                        <div class="pain-point-item">反馈滞后：不追踪哪个词转化好</div>
+                                        <div class="pain-point-item">竞品敏感度低：对手换词反超才发现</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2">
+                            </div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <div
+                                    class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
+                                    <i class="fa-solid fa-robot text-sm"></i></div>
+                                <h3 class="text-sm font-bold text-slate-900">RPA + AI 协同方案</h3>
+                            </div>
+                            <div class="workflow-box mt-2 !py-4">
+                                <div class="flex items-center justify-between px-2">
+                                    <div class="workflow-step group">
+                                        <div
+                                            class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-magnifying-glass"></i></div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
+                                            RPA关键词抓取<br>竞品+下拉词</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon !bg-gradient-to-br !from-red-500 !to-red-600 !text-white">
+                                            <i class="fa-solid fa-lightbulb"></i></div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
+                                            AI多版本生成<br>10种侧重点</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div
+                                            class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-upload"></i></div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">RPA自动更替<br>定时上架
+                                        </div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div
+                                            class="step-icon !bg-gradient-to-br !from-purple-500 !to-purple-600 !text-white">
+                                            <i class="fa-solid fa-chart-line"></i></div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">AI策略演进<br>转化数据闭环
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fragment mt-auto" animation_step="3">
+                            <div class="flex items-center gap-2 mb-3"><span class="w-1 h-3.5 bg-rpa-red"></span>
+                                <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="value-card">
+                                    <div class="value-number">10x</div>
+                                    <p class="text-[11px] text-slate-600 mt-2">标题<span
+                                            class="text-rpa-red font-bold">创意产出</span>提升</p>
+                                </div>
+                                <div class="value-card">
+                                    <div class="value-number">∞</div>
+                                    <p class="text-[11px] text-slate-600 mt-2">标题<span
+                                            class="text-rpa-red font-bold">自我进化</span>闭环</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
+                        <div class="glass-card p-4 flex-1">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div
+                                    class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
+                                    <i class="fa-solid fa-heading text-sm"></i></div>
+                                <h3 class="text-sm font-bold text-slate-900">AI多版本标题生成示例</h3>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="bg-white rounded-lg border p-3">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="title-tag bg-blue-100 text-blue-700">性能导向</span>
+                                        <span class="text-[9px] text-slate-400">CTR: 3.2%</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-700">Premium <span
+                                            class="text-rpa-red font-bold">Wireless</span> Bluetooth Earbuds | <span
+                                            class="text-rpa-red font-bold">40H Playtime</span> | IPX7 Waterproof | Deep
+                                        Bass</p>
+                                </div>
+                                <div class="bg-white rounded-lg border p-3 border-emerald-300 bg-emerald-50/50">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="title-tag bg-emerald-100 text-emerald-700">性价比导向 ⭐ 最佳</span>
+                                        <span class="text-[9px] text-emerald-600 font-bold">CTR: 5.8%</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-700"><span class="text-rpa-red font-bold">2024
+                                            Upgraded</span> Wireless Earbuds | Premium Sound Under $30 | <span
+                                            class="text-rpa-red font-bold">Best Seller</span></p>
+                                </div>
+                                <div class="bg-white rounded-lg border p-3">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="title-tag bg-purple-100 text-purple-700">美观导向</span>
+                                        <span class="text-[9px] text-slate-400">CTR: 2.9%</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-700">Sleek <span
+                                            class="text-rpa-red font-bold">Minimalist</span> Design Earbuds | Rose Gold
+                                        | Perfect Gift for Her</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glass-card p-4 h-32">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div
+                                    class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center text-amber-600 shadow-sm">
+                                    <i class="fa-solid fa-fire text-sm"></i></div>
+                                <h3 class="text-sm font-bold text-slate-900">AI智能关键词权重分析</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="keyword-chip hot"><i class="fa-solid fa-arrow-trend-up"></i>wireless
+                                    earbuds</span>
+                                <span class="keyword-chip hot"><i class="fa-solid fa-arrow-trend-up"></i>2024
+                                    upgraded</span>
+                                <span class="keyword-chip"><i class="fa-solid fa-check"></i>bluetooth 5.3</span>
+                                <span class="keyword-chip"><i class="fa-solid fa-check"></i>noise cancelling</span>
+                                <span class="keyword-chip"><i
+                                        class="fa-solid fa-ban text-red-400"></i><s>cheap</s></span>
+                                <span class="keyword-chip"><i
+                                        class="fa-solid fa-shield text-emerald-500"></i>合规检测通过</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>

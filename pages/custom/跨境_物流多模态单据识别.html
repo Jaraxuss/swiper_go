@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>跨境物流多模态单据识别 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border-radius: 16px;
+        }
+
+        .workflow-box {
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+            position: relative;
+            padding: 2rem 1.5rem;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .workflow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+            width: 90px;
+        }
+
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 0.5rem;
+            color: #3b82f6;
+            font-size: 1.5rem;
+        }
+
+        .connector-arrow {
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        .bg-img-overlay {
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(192, 0, 0, 0.05) 0%, transparent 70%);
+            z-index: 1;
+        }
+
+        .pain-point-item {
+            position: relative;
+            padding-left: 1rem;
+            font-size: 11px;
+            line-height: 1.5;
+            color: #475569;
+        }
+
+        .pain-point-item::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: #64748b;
+        }
+
+        .value-card {
+            background: linear-gradient(135deg, #fff 0%, #fef2f2 100%);
+            border: 1px solid rgba(192, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(192, 0, 0, 0.1);
+        }
+
+        .value-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #C00000 0%, #ff4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ocr-highlight {
+            border: 2px solid #10b981;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 4px;
+            padding: 2px 4px;
+            font-size: 9px;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container"
+                class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+                <div class="bg-img-overlay pointer-events-none"></div>
+                <header class="relative z-20 mb-6 shrink-0">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="text-rpa-red font-bold text-lg">跨境物流：单据处理自动化</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="w-2 h-8 bg-rpa-red rounded"></span>
+                        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">多模态单据识别与自动报关<span
+                                class="text-rpa-red ml-2">（OCR + Vision）</span></h1>
+                    </div>
+                </header>
+                <div class="flex gap-8 flex-1 relative z-10 min-h-0">
+                    <div class="w-1/2 flex flex-col gap-4">
+                        <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2">
+                            </div>
+                            <div class="flex gap-6">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div
+                                            class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 shadow-sm">
+                                            <i class="fa-solid fa-file-lines text-sm"></i></div>
+                                        <h3 class="text-sm font-bold text-slate-900">需求背景：</h3>
+                                    </div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed">海运、陆运、空运的货代各有一套模板，<span
+                                            class="text-rpa-red font-bold">格式完全不统一</span>，运营每天在几十个表格间切换。</p>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div
+                                            class="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm">
+                                            <i class="fa-solid fa-triangle-exclamation text-sm"></i></div>
+                                        <h3 class="text-sm font-bold text-slate-900">业务痛点：</h3>
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <div class="pain-point-item">格式地狱：不同货代模板完全不统一</div>
+                                        <div class="pain-point-item">重复录入：SKU、编码等信息反复搬运易出错</div>
+                                        <div class="pain-point-item">非标处理难：扫描件/拍照件只能手打</div>
+                                        <div class="pain-point-item">时效压力：录错导致报关失败，滞港费巨大</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2">
+                            </div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <div
+                                    class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
+                                    <i class="fa-solid fa-robot text-sm"></i></div>
+                                <h3 class="text-sm font-bold text-slate-900">RPA + AI 协同方案</h3>
+                            </div>
+                            <div class="workflow-box mt-2 !py-4">
+                                <div class="flex items-center justify-between px-2">
+                                    <div class="workflow-step group">
+                                        <div
+                                            class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-envelope-open-text"></i></div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
+                                            RPA自动抓取<br>邮件/钉钉单据</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon !bg-gradient-to-br !from-red-500 !to-red-600 !text-white">
+                                            <i class="fa-solid fa-eye"></i></div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">AI多模态识别<br>OCR +
+                                            Vision</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div
+                                            class="step-icon !bg-gradient-to-br !from-purple-500 !to-purple-600 !text-white">
+                                            <i class="fa-solid fa-scale-balanced"></i></div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">AI逻辑核对<br>三单对碰预警
+                                        </div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div
+                                            class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-file-import"></i></div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
+                                            RPA批量填表<br>报关系统录入</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fragment mt-auto" animation_step="3">
+                            <div class="flex items-center gap-2 mb-3"><span class="w-1 h-3.5 bg-rpa-red"></span>
+                                <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="value-card">
+                                    <div class="value-number">99%</div>
+                                    <p class="text-[11px] text-slate-600 mt-2"><span
+                                            class="text-rpa-red font-bold">识别准确率</span>，告别手动录入</p>
+                                </div>
+                                <div class="value-card">
+                                    <div class="value-number">0</div>
+                                    <p class="text-[11px] text-slate-600 mt-2"><span
+                                            class="text-rpa-red font-bold">滞港风险</span>，逻辑核对预警</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
+                        <div class="glass-card p-4 flex-1">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div
+                                    class="w-7 h-7 rounded-lg bg-cyan-100 flex items-center justify-center text-cyan-600 shadow-sm">
+                                    <i class="fa-solid fa-file-invoice text-sm"></i></div>
+                                <h3 class="text-sm font-bold text-slate-900">多模态单据识别示例</h3>
+                            </div>
+                            <div class="flex gap-3 h-full pb-4">
+                                <div class="flex-1 space-y-2">
+                                    <div class="text-[10px] font-bold text-slate-500">📥 原始单据</div>
+                                    <div class="bg-white border border-slate-200 rounded-lg p-2">
+                                        <div class="text-[9px]">装箱单 (PDF)<br><span class="ocr-highlight">50件 /
+                                                320kg</span></div>
+                                    </div>
+                                    <div class="bg-white border border-slate-200 rounded-lg p-2">
+                                        <div class="text-[9px]">发票 (Excel)<br><span class="ocr-highlight">$12.5 × 50 =
+                                                $625</span></div>
+                                    </div>
+                                    <div class="bg-white border border-slate-200 rounded-lg p-2">
+                                        <div class="text-[9px]">报关单 (扫描件)<br><span class="ocr-highlight">HS:
+                                                8471300000</span></div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col justify-center items-center px-2">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white mb-2">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                                    <div class="text-[9px] text-center text-slate-500 font-bold">AI Power</div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-[10px] font-bold text-slate-500 mb-2">📤 结构化数据</div>
+                                    <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
+                                        <div class="text-[10px] font-bold text-emerald-700 mb-2">✓ 三单对碰通过</div>
+                                        <table class="w-full text-[8px]">
+                                            <tr class="border-b border-emerald-200">
+                                                <td class="py-1 text-slate-500">SKU</td>
+                                                <td class="font-bold">SKU-20240118</td>
+                                            </tr>
+                                            <tr class="border-b border-emerald-200">
+                                                <td class="py-1 text-slate-500">HS编码</td>
+                                                <td class="font-bold">8471300000</td>
+                                            </tr>
+                                            <tr class="border-b border-emerald-200">
+                                                <td class="py-1 text-slate-500">件/重</td>
+                                                <td class="font-bold">50 / 320kg</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-1 text-slate-500">总价</td>
+                                                <td class="font-bold text-emerald-600">$625</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glass-card p-4 h-24">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div
+                                    class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center text-amber-600 shadow-sm">
+                                    <i class="fa-solid fa-shield-halved text-sm"></i></div>
+                                <h3 class="text-sm font-bold text-slate-900">AI 三单对碰校验</h3>
+                            </div>
+                            <div class="flex gap-3 text-[10px]">
+                                <div class="flex-1 flex items-center gap-2 bg-slate-50 rounded-lg p-2 border"><i
+                                        class="fa-solid fa-file-invoice text-blue-500"></i>报关单<i
+                                        class="fa-solid fa-check-circle text-emerald-500 ml-auto"></i></div>
+                                <div class="flex-1 flex items-center gap-2 bg-slate-50 rounded-lg p-2 border"><i
+                                        class="fa-solid fa-boxes-stacked text-purple-500"></i>装箱单<i
+                                        class="fa-solid fa-check-circle text-emerald-500 ml-auto"></i></div>
+                                <div class="flex-1 flex items-center gap-2 bg-slate-50 rounded-lg p-2 border"><i
+                                        class="fa-solid fa-receipt text-orange-500"></i>发票<i
+                                        class="fa-solid fa-check-circle text-emerald-500 ml-auto"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>
