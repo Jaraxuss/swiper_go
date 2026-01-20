@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>采购每日原材料价格获取 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border-radius: 16px;
+        }
+
+        .workflow-box {
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+            position: relative;
+            padding: 1.5rem 1rem;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .workflow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+            width: 80px;
+        }
+
+        .step-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .step-icon.brand {
+            background: #f8f8f8;
+            padding: 4px;
+        }
+
+        .step-icon.brand img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .connector-arrow {
+            color: #94a3b8;
+            font-size: 0.75rem;
+        }
+
+        .bg-img-overlay {
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(192, 0, 0, 0.05) 0%, transparent 70%);
+            z-index: 1;
+        }
+
+        .info-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #475569;
+        }
+
+        .value-card {
+            background: linear-gradient(135deg, #fff 0%, #fef2f2 100%);
+            border: 1px solid rgba(192, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(192, 0, 0, 0.1);
+        }
+
+        .value-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #C00000 0%, #ff4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 顶部流程导航 */
+        .process-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .process-nav-item {
+            padding: 4px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            color: #64748b;
+            background: white;
+        }
+
+        .process-nav-item.active {
+            background: #C00000;
+            color: white;
+            border-color: #C00000;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container"
+                class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+                <!-- Background Graphic -->
+                <div class="bg-img-overlay pointer-events-none"></div>
+
+                <!-- Header with Process Navigation -->
+                <header class="relative z-20 mb-5 shrink-0">
+                    <div class="flex items-center justify-between mb-2">
+                        <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">
+                            采购每日原材料价格获取
+                        </h1>
+                        <div class="process-nav">
+                            <div class="process-nav-item active">采购</div>
+                            <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
+                            <div class="process-nav-item">生产管理</div>
+                            <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
+                            <div class="process-nav-item">销售</div>
+                            <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
+                            <div class="process-nav-item">仓储物流</div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Content Layout -->
+                <div class="flex gap-6 flex-1 relative z-10 min-h-0">
+
+                    <!-- Left Section -->
+                    <div class="w-1/2 flex flex-col gap-4">
+
+                        <!-- Background & Info -->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2">
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div
+                                            class="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 shadow-sm">
+                                            <i class="fa-solid fa-file-lines text-xs"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900">需求背景：</h3>
+                                    </div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                                        采购部每周一到周五的工作日，需获取钢、铜、钢材等原材料的当日单价，更新当日单价，并掌握市场价格动向。信息源头多且复杂，包括：各类行情网站、咨询商网站、二手大宗商品公司官网、小程序等各式各样渠道
+                                    </p>
+                                </div>
+                                <div class="w-48 shrink-0">
+                                    <div class="space-y-2">
+                                        <div class="info-tag"><i class="fa-solid fa-building text-rpa-red"></i> 部门：采购部
+                                        </div>
+                                        <div class="info-tag"><i class="fa-solid fa-calendar text-rpa-red"></i> 频率：每天
+                                        </div>
+                                        <div class="info-tag"><i class="fa-solid fa-clock text-rpa-red"></i> 耗时：1人，1小时
+                                        </div>
+                                        <div class="info-tag"><i class="fa-solid fa-link text-rpa-red"></i>
+                                            系统对接：各B2B门户网站</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Solution -->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2">
+                            </div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <div
+                                    class="w-6 h-6 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
+                                    <i class="fa-solid fa-robot text-xs"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900">影刀RPA解决方案</h3>
+                            </div>
+
+                            <!-- Workflow with Brand Logos -->
+                            <div class="workflow-box !py-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="workflow-step">
+                                        <div class="step-icon text-blue-500">
+                                            <i class="fa-solid fa-globe"></i>
+                                        </div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">卓创咨询</div>
+                                        <div class="text-[8px] text-slate-500">SCI99.COM</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step">
+                                        <div class="step-icon text-orange-500">
+                                            <i class="fa-solid fa-chart-line"></i>
+                                        </div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">上海有色</div>
+                                        <div class="text-[8px] text-slate-500">上海有色网</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step">
+                                        <div class="step-icon text-green-500">
+                                            <i class="fa-solid fa-coins"></i>
+                                        </div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">富宝资讯</div>
+                                        <div class="text-[8px] text-slate-500">fubao</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step">
+                                        <div class="step-icon text-rpa-red">
+                                            <i class="fa-solid fa-search"></i>
+                                        </div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">小程序</div>
+                                        <div class="text-[8px] text-slate-500">找钢材</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step">
+                                        <div class="step-icon text-purple-500">
+                                            <i class="fa-solid fa-database"></i>
+                                        </div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">保交集团</div>
+                                        <div class="text-[8px] text-slate-500">获取当日价格</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step">
+                                        <div class="step-icon text-emerald-500">
+                                            <i class="fa-solid fa-file-excel"></i>
+                                        </div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">汇总表格</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Benefits -->
+                        <div class="fragment" animation_step="3">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="w-1 h-3.5 bg-rpa-red"></span>
+                                <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="value-card">
+                                    <div class="value-number">100%</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">
+                                        效率100%，<span class="text-rpa-red font-bold">上班即可直接看到价格数据</span>
+                                    </p>
+                                </div>
+                                <div class="value-card">
+                                    <div class="value-number">1H/天</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">
+                                        每天节省采购同学<span class="text-rpa-red font-bold">1h人力成本</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Section: Data Preview -->
+                    <div class="fragment w-1/2 flex flex-col" animation_step="2">
+                        <div class="glass-card p-4 flex-1 flex flex-col">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="w-6 h-6 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
+                                        <i class="fa-solid fa-table text-xs"></i>
+                                    </div>
+                                    <h3 class="text-sm font-bold text-slate-900">价格汇总数据</h3>
+                                </div>
+                            </div>
+
+                            <!-- Price Summary Table -->
+                            <div class="flex-1 bg-white rounded-lg border border-slate-200 overflow-hidden">
+                                <table class="w-full text-[10px]">
+                                    <thead class="bg-slate-100">
+                                        <tr>
+                                            <th class="py-2 px-3 text-left font-bold text-slate-700">材料类型</th>
+                                            <th class="py-2 px-3 text-center font-bold text-slate-700">数据来源</th>
+                                            <th class="py-2 px-3 text-center font-bold text-slate-700">昨日价格</th>
+                                            <th class="py-2 px-3 text-center font-bold text-slate-700">今日价格</th>
+                                            <th class="py-2 px-3 text-center font-bold text-slate-700">涨跌幅</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-t border-slate-100">
+                                            <td class="py-2 px-3 text-slate-700">钢材-螺纹钢</td>
+                                            <td class="py-2 px-3 text-center text-slate-500">找钢材</td>
+                                            <td class="py-2 px-3 text-center text-slate-600">¥3,850</td>
+                                            <td class="py-2 px-3 text-center font-bold text-slate-900">¥3,880</td>
+                                            <td class="py-2 px-3 text-center text-green-600">+0.78%</td>
+                                        </tr>
+                                        <tr class="border-t border-slate-100 bg-slate-50">
+                                            <td class="py-2 px-3 text-slate-700">铜材-电解铜</td>
+                                            <td class="py-2 px-3 text-center text-slate-500">上海有色</td>
+                                            <td class="py-2 px-3 text-center text-slate-600">¥72,500</td>
+                                            <td class="py-2 px-3 text-center font-bold text-slate-900">¥72,200</td>
+                                            <td class="py-2 px-3 text-center text-rpa-red">-0.41%</td>
+                                        </tr>
+                                        <tr class="border-t border-slate-100">
+                                            <td class="py-2 px-3 text-slate-700">铝材-A00铝</td>
+                                            <td class="py-2 px-3 text-center text-slate-500">卓创资讯</td>
+                                            <td class="py-2 px-3 text-center text-slate-600">¥19,850</td>
+                                            <td class="py-2 px-3 text-center font-bold text-slate-900">¥19,920</td>
+                                            <td class="py-2 px-3 text-center text-green-600">+0.35%</td>
+                                        </tr>
+                                        <tr class="border-t border-slate-100 bg-slate-50">
+                                            <td class="py-2 px-3 text-slate-700">锌材-0#锌</td>
+                                            <td class="py-2 px-3 text-center text-slate-500">富宝资讯</td>
+                                            <td class="py-2 px-3 text-center text-slate-600">¥24,100</td>
+                                            <td class="py-2 px-3 text-center font-bold text-slate-900">¥24,150</td>
+                                            <td class="py-2 px-3 text-center text-green-600">+0.21%</td>
+                                        </tr>
+                                        <tr class="border-t border-slate-100">
+                                            <td class="py-2 px-3 text-slate-700">不锈钢-304冷轧</td>
+                                            <td class="py-2 px-3 text-center text-slate-500">保交集团</td>
+                                            <td class="py-2 px-3 text-center text-slate-600">¥14,200</td>
+                                            <td class="py-2 px-3 text-center font-bold text-slate-900">¥14,180</td>
+                                            <td class="py-2 px-3 text-center text-rpa-red">-0.14%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Update Time -->
+                            <div class="mt-3 flex items-center justify-between text-[10px] text-slate-500">
+                                <span><i class="fa-solid fa-clock mr-1"></i>数据更新时间：2024-01-20 09:00</span>
+                                <span class="text-rpa-red font-semibold">自动抓取 · 每日更新</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>

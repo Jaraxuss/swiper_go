@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>采购份额每月更新调整分配 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border-radius: 16px;
+        }
+
+        .workflow-box {
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+            position: relative;
+            padding: 1.5rem 1rem;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .workflow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+            width: 85px;
+        }
+
+        .step-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+            color: #3b82f6;
+        }
+
+        .connector-arrow {
+            color: #94a3b8;
+            font-size: 0.75rem;
+        }
+
+        .bg-img-overlay {
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(192, 0, 0, 0.05) 0%, transparent 70%);
+            z-index: 1;
+        }
+
+        .info-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #475569;
+        }
+
+        .value-card {
+            background: linear-gradient(135deg, #fff 0%, #fef2f2 100%);
+            border: 1px solid rgba(192, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(192, 0, 0, 0.1);
+        }
+
+        .value-number {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #C00000 0%, #ff4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .process-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .process-nav-item {
+            padding: 4px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            color: #64748b;
+            background: white;
+        }
+
+        .process-nav-item.active {
+            background: #C00000;
+            color: white;
+            border-color: #C00000;
+        }
+
+        .pain-point-item {
+            position: relative;
+            padding-left: 1rem;
+            font-size: 11px;
+            line-height: 1.5;
+            color: #475569;
+        }
+
+        .pain-point-item::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: #64748b;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container"
+                class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+                <div class="bg-img-overlay pointer-events-none"></div>
+
+                <header class="relative z-20 mb-5 shrink-0">
+                    <div class="flex items-center justify-between mb-2">
+                        <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">采购份额每月更新调整分配</h1>
+                        <div class="process-nav">
+                            <div class="process-nav-item active">采购</div>
+                            <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
+                            <div class="process-nav-item">生产管理</div>
+                            <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
+                            <div class="process-nav-item">销售</div>
+                            <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
+                            <div class="process-nav-item">仓储物流</div>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="flex gap-6 flex-1 relative z-10 min-h-0">
+                    <!-- Left -->
+                    <div class="w-1/2 flex flex-col gap-4">
+                        <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2">
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div
+                                            class="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 shadow-sm">
+                                            <i class="fa-solid fa-file-lines text-xs"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900">需求背景：</h3>
+                                    </div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                                        采购成本是企业运营成本的重要组成部分，通过每月更新调整采购份额，企业可以更好地控制采购成本，选择价格合理、质量可靠的供应商，从而实现成本节约和效益提升。
+                                    </p>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div
+                                            class="w-6 h-6 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm">
+                                            <i class="fa-solid fa-triangle-exclamation text-xs"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900">业务痛点：</h3>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <div class="pain-point-item">1. 供应商数据维护：信息复杂，更新任务繁琐，影响采购决策</div>
+                                        <div class="pain-point-item">2. 采购份额分配：可能存在主观性和不公平性</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2">
+                            </div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <div
+                                    class="w-6 h-6 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
+                                    <i class="fa-solid fa-robot text-xs"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900">影刀RPA解决方案</h3>
+                            </div>
+                            <div class="workflow-box !py-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="workflow-step">
+                                        <div class="step-icon"><i class="fa-solid fa-right-to-bracket"></i></div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">
+                                            登录SAP系统并按<br>照采购参数进行<br>查询结果</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step">
+                                        <div class="step-icon"><i class="fa-solid fa-filter"></i></div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">导出查询<br>结果表格
+                                        </div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step">
+                                        <div class="step-icon"><i class="fa-solid fa-calculator"></i></div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">在类格简内分配<br>表格按规则
+                                        </div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step">
+                                        <div class="step-icon"><i class="fa-solid fa-upload"></i></div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">表格上传SAP</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step">
+                                        <div class="step-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">
+                                            检查是否完成所<br>有采购份额记录</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step">
+                                        <div class="step-icon"><i class="fa-solid fa-file-import"></i></div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">采购份额导入<br>SAP系统
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-[10px] text-slate-500 mt-3">
+                                <i class="fa-solid fa-info-circle mr-1"></i>
+                                解决了客户大部分科目多、每月需要手动调整比列及更新供应商下单份额的问题，后续带来的降本案例及时性无法衡量
+                            </p>
+                        </div>
+
+                        <div class="fragment" animation_step="3">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="w-1 h-3.5 bg-rpa-red"></span>
+                                <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
+                            </div>
+                            <div class="value-card">
+                                <div class="value-number">7-8小时/月</div>
+                                <p class="text-[11px] text-slate-600 leading-relaxed mt-1">
+                                    解决每月及时对供应商进行<span class="text-rpa-red font-bold">采购份额调整分配</span>的问题
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right -->
+                    <div class="fragment w-1/2 flex flex-col" animation_step="2">
+                        <div class="glass-card p-4 flex-1 flex flex-col">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div
+                                    class="w-6 h-6 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
+                                    <i class="fa-solid fa-chart-pie text-xs"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900">供应商份额分配示意</h3>
+                            </div>
+                            <div
+                                class="flex-1 bg-white rounded-lg border border-slate-200 p-4 flex flex-col justify-center">
+                                <div class="grid grid-cols-3 gap-4 text-center">
+                                    <div class="p-3 bg-blue-50 rounded-lg">
+                                        <div class="text-2xl font-bold text-blue-600">40%</div>
+                                        <div class="text-[10px] text-slate-600 mt-1">供应商 A</div>
+                                        <div class="text-[9px] text-green-600 mt-1"><i class="fa-solid fa-arrow-up"></i>
+                                            +5%</div>
+                                    </div>
+                                    <div class="p-3 bg-emerald-50 rounded-lg">
+                                        <div class="text-2xl font-bold text-emerald-600">35%</div>
+                                        <div class="text-[10px] text-slate-600 mt-1">供应商 B</div>
+                                        <div class="text-[9px] text-slate-400 mt-1">— 不变</div>
+                                    </div>
+                                    <div class="p-3 bg-orange-50 rounded-lg">
+                                        <div class="text-2xl font-bold text-orange-600">25%</div>
+                                        <div class="text-[10px] text-slate-600 mt-1">供应商 C</div>
+                                        <div class="text-[9px] text-rpa-red mt-1"><i class="fa-solid fa-arrow-down"></i>
+                                            -5%</div>
+                                    </div>
+                                </div>
+                                <div class="mt-4 pt-3 border-t border-slate-100 text-center">
+                                    <span class="text-[10px] text-slate-500">
+                                        <i class="fa-solid fa-sync-alt text-rpa-red mr-1"></i>
+                                        基于交期、质量、价格等维度自动计算并更新份额
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>

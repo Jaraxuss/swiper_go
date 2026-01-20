@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>延期订单查询跟进 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border-radius: 16px;
+        }
+
+        .workflow-box {
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+            position: relative;
+            padding: 1.5rem 1rem;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .workflow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+            width: 95px;
+        }
+
+        .step-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+            color: #3b82f6;
+        }
+
+        .connector-arrow {
+            color: #94a3b8;
+            font-size: 0.75rem;
+        }
+
+        .bg-img-overlay {
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(192, 0, 0, 0.05) 0%, transparent 70%);
+            z-index: 1;
+        }
+
+        .info-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #475569;
+        }
+
+        .value-card {
+            background: linear-gradient(135deg, #fff 0%, #fef2f2 100%);
+            border: 1px solid rgba(192, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(192, 0, 0, 0.1);
+        }
+
+        .value-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #C00000 0%, #ff4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .process-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .process-nav-item {
+            padding: 4px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            color: #64748b;
+            background: white;
+        }
+
+        .process-nav-item.active {
+            background: #C00000;
+            color: white;
+            border-color: #C00000;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container"
+                class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+                <div class="bg-img-overlay pointer-events-none"></div>
+
+                <header class="relative z-20 mb-5 shrink-0">
+                    <div class="flex items-center justify-between mb-2">
+                        <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">延期订单查询跟进</h1>
+                        <div class="process-nav">
+                            <div class="process-nav-item">采购</div>
+                            <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
+                            <div class="process-nav-item active">生产管理</div>
+                            <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
+                            <div class="process-nav-item">销售</div>
+                            <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
+                            <div class="process-nav-item">仓储物流</div>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="flex gap-6 flex-1 relative z-10 min-h-0">
+                    <div class="w-1/2 flex flex-col gap-4">
+                        <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2">
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div
+                                            class="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 shadow-sm">
+                                            <i class="fa-solid fa-file-lines text-xs"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900">需求背景：</h3>
+                                    </div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                                        PMC部门要跟进延期订单（未及时完成生产和交付）跟进生产/物流，催进度、保订单如期履约。每日ERP查询延期订单，再MES系统逐个查询生产进度，再汇总成表同步生产部门
+                                    </p>
+                                </div>
+                                <div class="w-48 shrink-0">
+                                    <div class="space-y-2">
+                                        <div class="info-tag"><i class="fa-solid fa-building text-rpa-red"></i> 部门：PMC
+                                        </div>
+                                        <div class="info-tag"><i class="fa-solid fa-calendar text-rpa-red"></i> 频率：每天
+                                        </div>
+                                        <div class="info-tag"><i class="fa-solid fa-clock text-rpa-red"></i> 耗时：1人，2小时
+                                        </div>
+                                        <div class="info-tag"><i class="fa-solid fa-link text-rpa-red"></i>
+                                            系统对接：金蝶ERP、MES、钉钉</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2">
+                            </div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <div
+                                    class="w-6 h-6 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
+                                    <i class="fa-solid fa-robot text-xs"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900">影刀RPA解决方案</h3>
+                            </div>
+                            <div class="workflow-box !py-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="workflow-step">
+                                        <div class="step-icon"><i class="fa-solid fa-right-to-bracket"></i></div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">登入ERP进入订<br>单模块
+                                        </div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step">
+                                        <div class="step-icon"><i class="fa-solid fa-filter"></i></div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">导出延期<br>订单明细
+                                        </div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step">
+                                        <div class="step-icon"><i class="fa-solid fa-industry"></i></div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">
+                                            MES系统逐个<br>订单查生产工单</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step">
+                                        <div class="step-icon"><i class="fa-solid fa-file-excel"></i></div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">逐个记EXCEL表格</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step">
+                                        <div class="step-icon"><i class="fa-solid fa-comments"></i></div>
+                                        <div class="text-[9px] font-bold text-slate-800 leading-tight">表格通过钉钉发送<br>到生产群
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-[10px] text-slate-500 mt-3">
+                                <i class="fa-solid fa-info-circle mr-1"></i>
+                                人工循环耗时和瓶颈力：ERP与MES之间电切过道，但颗粒度相拟对生产工序进程促、成本会增加。因为机器人的触发器和效率，实现了高效的PMC和生产车间之间的联动，能在早会前完成延期订单的更同步进展
+                            </p>
+                        </div>
+
+                        <div class="fragment" animation_step="3">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="w-1 h-3.5 bg-rpa-red"></span>
+                                <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="value-card">
+                                    <div class="value-number">75%</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">
+                                        每日延期订单更新及时率提高75%，<span class="text-rpa-red font-bold">与生产部门联动更高效</span>
+                                    </p>
+                                </div>
+                                <div class="value-card">
+                                    <div class="value-number">2H/天</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">
+                                        每天节省<span class="text-rpa-red font-bold">1名PMC员工2h工作时间</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fragment w-1/2 flex flex-col" animation_step="2">
+                        <div class="glass-card p-4 flex-1 flex flex-col">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div
+                                    class="w-6 h-6 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm">
+                                    <i class="fa-solid fa-clock-rotate-left text-xs"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900">延期订单跟踪表</h3>
+                            </div>
+                            <div class="flex-1 bg-white rounded-lg border border-slate-200 overflow-hidden">
+                                <table class="w-full text-[9px]">
+                                    <thead class="bg-slate-100">
+                                        <tr>
+                                            <th class="py-2 px-2 text-left font-bold text-slate-700">订单号</th>
+                                            <th class="py-2 px-2 text-center font-bold text-slate-700">客户</th>
+                                            <th class="py-2 px-2 text-center font-bold text-slate-700">计划交期</th>
+                                            <th class="py-2 px-2 text-center font-bold text-slate-700">延期天数</th>
+                                            <th class="py-2 px-2 text-center font-bold text-slate-700">生产进度</th>
+                                            <th class="py-2 px-2 text-center font-bold text-slate-700">状态</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-t border-slate-100">
+                                            <td class="py-1.5 px-2 text-slate-700">SO2024012001</td>
+                                            <td class="py-1.5 px-2 text-center text-slate-600">客户A</td>
+                                            <td class="py-1.5 px-2 text-center text-slate-600">01-18</td>
+                                            <td class="py-1.5 px-2 text-center text-rpa-red font-bold">2天</td>
+                                            <td class="py-1.5 px-2 text-center">
+                                                <div class="w-full bg-slate-200 rounded-full h-1.5">
+                                                    <div class="bg-blue-500 h-1.5 rounded-full" style="width: 85%">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="py-1.5 px-2 text-center"><span
+                                                    class="px-1.5 py-0.5 bg-orange-100 text-orange-600 rounded text-[8px]">生产中</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="border-t border-slate-100 bg-slate-50">
+                                            <td class="py-1.5 px-2 text-slate-700">SO2024012002</td>
+                                            <td class="py-1.5 px-2 text-center text-slate-600">客户B</td>
+                                            <td class="py-1.5 px-2 text-center text-slate-600">01-17</td>
+                                            <td class="py-1.5 px-2 text-center text-rpa-red font-bold">3天</td>
+                                            <td class="py-1.5 px-2 text-center">
+                                                <div class="w-full bg-slate-200 rounded-full h-1.5">
+                                                    <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 100%">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="py-1.5 px-2 text-center"><span
+                                                    class="px-1.5 py-0.5 bg-blue-100 text-blue-600 rounded text-[8px]">待发货</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="border-t border-slate-100">
+                                            <td class="py-1.5 px-2 text-slate-700">SO2024012003</td>
+                                            <td class="py-1.5 px-2 text-center text-slate-600">客户C</td>
+                                            <td class="py-1.5 px-2 text-center text-slate-600">01-19</td>
+                                            <td class="py-1.5 px-2 text-center text-rpa-red font-bold">1天</td>
+                                            <td class="py-1.5 px-2 text-center">
+                                                <div class="w-full bg-slate-200 rounded-full h-1.5">
+                                                    <div class="bg-blue-500 h-1.5 rounded-full" style="width: 60%">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="py-1.5 px-2 text-center"><span
+                                                    class="px-1.5 py-0.5 bg-orange-100 text-orange-600 rounded text-[8px]">生产中</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-3 flex items-center justify-between text-[10px] text-slate-500">
+                                <span><i class="fa-solid fa-sync-alt mr-1"></i>自动同步至钉钉生产群</span>
+                                <span class="text-rpa-red font-semibold">早会前自动更新</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>
