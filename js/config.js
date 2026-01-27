@@ -24,6 +24,7 @@ const slideConfig = [
     "pages/common/影刀RPA简介.html",
     "pages/custom/卫健委网站查询医生执业信息1.html",
     "pages/custom/卫健委网站查询医生执业信息2.html",
+    "pages/custom/微信精准触达方案.html",
 
 ];
 
