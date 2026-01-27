@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>卫健委医生执业信息核验 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        /* 字体设置 */
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        /* 隐藏滚动条 */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 影刀品牌色 */
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        /* 动画逻辑 */
+        @keyframes fade-in-up {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-enter {
+            animation: fade-in-up 0.8s ease-out forwards;
+        }
+
+        /* 视频容器美化 */
+        .video-wrapper {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+            border: 6px solid white;
+            transition: transform 0.3s ease;
+        }
+
+        .video-wrapper:hover {
+            transform: scale(1.02);
+        }
+
+        /* 玻璃拟态卡片 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gray-900 flex items-center justify-center h-screen w-screen selection:bg-red-100 selection:text-red-800 font-sans">
+    <div id="page-shell" class="flex items-center justify-center h-full w-full">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+
+            <!-- 画布容器 -->
+            <div id="slide-container"
+                class="w-full h-full box-border flex flex-col relative overflow-hidden bg-[#F8F9FA] p-12">
+
+                <!-- 背景装饰：左上角蓝色（代表数据），右下角红色（代表合规） -->
+                <div
+                    class="absolute -top-20 -left-20 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl pointer-events-none">
+                </div>
+                <div
+                    class="absolute -bottom-20 -right-20 w-[500px] h-[500px] bg-red-500/5 rounded-full blur-3xl pointer-events-none">
+                </div>
+
+                <!-- 头部标题区 -->
+                <header class="relative z-20 mb-8 shrink-0">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-1.5 h-8 bg-gradient-to-b from-blue-600 to-[#C00000] rounded-full"></div>
+                        <h1 class="text-4xl font-bold tracking-tight text-gray-900">
+                            卫健委医生执业信息自动核验
+                        </h1>
+                    </div>
+                    <p class="text-gray-500 ml-5 text-sm font-medium tracking-wide uppercase">
+                        Automated Doctor License Verification & Compliance
+                    </p>
+                </header>
+
+                <!-- 主要内容区：左右布局 -->
+                <div class="flex-1 flex gap-12 relative z-20 h-full min-h-0">
+
+                    <!-- 左侧：核心功能提炼 (55%) -->
+                    <div class="w-[55%] flex flex-col gap-5 justify-center pb-8">
+
+                        <!-- 功能卡片 1: 批量数据处理 -->
+                        <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-all animate-enter"
+                            style="animation-delay: 0.1s;">
+                            <div class="flex items-start gap-4">
+                                <div
+                                    class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 mt-1">
+                                    <i class="fa-regular fa-file-excel text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-gray-800 mb-1">批量数据自动读取</h3>
+                                    <p class="text-sm text-gray-500 leading-relaxed">
+                                        机器人自动读取待查询医生Excel表格，精准提取姓名、所在省份等关键字段，无需人工预处理。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 功能卡片 2: 核心反爬逻辑 -->
+                        <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-all animate-enter"
+                            style="animation-delay: 0.2s;">
+                            <div class="flex items-start gap-4">
+                                <div
+                                    class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center text-[#C00000] shrink-0 mt-1">
+                                    <i class="fa-solid fa-shuffle text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-gray-800 mb-1">智能规避查询频率限制</h3>
+                                    <p class="text-sm text-gray-500 leading-relaxed">
+                                        针对网站 <span
+                                            class="text-[#C00000] font-bold">60秒查询限制</span>，采用多浏览器并发与智能切换策略，实现不间断连续查询。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 功能卡片 3: 结果留档 -->
+                        <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-all animate-enter"
+                            style="animation-delay: 0.3s;">
+                            <div class="flex items-start gap-4">
+                                <div
+                                    class="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600 shrink-0 mt-1">
+                                    <i class="fa-solid fa-floppy-disk text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-gray-800 mb-1">自动截图与结果回填</h3>
+                                    <p class="text-sm text-gray-500 leading-relaxed">
+                                        查询详情也自动截图留档，并将核验状态直接回写入原Excel表格，数据闭环一步到位。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 业务价值总结 -->
+                        <div class="mt-2 glass-card p-4 rounded-xl flex items-center gap-4 animate-enter"
+                            style="animation-delay: 0.4s;">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <div class="w-2 h-2 rounded-full bg-[#C00000]"></div>
+                                    <span class="text-sm font-bold text-gray-800">赋能业务合规：</span>
+                                </div>
+                                <p class="text-xs text-gray-600">
+                                    从“人工逐条等待”转变为“全自动并发行”。确保医生资质 100% 准确核验，效率提升 1000%+。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：视频播放器 (45%) -->
+                    <div class="w-[45%] flex items-center justify-center animate-enter pl-4"
+                        style="animation-delay: 0.5s;">
+                        <div
+                            class="video-wrapper w-full rounded-xl overflow-hidden bg-black aspect-[4/3] relative group">
+                            <!-- 视频源 -->
+                            <video id="demo-video" class="w-full h-full object-cover" controls>
+                                <!-- 建议放置对应的视频文件 -->
+                                <source src="../../assets/卫健委查询医生执业信息.mp4" type="video/mp4">
+                                <div class="flex flex-col items-center justify-center h-full text-white">
+                                    <i class="fa-solid fa-user-md text-4xl mb-2 opacity-50"></i>
+                                    <span class="text-sm opacity-50">请放置文件：卫健委查询演示.mp4</span>
+                                </div>
+                            </video>
+
+                            <!-- 顶部模拟窗口栏 -->
+                            <div
+                                class="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-black/60 to-transparent flex items-center px-3 gap-1.5 pointer-events-none">
+                                <div class="w-2.5 h-2.5 rounded-full bg-[#FF5F57]"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-[#28C840]"></div>
+                                <span class="ml-2 text-[10px] text-white/50 font-mono">Doctor_Check_Bot_V2.rpa</span>
+                            </div>
+
+                            <!-- 播放按钮遮罩 -->
+                            <div id="play-overlay"
+                                class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors pointer-events-none">
+                                <div
+                                    class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fa-solid fa-play text-white ml-1 text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 底部页码 -->
+                <footer
+                    class="absolute bottom-10 left-12 right-12 flex justify-between items-center text-[10px] text-gray-400 font-bold tracking-widest uppercase border-t border-gray-200 pt-4">
+                    <div>影刀RPA · 医疗合规自动化解决方案</div>
+                    <div class="flex items-center gap-2">
+                        <span>COMPLIANCE CHECK</span>
+                        <span class="w-8 h-px bg-gray-300"></span>
+                        PAGE 03
+                    </div>
+                </footer>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>

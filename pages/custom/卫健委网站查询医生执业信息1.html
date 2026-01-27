@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>业务背景与痛点 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 品牌色 */
+        .text-rpa-red {
+            color: #C00000;
+        }
+
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+
+        /* 动画基础 */
+        .fragment {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fade-in-up {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 玻璃拟态 - 增强版 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border-radius: 20px;
+        }
+
+        /* 列表项连接线 */
+        .timeline-line {
+            position: absolute;
+            left: 23px;
+            top: 24px;
+            bottom: 24px;
+            width: 2px;
+            background: #e2e8f0;
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gray-900 flex items-center justify-center h-screen w-screen selection:bg-red-100 selection:text-red-800 font-sans">
+    <div id="page-shell" class="flex items-center justify-center h-full w-full">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+
+            <div id="slide-container"
+                class="w-full h-full box-border flex flex-col relative overflow-hidden bg-[#F8F9FA] px-16 py-12">
+
+                <!-- 背景装饰 -->
+                <!-- 右上角红色光晕 -->
+                <div
+                    class="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-[#C00000]/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 z-0 pointer-events-none">
+                </div>
+                <!-- 左下角蓝色光晕 -->
+                <div
+                    class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 z-0 pointer-events-none">
+                </div>
+
+                <!-- 头部标题区 -->
+                <header class="relative z-20 mb-10 shrink-0 fragment" style="animation-delay: 0s;">
+                    <div class="flex items-center gap-4 mb-2">
+                        <span class="w-2 h-8 bg-rpa-red rounded-full"></span>
+                        <h1 class="text-4xl font-extrabold tracking-tight text-slate-900">
+                            业务背景与现状痛点
+                        </h1>
+                    </div>
+                    <p class="text-xl text-slate-500 font-medium ml-6 tracking-wide">
+                        BACKGROUND & PAIN POINTS ANALYSIS
+                    </p>
+                </header>
+
+                <!-- 内容网格 -->
+                <div class="flex-1 grid grid-cols-12 gap-10 relative z-20 min-h-0">
+
+                    <!-- 左侧：合规背景 (col-span-5) -->
+                    <div class="col-span-5 h-full flex flex-col fragment" style="animation-delay: 0.1s;">
+                        <div
+                            class="glass-card flex-1 flex flex-col p-8 relative overflow-hidden group hover:shadow-lg transition-all duration-500 border border-blue-100/50">
+                            <!-- 顶部装饰 -->
+                            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-400 to-blue-600">
+                            </div>
+
+                            <!-- 标题 -->
+                            <div class="flex items-center gap-3 mb-8">
+                                <div
+                                    class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-scale-balanced text-xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-slate-900">硬性合规要求</h3>
+                            </div>
+
+                            <!-- 列表内容 -->
+                            <div class="relative flex-1 flex flex-col justify-center space-y-8 pl-2">
+                                <!-- 连接线 -->
+                                <div class="timeline-line"></div>
+
+                                <!-- Item 1 -->
+                                <div class="relative z-10 flex gap-5">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-white border-2 border-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg shadow-sm shrink-0">
+                                        1</div>
+                                    <div>
+                                        <h4 class="text-lg font-bold text-slate-800 mb-1">互联网诊疗资质</h4>
+                                        <p class="text-sm text-slate-500 leading-relaxed">
+                                            必须取得《医疗机构执业许可证》，医师需具备3年以上独立临床经验。
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Item 2 -->
+                                <div class="relative z-10 flex gap-5">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-white border-2 border-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg shadow-sm shrink-0">
+                                        2</div>
+                                    <div>
+                                        <h4 class="text-lg font-bold text-slate-800 mb-1">平台定期查验</h4>
+                                        <p class="text-sm text-slate-500 leading-relaxed">
+                                            阿里健康等平台定期核验，需上传最新的卫健委官方查询截图证明。
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Item 3 -->
+                                <div class="relative z-10 flex gap-5">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-white border-2 border-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg shadow-sm shrink-0">
+                                        3</div>
+                                    <div>
+                                        <h4 class="text-lg font-bold text-slate-800 mb-1">机构定期自查</h4>
+                                        <p class="text-sm text-slate-500 leading-relaxed">
+                                            所有异常执业信息需及时处理并留档，严防违规风险。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：当前痛点 (col-span-7) -->
+                    <div class="col-span-7 h-full flex flex-col gap-6">
+
+                        <!-- 痛点 1 -->
+                        <div class="fragment bg-white rounded-2xl p-6 flex items-center gap-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-rpa-red/30 transition-all duration-300 flex-1 group"
+                            style="animation-delay: 0.2s;">
+                            <div
+                                class="w-20 h-20 bg-red-50 rounded-2xl flex items-center justify-center text-rpa-red text-3xl shrink-0 group-hover:scale-105 transition-transform duration-300">
+                                <i class="fa-solid fa-hourglass-half"></i>
+                            </div>
+                            <div>
+                                <h3
+                                    class="text-xl font-bold text-slate-900 mb-2 group-hover:text-rpa-red transition-colors">
+                                    人工查询效率极低</h3>
+                                <p class="text-slate-500 leading-relaxed">
+                                    卫健委官网设有限制，同浏览器查询间隔需 <span
+                                        class="font-bold text-rpa-red bg-red-50 px-1 rounded">60秒+</span>，大量时间浪费在等待上。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 痛点 2 -->
+                        <div class="fragment bg-white rounded-2xl p-6 flex items-center gap-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-rpa-red/30 transition-all duration-300 flex-1 group"
+                            style="animation-delay: 0.3s;">
+                            <div
+                                class="w-20 h-20 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-500 text-3xl shrink-0 group-hover:scale-105 transition-transform duration-300">
+                                <i class="fa-solid fa-repeat"></i>
+                            </div>
+                            <div>
+                                <h3
+                                    class="text-xl font-bold text-slate-900 mb-2 group-hover:text-orange-600 transition-colors">
+                                    重复机械操作</h3>
+                                <p class="text-slate-500 leading-relaxed">
+                                    运营专员循环执行“输入-查询-截图-保存”动作，耗费精力且容易产生疲劳，缺乏价值感。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 痛点 3 -->
+                        <div class="fragment bg-white rounded-2xl p-6 flex items-center gap-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-rpa-red/30 transition-all duration-300 flex-1 group"
+                            style="animation-delay: 0.4s;">
+                            <div
+                                class="w-20 h-20 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-600 text-3xl shrink-0 group-hover:scale-105 transition-transform duration-300">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                            <div>
+                                <h3
+                                    class="text-xl font-bold text-slate-900 mb-2 group-hover:text-slate-800 transition-colors">
+                                    合规与处罚风险</h3>
+                                <p class="text-slate-500 leading-relaxed">
+                                    人工操作易漏查错存，一旦医生资质过期未及时发现，将面临平台下架甚至行政处罚。
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>

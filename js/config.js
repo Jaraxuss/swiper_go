@@ -22,11 +22,8 @@ const slideConfig = [
 
     // 跨境RPA+AI场景
     "pages/common/影刀RPA简介.html",
-    "pages/custom/跨境_广告智能投手.html",
-    "pages/custom/跨境_运营规则动态知识库.html",
-    "pages/custom/跨境_物流多模态单据识别.html",
-    "pages/custom/跨境_视觉全自动化工坊.html",
-    "pages/custom/跨境_AI标题优化.html",
+    "pages/custom/卫健委网站查询医生执业信息1.html",
+    "pages/custom/卫健委网站查询医生执业信息2.html",
 
 ];
 
