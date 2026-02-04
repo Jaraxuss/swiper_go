@@ -2,7 +2,7 @@
  * Project Configuration
  */
 var brandConfig = {
-    clientName: "华孚精密科技",
+    clientName: "华医大健康",
     presentationTitle: "影刀演示文稿"
 };
 window.brandConfig = brandConfig; // Explicitly attach to window for iframe access
@@ -15,6 +15,8 @@ const slideConfig = [
     // 首页
     "pages/custom/跨境电商_启动会首页.html",
 
+    "pages/custom/舆情监测自动化.html",
+
     // RPA简介
     "pages/common/影刀RPA简介.html",
     "pages/common/影刀能做什么.html",
@@ -25,6 +27,7 @@ const slideConfig = [
     "pages/custom/卫健委网站查询医生执业信息1.html",
     "pages/custom/卫健委网站查询医生执业信息2.html",
     "pages/custom/微信精准触达方案.html",
+    "pages/custom/企微AI客服机器人.html",
 
 ];
 
