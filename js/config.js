@@ -2,7 +2,7 @@
  * Project Configuration
  */
 var brandConfig = {
-    clientName: "华孚精密科技",
+    clientName: "常熟通润汽车零部件股份有限公司",
     presentationTitle: "影刀演示文稿"
 };
 window.brandConfig = brandConfig; // Explicitly attach to window for iframe access
@@ -13,7 +13,7 @@ window.brandConfig = brandConfig; // Explicitly attach to window for iframe acce
  */
 const slideConfig = [
     // 首页
-    "pages/启动会首页.html",
+    "pages/custom/跨境汽配领军者启动会首页.html",
 
     // RPA简介
     "pages/common/影刀RPA简介.html",

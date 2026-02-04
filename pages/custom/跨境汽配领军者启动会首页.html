@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{CLIENT_NAME}}项目启动会</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+
+    <style>
+        /* 解决 SVG 文字路径兼容性问题 */
+        svg {
+            overflow: visible;
+        }
+
+        /* 字体设置 */
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
+        /* 入场动画 */
+        @keyframes fade-in-up {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-enter {
+            animation: fade-in-up 0.8s ease-out forwards;
+        }
+
+        /* 玻璃拟态卡片 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gray-900 flex items-center justify-center h-screen w-screen selection:bg-red-100 selection:text-red-800 font-sans">
+    <div id="page-shell" class="w-full h-full flex items-center justify-center">
+        <!-- 缩放容器 -->
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <!-- 核心 Slide 容器 -->
+            <div id="slide-container"
+                class="w-[1280px] h-[720px] box-border flex flex-col relative overflow-hidden bg-[#F8F9FA]">
+
+                <!-- 1. 全局背景层 -->
+                <!-- 右上角红色光晕 -->
+                <div
+                    class='absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-[#C00000]/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 z-0 pointer-events-none'>
+                </div>
+                <!-- 左下角蓝色光晕 (飞书蓝) -->
+                <div
+                    class="absolute bottom-0 left-0 w-[800px] h-[800px] bg-[#3370FF]/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 z-0 pointer-events-none">
+                </div>
+                <!-- 网格纹理 -->
+                <div class="absolute inset-0 z-0 opacity-30"
+                    style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 40px 40px;">
+                </div>
+
+                <!-- 个人名片/联系方式 -->
+                <div
+                    class="absolute bottom-6 right-8 z-30 flex flex-col items-end opacity-60 hover:opacity-100 transition-opacity duration-500 cursor-default group">
+                    <div class="flex items-center gap-2 text-xs text-gray-500 font-medium">
+                        <!-- 这里的 user icon 用 SVG 替代 -->
+                        <svg class="w-3 h-3 text-[#C00000] opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-2 group-hover:translate-x-0"
+                            fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                        </svg>
+                        <span>影刀客户成功</span>
+                        <span class="w-px h-3 bg-gray-300"></span>
+                        <span class="text-gray-800 font-bold">图南</span>
+                    </div>
+                    <div
+                        class="text-[10px] text-gray-600 font-mono tracking-wider mt-0.5 group-hover:text-[#C00000] transition-colors duration-300">
+                        199-5165-6379
+                    </div>
+                </div>
+
+                <!-- 2. 主要内容区 -->
+                <div class="relative z-20 w-full h-full flex flex-col items-center justify-center px-20 pt-8 pb-32">
+
+                    <!-- 标题组合 -->
+                    <div class="text-center space-y-8 max-w-6xl animate-enter">
+                        <!-- 顶部标签：核心价值主张 -->
+                        <div
+                            class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#C00000]/5 to-[#C00000]/10 border border-[#C00000]/10 mb-2">
+                            <svg class="w-4 h-4 text-[#C00000]" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M7 2v11h3v9l7-12h-4l4-8z" />
+                            </svg>
+                            <span class="text-[#C00000] font-bold text-sm tracking-wide uppercase">全球汽车后市场设备领军者 ·
+                                跨境业务数智化转型先行企业</span>
+                        </div>
+
+                        <!-- 主标题 -->
+                        <h1 class="text-[76px] font-bold text-[#1F2937] tracking-tight leading-[1.15]">
+                            {{CLIENT_NAME}} & 影刀RPA<br>
+                            <span class="text-[64px] font-bold text-[#374151]">项目启动宣讲会</span>
+                        </h1>
+
+                        <!-- 副标题/Slogan -->
+                        <div class="flex items-center justify-center gap-6 mt-6">
+                            <div class="h-px w-20 bg-gradient-to-r from-transparent to-gray-300"></div>
+                            <p class="text-2xl text-[#4B5563] font-medium tracking-wide">
+                                以<span class="text-[#C00000] font-bold mx-1">自动化</span>驱动<span
+                                    class="text-[#C00000] font-bold mx-1">跨境精益运营</span>· 提升全链路效率
+                            </p>
+                            <div class="h-px w-20 bg-gradient-to-l from-transparent to-gray-300"></div>
+                        </div>
+                    </div>
+
+                    <!-- 底部装饰图标：三大核心标签 -->
+                    <div class="absolute bottom-16 flex gap-10 w-full justify-center px-20 animate-enter"
+                        style="animation-delay: 0.2s;">
+
+                        <!-- 1. 全球化品牌矩阵 (橙色) -->
+                        <div
+                            class="glass-card flex-1 h-32 rounded-2xl flex items-center p-6 gap-5 group cursor-default">
+                            <div
+                                class="w-16 h-16 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-500 shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                <!-- 图标：全球/地球 -->
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-1">全球化品牌矩阵</h3>
+                                <p class="text-xs text-gray-500 leading-relaxed">多平台多店铺运营<br>Amazon / eBay / Walmart</p>
+                            </div>
+                        </div>
+
+                        <!-- 2. 精益供应链管理 (红色 - 强调) -->
+                        <div
+                            class="glass-card flex-1 h-32 rounded-2xl flex items-center p-6 gap-5 group cursor-default border-red-100 bg-white/70">
+                            <div
+                                class="w-16 h-16 rounded-xl bg-red-50 border border-red-100 flex items-center justify-center text-[#C00000] shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                <!-- 图标：仓库/库存 -->
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-1 text-[#C00000]">精益供应链管理</h3>
+                                <p class="text-xs text-gray-500 leading-relaxed">库存预警 · 补货计算<br>提升资金周转率</p>
+                            </div>
+                        </div>
+
+                        <!-- 3. 多平台精细化运营 (蓝色) -->
+                        <div
+                            class="glass-card flex-1 h-32 rounded-2xl flex items-center p-6 gap-5 group cursor-default">
+                            <div
+                                class="w-16 h-16 rounded-xl bg-[#3370FF]/10 border border-[#3370FF]/20 flex items-center justify-center text-[#3370FF] shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                <!-- 图标：数据分析/精细化 -->
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-1">多平台精细化运营</h3>
+                                <p class="text-xs text-gray-500 leading-relaxed">跨平台价格监控<br>紫鸟环境多店铺管理</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>
