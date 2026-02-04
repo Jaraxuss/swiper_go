@@ -164,6 +164,68 @@
             font-weight: 600;
             color: #334155;
         }
+
+        /* Image Zoom Modal */
+        .zoomable-img {
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+
+        .zoomable-img:hover {
+            transform: scale(1.02);
+        }
+
+        .image-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .image-modal-overlay.active {
+            display: flex;
+        }
+
+        .image-modal-overlay img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .image-modal-close:hover {
+            opacity: 1;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 
@@ -331,8 +393,8 @@
                     <!-- Right Section: Preview & Demo -->
                     <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
                         <!-- Excel Preview Card -->
-                        <div class="glass-card p-4 flex-1 flex flex-col">
-                            <div class="flex items-center justify-between mb-3">
+                        <div class="glass-card p-3 flex-1 flex flex-col">
+                            <div class="flex items-center justify-between mb-2">
                                 <div class="flex items-center gap-2">
                                     <div
                                         class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
@@ -340,99 +402,28 @@
                                     </div>
                                     <h3 class="text-sm font-bold text-slate-900">选型明细表</h3>
                                 </div>
-                                <a href="#" class="text-rpa-red text-xs font-semibold hover:underline">点我查看更多 →</a>
                             </div>
 
-                            <!-- Excel Preview Table -->
-                            <div class="excel-preview flex-1 overflow-hidden">
-                                <div class="excel-header flex items-center gap-2">
-                                    <i class="fa-solid fa-table text-xs"></i>
-                                    <span>选型明细表.xlsx</span>
-                                </div>
-                                <table class="w-full border-collapse">
-                                    <thead>
-                                        <tr>
-                                            <td class="excel-cell excel-cell-header" style="width: 30px;"></td>
-                                            <td class="excel-cell excel-cell-header">G</td>
-                                            <td class="excel-cell excel-cell-header">H</td>
-                                            <td class="excel-cell excel-cell-header">I</td>
-                                            <td class="excel-cell excel-cell-header">J</td>
-                                            <td class="excel-cell excel-cell-header">K</td>
-                                            <td class="excel-cell excel-cell-header">L</td>
-                                            <td class="excel-cell excel-cell-header">M</td>
-                                            <td class="excel-cell excel-cell-header">N</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="excel-cell excel-cell-header">2</td>
-                                            <td class="excel-cell">分类明码</td>
-                                            <td class="excel-cell">功能</td>
-                                            <td class="excel-cell">上浮比例</td>
-                                            <td class="excel-cell">上浮原因</td>
-                                            <td class="excel-cell">附属功能</td>
-                                            <td class="excel-cell">附属电器</td>
-                                            <td class="excel-cell">选型描述</td>
-                                            <td class="excel-cell">电器描述</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="excel-cell excel-cell-header">3</td>
-                                            <td class="excel-cell">A001</td>
-                                            <td class="excel-cell">控制</td>
-                                            <td class="excel-cell">5%</td>
-                                            <td class="excel-cell">市场调整</td>
-                                            <td class="excel-cell">监控</td>
-                                            <td class="excel-cell">传感器</td>
-                                            <td class="excel-cell">高精度</td>
-                                            <td class="excel-cell">标准型</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="excel-cell excel-cell-header">4</td>
-                                            <td class="excel-cell">B002</td>
-                                            <td class="excel-cell">检测</td>
-                                            <td class="excel-cell">8%</td>
-                                            <td class="excel-cell">原材料涨价</td>
-                                            <td class="excel-cell">报警</td>
-                                            <td class="excel-cell">继电器</td>
-                                            <td class="excel-cell">工业级</td>
-                                            <td class="excel-cell">增强型</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <!-- Excel Preview Screenshot -->
+                            <div class="flex-1 bg-slate-50 rounded-xl overflow-hidden">
+                                <img src="../../assets/选型明细表.png" alt="选型明细表"
+                                    class="w-full h-full object-cover rounded-xl zoomable-img" />
                             </div>
                         </div>
 
                         <!-- Document Preview -->
-                        <div class="glass-card p-4 h-36">
-                            <div class="flex items-center gap-2 mb-3">
+                        <div class="glass-card p-3 h-56">
+                            <div class="flex items-center gap-2 mb-2">
                                 <div
                                     class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
                                     <i class="fa-solid fa-file-pdf text-sm"></i>
                                 </div>
                                 <h3 class="text-sm font-bold text-slate-900">原始表单文档</h3>
                             </div>
-                            <div class="flex gap-3 h-16">
-                                <div
-                                    class="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400">
-                                    <div class="text-center">
-                                        <i class="fa-solid fa-file-pdf text-2xl mb-1"></i>
-                                        <div class="text-[10px]">采购单.pdf</div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400">
-                                    <div class="text-center">
-                                        <i class="fa-solid fa-file-image text-2xl mb-1 text-purple-400"></i>
-                                        <div class="text-[10px]">表单扫描件.png</div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400">
-                                    <div class="text-center">
-                                        <i class="fa-solid fa-file-excel text-2xl mb-1 text-emerald-400"></i>
-                                        <div class="text-[10px]">供应商报价.xlsx</div>
-                                    </div>
-                                </div>
+                            <!-- Complex Form Screenshot -->
+                            <div class="h-44 bg-slate-50 rounded-xl overflow-hidden">
+                                <img src="../../assets/复杂表单.png" alt="复杂表单"
+                                    class="w-full h-full object-cover rounded-xl zoomable-img" />
                             </div>
                         </div>
                     </div>
@@ -440,7 +431,51 @@
             </div>
         </div>
     </div>
+    <!-- Image Zoom Modal -->
+    <div id="imageModal" class="image-modal-overlay">
+        <span class="image-modal-close">&times;</span>
+        <img id="modalImage" src="" alt="放大图片" />
+    </div>
+
     <script src="../../js/slide-core.js"></script>
+    <script>
+        // Image Zoom Functionality
+        (function () {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const closeBtn = modal.querySelector('.image-modal-close');
+
+            // Add click handler to all zoomable images
+            document.querySelectorAll('.zoomable-img').forEach(img => {
+                img.addEventListener('click', function (e) {
+                    e.stopPropagation(); // Prevent triggering slide navigation
+                    e.preventDefault();
+                    modalImg.src = this.src;
+                    modal.classList.add('active');
+                });
+            });
+
+            // Close modal on overlay click
+            modal.addEventListener('click', function (e) {
+                e.stopPropagation(); // Prevent triggering slide navigation
+                modal.classList.remove('active');
+            });
+
+            // Close button
+            closeBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                modal.classList.remove('active');
+            });
+
+            // Close on Escape key
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    e.stopPropagation();
+                    modal.classList.remove('active');
+                }
+            });
+        })();
+    </script>
 </body>
 
 </html>
