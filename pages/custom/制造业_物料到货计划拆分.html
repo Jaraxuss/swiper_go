@@ -283,38 +283,18 @@
 
                     <!-- Right: Preview -->
                     <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
-                        <div class="glass-card p-4 flex-1">
-                            <div class="flex items-center gap-2 mb-3">
+                        <div class="glass-card p-3 flex-1 flex flex-col">
+                            <div class="flex items-center gap-2 mb-2">
                                 <div
                                     class="w-6 h-6 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
-                                    <i class="fa-solid fa-envelope-open-text text-xs"></i>
+                                    <i class="fa-solid fa-play text-xs"></i>
                                 </div>
-                                <h3 class="text-sm font-bold text-slate-900">邮件发送预览</h3>
+                                <h3 class="text-sm font-bold text-slate-900">流程演示</h3>
                             </div>
-                            <div class="bg-white rounded-lg border border-slate-200 p-4 h-full">
-                                <div class="flex items-center gap-2 mb-3 pb-3 border-b border-slate-100">
-                                    <div
-                                        class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-bold">
-                                        采</div>
-                                    <div>
-                                        <div class="text-sm font-bold text-slate-800">采购部 - 物料到货计划通知</div>
-                                        <div class="text-[10px] text-slate-500">发送至：supplier_001@example.com</div>
-                                    </div>
-                                </div>
-                                <div class="text-[11px] text-slate-600 leading-relaxed space-y-2">
-                                    <p>尊敬的供应商：</p>
-                                    <p>您好！附件为本周物料到货计划，请查收并确认交期。</p>
-                                    <div class="flex items-center gap-2 mt-3 p-2 bg-slate-50 rounded-lg">
-                                        <i class="fa-solid fa-paperclip text-slate-400"></i>
-                                        <span class="text-[10px] text-slate-600">供应商A_20240120_到货计划.xlsx</span>
-                                    </div>
-                                </div>
-                                <div class="mt-4 pt-3 border-t border-slate-100">
-                                    <div class="text-[10px] text-slate-500">
-                                        <i class="fa-solid fa-check-circle text-green-500 mr-1"></i>
-                                        已发送 94 封邮件，覆盖全部供应商
-                                    </div>
-                                </div>
+                            <!-- Video Player -->
+                            <div class="flex-1 bg-slate-50 rounded-xl overflow-hidden">
+                                <video src="../../assets/物料到货计划拆分视频.mp4" class="w-full h-full object-cover rounded-xl"
+                                    controls loop playsinline></video>
                             </div>
                         </div>
                     </div>
