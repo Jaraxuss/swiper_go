@@ -327,8 +327,8 @@
                     <!-- Right Section: Preview & Demo -->
                     <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
                         <!-- AI Power Workflow Preview -->
-                        <div class="glass-card p-4 flex-1 flex flex-col">
-                            <div class="flex items-center justify-between mb-3">
+                        <div class="glass-card p-3 flex-1 flex flex-col">
+                            <div class="flex items-center justify-between mb-2">
                                 <div class="flex items-center gap-2">
                                     <div
                                         class="w-7 h-7 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 shadow-sm">
@@ -338,80 +338,26 @@
                                 </div>
                             </div>
 
-                            <!-- AI Workflow Diagram -->
-                            <div class="flex-1 bg-slate-50 rounded-xl p-4 overflow-hidden">
-                                <div class="flex flex-col gap-3 h-full justify-center">
-                                    <!-- 输入节点行 -->
-                                    <div class="flex items-center gap-3">
-                                        <div class="ai-workflow-node input flex items-center gap-2">
-                                            <i class="fa-solid fa-file-word text-blue-500"></i>
-                                            <span>本次合同文件</span>
-                                        </div>
-                                        <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
-                                        <div class="ai-workflow-node ai flex items-center gap-2">
-                                            <i class="fa-solid fa-wand-magic-sparkles text-rpa-red"></i>
-                                            <span>文本提取(本次)</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- AI处理节点 -->
-                                    <div class="flex items-center justify-center gap-3">
-                                        <div class="ai-workflow-node ai flex items-center gap-2 px-6">
-                                            <i class="fa-solid fa-brain text-rpa-red"></i>
-                                            <span>AI智能对比分析</span>
-                                        </div>
-                                        <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
-                                        <div class="ai-workflow-node output flex items-center gap-2">
-                                            <i class="fa-solid fa-file-lines text-emerald-500"></i>
-                                            <span>差异报告输出</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- 输入节点行 -->
-                                    <div class="flex items-center gap-3">
-                                        <div class="ai-workflow-node input flex items-center gap-2">
-                                            <i class="fa-solid fa-file-pdf text-blue-500"></i>
-                                            <span>参考合同文件</span>
-                                        </div>
-                                        <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
-                                        <div class="ai-workflow-node ai flex items-center gap-2">
-                                            <i class="fa-solid fa-wand-magic-sparkles text-rpa-red"></i>
-                                            <span>文本提取(参考)</span>
-                                        </div>
-                                    </div>
-                                </div>
+                            <!-- AI Workflow Screenshot -->
+                            <div class="flex-1 bg-slate-50 rounded-xl overflow-hidden">
+                                <img src="../../assets/合同对比AI工作流.png" alt="AI Power 合同对比工作流"
+                                    class="w-full h-full object-cover rounded-xl" />
                             </div>
                         </div>
 
                         <!-- Comparison Result Preview -->
-                        <div class="glass-card p-4 h-44">
-                            <div class="flex items-center gap-2 mb-3">
+                        <div class="glass-card p-3 h-48">
+                            <div class="flex items-center gap-2 mb-2">
                                 <div
                                     class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
                                     <i class="fa-solid fa-balance-scale text-sm"></i>
                                 </div>
                                 <h3 class="text-sm font-bold text-slate-900">对比结果预览</h3>
                             </div>
-                            <div class="flex gap-3 h-24">
-                                <div
-                                    class="flex-1 bg-slate-50 rounded-lg border border-slate-200 p-3 overflow-hidden">
-                                    <div class="text-[9px] text-slate-500 mb-1">本次合同</div>
-                                    <div class="text-[10px] text-slate-700 leading-relaxed">
-                                        第三条：付款方式<br>
-                                        <span class="bg-red-100 text-rpa-red">预付款30%</span>，货到付款70%
-                                    </div>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fa-solid fa-arrows-left-right text-slate-400"></i>
-                                </div>
-                                <div
-                                    class="flex-1 bg-slate-50 rounded-lg border border-slate-200 p-3 overflow-hidden">
-                                    <div class="text-[9px] text-slate-500 mb-1">参考合同</div>
-                                    <div class="text-[10px] text-slate-700 leading-relaxed">
-                                        第三条：付款方式<br>
-                                        <span class="bg-green-100 text-green-700">预付款20%</span>，货到付款80%
-                                    </div>
-                                </div>
+                            <!-- Comparison Screenshot -->
+                            <div class="h-32 bg-slate-50 rounded-xl overflow-hidden">
+                                <img src="../../assets/合同对比.png" alt="合同对比结果"
+                                    class="w-full h-full object-cover rounded-xl" />
                             </div>
                         </div>
                     </div>
