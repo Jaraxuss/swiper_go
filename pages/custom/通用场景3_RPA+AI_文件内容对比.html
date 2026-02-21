@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>通用场景3：RPA+AI，文件处理助手 CASE1 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .text-rpa-red { color: #C00000; }
+        .bg-rpa-red { background-color: #C00000; }
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border-radius: 16px;
+        }
+        .workflow-box {
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+            position: relative;
+            padding: 1.5rem 1rem;
+            background: rgba(255, 255, 255, 0.4);
+        }
+        .workflow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+            width: 80px;
+        }
+        .step-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 0.4rem;
+            color: #3b82f6;
+            font-size: 1.25rem;
+        }
+        .connector-arrow {
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+        .bg-img-overlay {
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(192, 0, 0, 0.05) 0%, transparent 70%);
+            z-index: 1;
+        }
+        .pain-point-item {
+            position: relative;
+            padding-left: 1rem;
+            font-size: 11px;
+            line-height: 1.5;
+            color: #475569;
+        }
+        .pain-point-item::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: #64748b;
+        }
+        .value-card {
+            background: linear-gradient(135deg, #fff 0%, #fef2f2 100%);
+            border: 1px solid rgba(192, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .value-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(192, 0, 0, 0.1);
+        }
+        .value-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #C00000 0%, #ff4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        /* AP工作流图示 */
+        .ap-flow-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .ap-flow-header {
+            background: #f1f5f9;
+            padding: 5px 10px;
+            font-size: 10px;
+            color: #64748b;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container"
+                class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+                <!-- Background Graphic -->
+                <div class="bg-img-overlay pointer-events-none"></div>
+                <!-- Header -->
+                <header class="relative z-20 mb-5 shrink-0">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="text-rpa-red font-bold text-lg">通用场景3：RPA+AI，文件处理助手</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="w-2 h-8 bg-rpa-red rounded"></span>
+                        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
+                            CASE1: 文件内容对比
+                            <span class="text-rpa-red ml-2 text-2xl font-bold">（Ai Power 工作流）</span>
+                        </h1>
+                    </div>
+                </header>
+                <!-- Content Layout -->
+                <div class="flex gap-8 flex-1 relative z-10 min-h-0">
+                    <!-- Left Section -->
+                    <div class="w-1/2 flex flex-col gap-4">
+                        <!-- Background & Pain Points -->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2"></div>
+                            <div class="flex gap-5">
+                                <!-- 需求背景 -->
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 shadow-sm">
+                                            <i class="fa-solid fa-file-lines text-sm"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">需求背景：</h3>
+                                    </div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                                        制造业采购业务高频、品类多、跨地域，合同条款复杂且模板多样，市场变化快，传统人工管理难以满足需求。
+                                    </p>
+                                </div>
+                                <!-- 业务痛点 -->
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm">
+                                            <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">业务痛点：</h3>
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <div class="pain-point-item">1. 人工比对合同效率低、准确性差</div>
+                                        <div class="pain-point-item">2. 缺乏风险预警且管理成本高</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Solution -->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2"></div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
+                                    <i class="fa-solid fa-robot text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900 tracking-tight">影刀RPA解决方案</h3>
+                            </div>
+                            <!-- Workflow Diagram -->
+                            <div class="workflow-box mt-2 !py-3">
+                                <div class="flex items-center justify-between px-1">
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">上传本次合同<br>格式不限<br><span class="text-slate-500 font-normal">(PDF/Word...)</span></div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-code"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">上传参考合同<br>格式不限<br><span class="text-slate-500 font-normal">(PDF/Word...)</span></div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-people-arrows"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">运行AP<br>工作流</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-green-600 group-hover:text-white" style="color: #059669;">
+                                            <i class="fa-solid fa-table-list"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">查看AP给出的<br>最后对比结果</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Value -->
+                        <div class="fragment mt-auto" animation_step="3">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-1 h-3.5 bg-rpa-red"></span>
+                                <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="value-card">
+                                    <div class="value-number">95%</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">
+                                        将合同条款比对的<span class="text-rpa-red font-bold">准确率</span>从人工的70%-80%大幅提升至95%以上
+                                    </p>
+                                </div>
+                                <div class="value-card">
+                                    <div class="value-number">85%</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">
+                                        AI可在数分钟内完成合同关键信息提取与条款比对，<span class="text-rpa-red font-bold">效率</span>提升85%
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Section: AP工作流预览 -->
+                    <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
+                        <!-- AP工作流展示 -->
+                        <div class="glass-card p-4 flex-1 flex flex-col">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
+                                        <i class="fa-solid fa-diagram-project text-sm"></i>
+                                    </div>
+                                    <h3 class="text-sm font-bold text-slate-900">Ai Power 工作流界面</h3>
+                                </div>
+                            </div>
+                            <!-- AP Flow Mockup -->
+                            <div class="ap-flow-card flex-1 flex flex-col">
+                                <div class="ap-flow-header">
+                                    <i class="fa-solid fa-diagram-project text-xs"></i>
+                                    <span>合同内容对比工作流 · Ai Power</span>
+                                    <span class="ml-auto text-emerald-500 font-semibold">● 运行中</span>
+                                </div>
+                                <div class="flex-1 p-4 bg-slate-50 relative overflow-hidden">
+                                    <!-- 模拟工作流节点 -->
+                                    <div class="flex flex-col gap-3 h-full justify-center">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-28 bg-white border border-slate-200 rounded-lg p-2 shadow-sm text-center">
+                                                <div class="text-[10px] font-bold text-slate-700">📄 读取合同A</div>
+                                                <div class="text-[9px] text-slate-400 mt-0.5">PDF/Word 解析</div>
+                                            </div>
+                                            <i class="fa-solid fa-arrow-right text-slate-300 text-sm"></i>
+                                            <div class="w-28 bg-white border border-slate-200 rounded-lg p-2 shadow-sm text-center">
+                                                <div class="text-[10px] font-bold text-slate-700">📄 读取合同B</div>
+                                                <div class="text-[9px] text-slate-400 mt-0.5">参考模板</div>
+                                            </div>
+                                            <i class="fa-solid fa-arrow-right text-slate-300 text-sm"></i>
+                                            <div class="w-28 bg-white border border-blue-300 rounded-lg p-2 shadow-sm text-center bg-blue-50">
+                                                <div class="text-[10px] font-bold text-blue-700">🤖 AI 条款提取</div>
+                                                <div class="text-[9px] text-blue-400 mt-0.5">关键字段识别</div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-3 pl-32">
+                                            <i class="fa-solid fa-arrow-down text-slate-300 text-sm rotate-45"></i>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-28 bg-white border border-emerald-200 rounded-lg p-2 shadow-sm text-center bg-emerald-50">
+                                                <div class="text-[10px] font-bold text-emerald-700">✅ 差异对比</div>
+                                                <div class="text-[9px] text-emerald-400 mt-0.5">逐条分析</div>
+                                            </div>
+                                            <i class="fa-solid fa-arrow-right text-slate-300 text-sm"></i>
+                                            <div class="w-28 bg-white border border-orange-200 rounded-lg p-2 shadow-sm text-center bg-orange-50">
+                                                <div class="text-[10px] font-bold text-orange-700">⚠️ 风险标注</div>
+                                                <div class="text-[9px] text-orange-400 mt-0.5">预警提示</div>
+                                            </div>
+                                            <i class="fa-solid fa-arrow-right text-slate-300 text-sm"></i>
+                                            <div class="w-28 bg-white border border-slate-200 rounded-lg p-2 shadow-sm text-center">
+                                                <div class="text-[10px] font-bold text-slate-700">📊 生成报告</div>
+                                                <div class="text-[9px] text-slate-400 mt-0.5">Excel汇总</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 右下：合同对比结果示意 -->
+                        <div class="glass-card p-4 h-36">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
+                                    <i class="fa-solid fa-file-excel text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900">对比结果输出</h3>
+                            </div>
+                            <div class="flex gap-3 h-20">
+                                <div class="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400">
+                                    <div class="text-center">
+                                        <i class="fa-solid fa-file-pdf text-2xl mb-1 text-red-400"></i>
+                                        <div class="text-[10px]">本次合同.pdf</div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 bg-slate-50 rounded-lg border border-emerald-200 flex items-center justify-center text-emerald-500">
+                                    <div class="text-center">
+                                        <i class="fa-solid fa-file-excel text-2xl mb-1"></i>
+                                        <div class="text-[10px]">差异对比表.xlsx</div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 bg-slate-50 rounded-lg border border-blue-200 flex items-center justify-center text-blue-400">
+                                    <div class="text-center">
+                                        <i class="fa-solid fa-shield-halved text-2xl mb-1"></i>
+                                        <div class="text-[10px]">风险预警报告</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/slide-core.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OMS销售订单录入 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans { font-family: 'Inter', 'Noto Sans SC', sans-serif; }
+        ::-webkit-scrollbar { display: none; }
+        .text-rpa-red { color: #C00000; }
+        .bg-rpa-red { background-color: #C00000; }
+        .fragment { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none; }
+        .fragment.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .glass-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 8px 32px rgba(0,0,0,0.04); border-radius: 16px; }
+        .workflow-box { border: 2px dashed #cbd5e1; border-radius: 20px; position: relative; padding: 1rem 0.5rem; background: rgba(255,255,255,0.4); }
+        .workflow-step { display: flex; flex-direction: column; align-items: center; text-align: center; z-index: 10; width: 72px; }
+        .step-icon { width: 42px; height: 42px; border-radius: 12px; background: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 0.35rem; color: #3b82f6; font-size: 1.1rem; }
+        .connector-arrow { color: #94a3b8; font-size: 0.7rem; }
+        .bg-img-overlay { position: absolute; bottom: -50px; left: -50px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(192,0,0,0.05) 0%, transparent 70%); z-index: 1; }
+        .pain-point-item { position: relative; padding-left: 1rem; font-size: 11px; line-height: 1.5; color: #475569; }
+        .pain-point-item::before { content: ""; position: absolute; left: 0; top: 6px; width: 5px; height: 5px; border-radius: 50%; background-color: #64748b; }
+        .value-card { background: linear-gradient(135deg, #fff 0%, #fef2f2 100%); border: 1px solid rgba(192,0,0,0.1); border-radius: 16px; padding: 1rem; text-align: center; transition: all 0.3s ease; }
+        .value-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(192,0,0,0.1); }
+        .value-number { font-size: 2.2rem; font-weight: 900; background: linear-gradient(135deg,#C00000 0%,#ff4444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .info-badge { display: inline-flex; align-items: center; gap: 4px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; padding: 3px 8px; font-size: 10px; color: #475569; }
+        .info-badge .label { font-weight: 700; color: #0f172a; }
+    </style>
+</head>
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container" class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+                <div class="bg-img-overlay pointer-events-none"></div>
+                <!-- Header -->
+                <header class="relative z-20 mb-5 shrink-0">
+                    <div class="flex items-center gap-4">
+                        <span class="w-2 h-8 bg-rpa-red rounded"></span>
+                        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">OMS销售订单录入</h1>
+                        <div class="flex items-center gap-2 ml-4">
+                            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">采购</span>
+                            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
+                            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">生产管理</span>
+                            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
+                            <span class="text-[11px] px-3 py-1 rounded-full bg-rpa-red text-white font-semibold">销售</span>
+                            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
+                            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">仓储物流</span>
+                        </div>
+                    </div>
+                </header>
+                <!-- Content Layout -->
+                <div class="flex gap-8 flex-1 relative z-10 min-h-0">
+                    <!-- Left -->
+                    <div class="w-1/2 flex flex-col gap-4">
+                        <!-- Background & Pain Points -->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2"></div>
+                            <div class="flex gap-5">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 shadow-sm">
+                                            <i class="fa-solid fa-file-lines text-sm"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">需求背景：</h3>
+                                    </div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                                        运营人员每天需要将各大电商平台的订单（速卖通、shopify等）下载到Excel中，再将这些海量的订单信息逐条录入到公司内部的OMS订单管理系统，实现订单统一管理。
+                                    </p>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm">
+                                            <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">业务痛点：</h3>
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <div class="pain-point-item">1. 订单量大，每日需录入数百到数千条订单，工作量较大</div>
+                                        <div class="pain-point-item">2. 人工录入速度慢，且容易发生录入错误，影响后续处理</div>
+                                        <div class="pain-point-item">3. 录入工作占用大量工作时间，无法进行其他工作</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Solution -->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2"></div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
+                                    <i class="fa-solid fa-robot text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900 tracking-tight">影刀RPA解决方案</h3>
+                            </div>
+                            <div class="workflow-box mt-1">
+                                <div class="flex items-center justify-between">
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-store"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">从速卖通/<br>Shopify获取<br>订单列表</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-filter"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">筛选当日<br>新增订单</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-table-list"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">循环处理<br>每条订单<br>提取字段</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-desktop"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">登录OMS<br>系统创建<br>新订单</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-green-600 group-hover:text-white" style="color:#059669">
+                                            <i class="fa-solid fa-circle-check"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">逐字段填写<br>并保存确认</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Value -->
+                        <div class="fragment" animation_step="3">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-1 h-3.5 bg-rpa-red"></span>
+                                <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="value-card">
+                                    <div class="value-number">99%</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">机器录入<span class="text-rpa-red font-bold">准确率</span>接近100%，杜绝人工录入失误</p>
+                                </div>
+                                <div class="value-card">
+                                    <div class="value-number">3H/天</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">每日节省<span class="text-rpa-red font-bold">运营人员</span>3小时的订单录入时间</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right -->
+                    <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
+                        <div class="glass-card p-4 flex-1 flex flex-col">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm">
+                                    <i class="fa-solid fa-store text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900">多平台订单统一收口</h3>
+                            </div>
+                            <div class="flex-1 flex flex-col gap-2 justify-center">
+                                <div class="flex gap-3">
+                                    <div class="flex-1 bg-orange-50 rounded-xl border border-orange-200 p-3 flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center">
+                                            <i class="fa-solid fa-a text-white text-xs"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs font-bold text-slate-800">速卖通</div>
+                                            <div class="text-[9px] text-slate-500">AliExpress</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 bg-green-50 rounded-xl border border-green-200 p-3 flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-lg bg-green-600 flex items-center justify-center">
+                                            <i class="fa-solid fa-s text-white text-xs"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs font-bold text-slate-800">Shopify</div>
+                                            <div class="text-[9px] text-slate-500">独立站</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <div class="flex-1 bg-blue-50 rounded-xl border border-blue-200 p-3 flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                                            <i class="fa-solid fa-a text-white text-xs"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs font-bold text-slate-800">亚马逊</div>
+                                            <div class="text-[9px] text-slate-500">Amazon</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 bg-slate-50 rounded-xl border border-slate-200 p-3 flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-lg bg-slate-500 flex items-center justify-center">
+                                            <i class="fa-solid fa-ellipsis text-white text-xs"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs font-bold text-slate-800">其他平台</div>
+                                            <div class="text-[9px] text-slate-500">可扩展</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-center py-2">
+                                    <i class="fa-solid fa-angles-down text-slate-400 text-lg animate-bounce"></i>
+                                </div>
+                                <div class="bg-rpa-red rounded-xl p-3 flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-white bg-opacity-20 flex items-center justify-center">
+                                        <i class="fa-solid fa-database text-white text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-white text-sm font-bold">OMS 订单管理系统</div>
+                                        <div class="text-red-200 text-[10px]">统一管理全渠道订单，全自动入库</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glass-card p-4 h-36">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
+                                    <i class="fa-solid fa-chart-bar text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900">处理规模</h3>
+                            </div>
+                            <div class="flex gap-4 h-20">
+                                <div class="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex flex-col items-center justify-center">
+                                    <div class="text-xl font-black text-rpa-red">数百至数千</div>
+                                    <div class="text-[10px] text-slate-500 mt-0.5">条/每日订单量</div>
+                                </div>
+                                <div class="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex flex-col items-center justify-center">
+                                    <div class="text-xl font-black text-rpa-red">每日</div>
+                                    <div class="text-[10px] text-slate-500 mt-0.5">自动执行</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/slide-core.js"></script>
+</body>
+</html>
