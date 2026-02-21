@@ -32,6 +32,11 @@ const slideConfig = [
     "pages/custom/制造业RPA场景地图.html",
     "pages/custom/RPA+AI文件处理助手_案例1_文件内容对比.html",
     "pages/custom/RPA+AI文件处理助手_案例2_表单识别填写.html",
+
+    // 新增通用场景3 AI文件处理助手详情页
+    "pages/custom/通用场景3_RPA+AI_文件内容对比.html",
+    "pages/custom/通用场景3_AP+RPA_超复杂表单识别并填写.html",
+
     "pages/custom/制造业RPA场景地图_PMC部.html",
 
     // 简单实操
@@ -44,17 +49,30 @@ const slideConfig = [
     "pages/custom/核心场景相关案例1.html",
     "pages/custom/生产日报自动化汇总.html",
     "pages/custom/工单自动化批量管理.html",
-    "pages/custom/制造业_文件内容对比.html",
-    "pages/custom/制造业_超复杂表单识别.html",
-    "pages/custom/制造业_采购每日原材料价格获取.html",
-    "pages/custom/制造业_物料到货计划拆分.html",
-    "pages/custom/制造业_采购份额调整分配.html",
-    "pages/custom/制造业_采购月度原料用量计算.html",
-    "pages/custom/制造业_延期订单查询跟进.html",
-    "pages/custom/制造业_EDI订单信息提取.html",
-    "pages/custom/制造业_OMS销售订单录入.html",
-    "pages/custom/制造业_仓储部出货标签制作.html",
-    "pages/custom/制造业_每日发货流程自动化.html",
+    // 旧版本（保留备用）
+    // "pages/custom/制造业_文件内容对比.html",
+    // "pages/custom/制造业_超复杂表单识别.html",
+    // "pages/custom/制造业_采购每日原材料价格获取.html",
+    // "pages/custom/制造业_物料到货计划拆分.html",
+    // "pages/custom/制造业_采购份额调整分配.html",
+    // "pages/custom/制造业_采购月度原料用量计算.html",
+    // "pages/custom/制造业_延期订单查询跟进.html",
+    // "pages/custom/制造业_EDI订单信息提取.html",
+    // "pages/custom/制造业_OMS销售订单录入.html",
+    // "pages/custom/制造业_仓储部出货标签制作.html",
+    // "pages/custom/制造业_每日发货流程自动化.html",
+
+    // 新版本详情页（从 temp_pages 图片生成）
+    "pages/custom/图纸批量归档业务.html",
+    "pages/custom/采购每日原材料价格获取.html",
+    "pages/custom/物料到货计划拆分.html",
+    "pages/custom/采购份额每月更新调整分配.html",
+    "pages/custom/采购部月度原料用量计算.html",
+    "pages/custom/延期订单查询跟进.html",
+    "pages/custom/EDI订单信息提取.html",
+    "pages/custom/OMS销售订单录入.html",
+    "pages/custom/仓储部出货标签制作.html",
+    "pages/custom/每日发货流程自动化.html",
 
     // 核心场景场景案例
     "pages/custom/核心场景相关案例2.html",

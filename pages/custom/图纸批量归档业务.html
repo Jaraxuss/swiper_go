@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>图纸批量归档业务 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans { font-family: 'Inter', 'Noto Sans SC', sans-serif; }
+        ::-webkit-scrollbar { display: none; }
+        .text-rpa-red { color: #C00000; }
+        .bg-rpa-red { background-color: #C00000; }
+        .fragment { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none; }
+        .fragment.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .glass-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 8px 32px rgba(0,0,0,0.04); border-radius: 16px; }
+        .workflow-box { border: 2px dashed #cbd5e1; border-radius: 20px; position: relative; padding: 0.65rem 0.75rem; background: rgba(255,255,255,0.4); }
+        .workflow-step { display: flex; flex-direction: column; align-items: center; text-align: center; z-index: 10; width: 70px; }
+        .step-icon { width: 42px; height: 42px; border-radius: 12px; background: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 0.35rem; color: #3b82f6; font-size: 1.1rem; }
+        .connector-arrow { color: #94a3b8; font-size: 0.7rem; }
+        .bg-img-overlay { position: absolute; bottom: -50px; left: -50px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(192,0,0,0.05) 0%, transparent 70%); z-index: 1; }
+        .pain-point-item { position: relative; padding-left: 1rem; font-size: 11px; line-height: 1.5; color: #475569; }
+        .pain-point-item::before { content: ""; position: absolute; left: 0; top: 6px; width: 5px; height: 5px; border-radius: 50%; background-color: #64748b; }
+        .value-card { background: linear-gradient(135deg, #fff 0%, #fef2f2 100%); border: 1px solid rgba(192,0,0,0.1); border-radius: 16px; padding: 1rem; text-align: center; transition: all 0.3s ease; }
+        .value-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(192,0,0,0.1); }
+        .value-number { font-size: 2.4rem; font-weight: 900; background: linear-gradient(135deg,#C00000 0%,#ff4444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container" class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+                <div class="bg-img-overlay pointer-events-none"></div>
+
+                <!-- Header -->
+                <header class="relative z-20 mb-5 shrink-0">
+                    <div class="flex items-center gap-4">
+                        <span class="w-2 h-8 bg-rpa-red rounded"></span>
+                        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">图纸批量归档业务</h1>
+                    </div>
+                </header>
+
+                <!-- Content Layout -->
+                <div class="flex gap-8 flex-1 relative z-10 min-h-0">
+
+                    <!-- Left Section -->
+                    <div class="w-1/2 flex flex-col gap-4">
+
+                        <!-- Background & Pain Points -->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2"></div>
+                            <div class="flex gap-5">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 shadow-sm">
+                                            <i class="fa-solid fa-file-lines text-sm"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">需求背景：</h3>
+                                    </div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                                        在设计部门通常需要使用各种图纸材料。这些图纸信息往往数量众多，且需要在不同的部门和人员之间进行共享、协作。为提高工作效率，客户需要一个能够批量上图纸至共享盘，且回填共享信息至内部系统记录的需求。
+                                    </p>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm">
+                                            <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">业务痛点：</h3>
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <div class="pain-point-item">1. 图纸数量大，人工归档效率极低</div>
+                                        <div class="pain-point-item">2. 处理步骤繁琐，涉及多个系统切换</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Solution -->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2"></div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
+                                    <i class="fa-solid fa-robot text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900 tracking-tight">影刀RPA解决方案</h3>
+                            </div>
+                            <p class="text-[11px] text-slate-600 leading-relaxed mb-3">影刀登陆客户OA系统，获取符合条件代办单，逐个打开获取项目名称图纸信息等，下载符合条件图纸。登陆Sunrise系统，根据合同名称等内容创建对应文件夹，并批量上传，逐个创建共享图纸，获取图纸链接。登陆客户条码系统，创建并归档图纸信息记录。</p>
+
+                            <div class="workflow-box mt-2">
+                                <div class="flex items-center justify-between">
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-desktop"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">影刀进入OA系统<br>中获取代办数据</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-rotate"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">影刀循环获取代<br>办数据下载图纸</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-folder-plus"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">影刀进入Sunrise<br>系统创建对应<br>文件夹</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">影刀批量上传<br>图纸信息</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-purple-600 group-hover:text-white" style="color:#7c3aed">
+                                            <i class="fa-solid fa-link"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">影刀逐个创建<br>共享链接并获<br>取链接</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-green-600 group-hover:text-white" style="color:#059669">
+                                            <i class="fa-solid fa-qrcode"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">影刀进入条码<br>系统创建并回<br>填数据</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Value -->
+                        <div class="fragment" animation_step="3">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-1 h-3.5 bg-rpa-red"></span>
+                                <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="value-card">
+                                    <div class="value-number">80%</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">代替人工<span class="text-rpa-red font-bold">机械归档</span>图纸信息</p>
+                                </div>
+                                <div class="value-card">
+                                    <div class="value-number">1人</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">每日节省7小时的工作时长，相当于<span class="text-rpa-red font-bold">节省一名人工</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Section -->
+                    <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
+                        <!-- 系统流程示意 -->
+                        <div class="glass-card p-4 flex-1 flex flex-col">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700 shadow-sm">
+                                    <i class="fa-solid fa-sitemap text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900">多系统协同流程</h3>
+                            </div>
+                            <div class="flex-1 flex flex-col gap-3 justify-center">
+                                <!-- OA系统 -->
+                                <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3 border border-slate-200">
+                                    <div class="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                                        <i class="fa-solid fa-desktop text-sm"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="text-xs font-bold text-slate-800">OA 系统</div>
+                                        <div class="text-[10px] text-slate-500">获取代办单、项目信息、图纸文件</div>
+                                    </div>
+                                    <i class="fa-solid fa-arrow-right text-slate-300 text-sm"></i>
+                                </div>
+                                <!-- Sunrise系统 -->
+                                <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3 border border-slate-200">
+                                    <div class="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600">
+                                        <i class="fa-solid fa-cloud text-sm"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="text-xs font-bold text-slate-800">Sunrise 共享系统</div>
+                                        <div class="text-[10px] text-slate-500">批量上传图纸、创建共享链接</div>
+                                    </div>
+                                    <i class="fa-solid fa-arrow-right text-slate-300 text-sm"></i>
+                                </div>
+                                <!-- 条码系统 -->
+                                <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3 border border-slate-200">
+                                    <div class="w-9 h-9 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600">
+                                        <i class="fa-solid fa-qrcode text-sm"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="text-xs font-bold text-slate-800">条码系统</div>
+                                        <div class="text-[10px] text-slate-500">创建并归档图纸信息记录</div>
+                                    </div>
+                                    <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center">
+                                        <i class="fa-solid fa-check text-emerald-600 text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 文件类型说明 -->
+                        <div class="glass-card p-4 h-44">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-7 h-7 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 shadow-sm">
+                                    <i class="fa-solid fa-file-image text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900">归档图纸文件类型</h3>
+                            </div>
+                            <div class="flex gap-3" style="padding-top: 20px;">
+                                <div class="flex-1 bg-slate-50 rounded-lg border border-slate-200 p-3 flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-file-pdf text-2xl text-red-400 mb-1"></i>
+                                    <div class="text-[10px] font-semibold text-slate-700">CAD图纸.pdf</div>
+                                </div>
+                                <div class="flex-1 bg-slate-50 rounded-lg border border-slate-200 p-3 flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-file-image text-2xl text-blue-400 mb-1"></i>
+                                    <div class="text-[10px] font-semibold text-slate-700">设计图.dwg</div>
+                                </div>
+                                <div class="flex-1 bg-slate-50 rounded-lg border border-slate-200 p-3 flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-link text-2xl text-purple-400 mb-1"></i>
+                                    <div class="text-[10px] font-semibold text-slate-700">共享链接</div>
+                                </div>
+                                <div class="flex-1 bg-emerald-50 rounded-lg border border-emerald-200 p-3 flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-database text-2xl text-emerald-500 mb-1"></i>
+                                    <div class="text-[10px] font-semibold text-emerald-700">系统记录</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EDI订单信息提取 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans { font-family: 'Inter', 'Noto Sans SC', sans-serif; }
+        ::-webkit-scrollbar { display: none; }
+        .text-rpa-red { color: #C00000; }
+        .bg-rpa-red { background-color: #C00000; }
+        .fragment { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none; }
+        .fragment.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .glass-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 8px 32px rgba(0,0,0,0.04); border-radius: 16px; }
+        .workflow-box { border: 2px dashed #cbd5e1; border-radius: 20px; position: relative; padding: 1rem 0.5rem; background: rgba(255,255,255,0.4); }
+        .workflow-step { display: flex; flex-direction: column; align-items: center; text-align: center; z-index: 10; width: 72px; }
+        .step-icon { width: 42px; height: 42px; border-radius: 12px; background: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 0.35rem; color: #3b82f6; font-size: 1.1rem; }
+        .connector-arrow { color: #94a3b8; font-size: 0.7rem; }
+        .bg-img-overlay { position: absolute; bottom: -50px; left: -50px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(192,0,0,0.05) 0%, transparent 70%); z-index: 1; }
+        .pain-point-item { position: relative; padding-left: 1rem; font-size: 11px; line-height: 1.5; color: #475569; }
+        .pain-point-item::before { content: ""; position: absolute; left: 0; top: 6px; width: 5px; height: 5px; border-radius: 50%; background-color: #64748b; }
+        .value-card { background: linear-gradient(135deg, #fff 0%, #fef2f2 100%); border: 1px solid rgba(192,0,0,0.1); border-radius: 16px; padding: 1rem; text-align: center; transition: all 0.3s ease; }
+        .value-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(192,0,0,0.1); }
+        .value-number { font-size: 2.2rem; font-weight: 900; background: linear-gradient(135deg,#C00000 0%,#ff4444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .info-badge { display: inline-flex; align-items: center; gap: 4px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; padding: 3px 8px; font-size: 10px; color: #475569; }
+        .info-badge .label { font-weight: 700; color: #0f172a; }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container" class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+                <div class="bg-img-overlay pointer-events-none"></div>
+
+                <!-- Header -->
+                <header class="relative z-20 mb-5 shrink-0">
+                    <div class="flex items-center gap-4">
+                        <span class="w-2 h-8 bg-rpa-red rounded"></span>
+                        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">EDI订单信息提取</h1>
+                        <div class="flex items-center gap-2 ml-4">
+                            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">采购</span>
+                            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
+                            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">生产管理</span>
+                            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
+                            <span class="text-[11px] px-3 py-1 rounded-full bg-rpa-red text-white font-semibold">销售</span>
+                            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
+                            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">仓储物流</span>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Content Layout -->
+                <div class="flex gap-8 flex-1 relative z-10 min-h-0">
+
+                    <!-- Left -->
+                    <div class="w-1/2 flex flex-col gap-4">
+
+                        <!-- Background & Pain Points -->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2"></div>
+                            <div class="flex gap-5">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 shadow-sm">
+                                            <i class="fa-solid fa-file-lines text-sm"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">需求背景：</h3>
+                                    </div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                                        客户来自全球各地，每日有大量订单通过EDI系统下单，信息以特定格式存储，需业务员逐个查看每张订单的EDI报文，从中提取关键信息，整理好Excel表单，给到后续跟单同事进行跟进处理。
+                                    </p>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm">
+                                            <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">业务痛点：</h3>
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <div class="pain-point-item">1. 订单量大，信息格式固定但提取繁琐</div>
+                                        <div class="pain-point-item">2. 人工逐条提取效率低，易出错</div>
+                                        <div class="pain-point-item">3. 汇总至Excel后仍需人工检核</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Solution -->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2"></div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
+                                    <i class="fa-solid fa-robot text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900 tracking-tight">影刀RPA解决方案</h3>
+                            </div>
+                            <div class="workflow-box mt-1">
+                                <div class="flex items-center justify-between">
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-envelope"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">影刀登录<br>邮箱/EDI系统<br>获取订单列表</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-code"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">解析EDI报文<br>格式提取字段</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-rotate"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">循环遍历<br>所有订单</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-green-600 group-hover:text-white" style="color:#059669">
+                                            <i class="fa-solid fa-file-excel"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">汇总整理<br>至Excel表单<br>给跟单同事</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Value -->
+                        <div class="fragment" animation_step="3">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="w-1 h-3.5 bg-rpa-red"></span>
+                                <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="value-card">
+                                    <div class="value-number">90%</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">订单数据提取<span class="text-rpa-red font-bold">准确率</span>提升至90%+</p>
+                                </div>
+                                <div class="value-card">
+                                    <div class="value-number">70%</div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">业务员<span class="text-rpa-red font-bold">手工录入时间</span>减少70%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right -->
+                    <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
+                        <div class="glass-card p-4 flex-1 flex flex-col">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-7 h-7 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 shadow-sm">
+                                    <i class="fa-solid fa-code text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900">EDI 报文示例</h3>
+                            </div>
+                            <div class="flex-1 bg-slate-900 rounded-xl p-4 font-mono overflow-hidden relative">
+                                <div class="text-emerald-400 text-[10px] leading-relaxed">
+                                    <div><span class="text-slate-500">// EDI 856 订单报文</span></div>
+                                    <div class="mt-1">ISA*00*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*00...</div>
+                                    <div>GS*SH*SENDER*RECEIVER*20241201...</div>
+                                    <div>ST*856*0001</div>
+                                    <div class="text-yellow-400">BSN*00*12345678*20241201*1200*0002</div>
+                                    <div class="text-slate-400 text-[9px] mt-1">↑ 提取：发货单号、日期</div>
+                                    <div class="mt-1.5">HL*1**S</div>
+                                    <div class="text-yellow-400">DTM*011*20241205</div>
+                                    <div class="text-slate-400 text-[9px] mt-1">↑ 提取：预计到货日期</div>
+                                    <div class="mt-1.5">HL*2*1*O</div>
+                                    <div class="text-yellow-400">PRF*PO123456**20241101</div>
+                                    <div class="text-slate-400 text-[9px] mt-1">↑ 提取：PO采购订单号</div>
+                                    <div class="mt-1.5">LIN*1*VP*SKU-A001</div>
+                                    <div class="text-yellow-400">SN1**100*EA</div>
+                                    <div class="text-slate-400 text-[9px] mt-1">↑ 提取：产品编码、数量</div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-slate-900 to-transparent"></div>
+                            </div>
+                        </div>
+                        <div class="glass-card p-4 h-36">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
+                                    <i class="fa-solid fa-file-excel text-sm"></i>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900">提取后 Excel 输出字段</h3>
+                            </div>
+                            <div class="flex gap-2 flex-wrap h-20 items-center">
+                                <span class="px-2 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-[10px] rounded-lg">发货单号</span>
+                                <span class="px-2 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-[10px] rounded-lg">PO号</span>
+                                <span class="px-2 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-[10px] rounded-lg">客户编码</span>
+                                <span class="px-2 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-[10px] rounded-lg">产品SKU</span>
+                                <span class="px-2 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-[10px] rounded-lg">订货数量</span>
+                                <span class="px-2 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-[10px] rounded-lg">发货日期</span>
+                                <span class="px-2 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-[10px] rounded-lg">预计到货</span>
+                                <span class="px-2 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-[10px] rounded-lg">仓库地址</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/slide-core.js"></script>
+</body>
+
+</html>
