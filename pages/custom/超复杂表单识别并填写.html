@@ -47,20 +47,6 @@
             border-radius: 16px;
         }
 
-        /* Benefit Card Stats */
-        .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.25rem;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
         /* Workflow Connector */
         .workflow-box {
             border: 2px dashed #cbd5e1;
@@ -145,7 +131,7 @@
         }
 
         .value-number {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 900;
             background: linear-gradient(135deg, #C00000 0%, #ff4444 100%);
             -webkit-background-clip: text;
@@ -153,36 +139,37 @@
             background-clip: text;
         }
 
-        /* Excel Preview */
-        .excel-preview {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        /* Lightbox */
+        .lightbox-overlay {
+            position: fixed; inset: 0; z-index: 9999;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+            cursor: zoom-out;
         }
-
-        .excel-header {
-            background: #f1f5f9;
-            padding: 4px 8px;
-            font-size: 10px;
-            color: #64748b;
-            border-bottom: 1px solid #e2e8f0;
+        .lightbox-overlay.active { opacity: 1; pointer-events: auto; }
+        .lightbox-overlay .lightbox-img {
+            max-width: 90vw; max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transform: scale(0.9); opacity: 0;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
         }
-
-        .excel-cell {
-            border: 1px solid #e2e8f0;
-            padding: 3px 6px;
-            font-size: 8px;
-            color: #475569;
-            text-align: center;
+        .lightbox-overlay.active .lightbox-img { transform: scale(1); opacity: 1; }
+        .lightbox-close {
+            position: absolute; top: 20px; right: 24px;
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%; color: white;
+            font-size: 18px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease; backdrop-filter: blur(8px);
         }
-
-        .excel-cell-header {
-            background: #f8fafc;
-            font-weight: 600;
-            color: #334155;
-        }
+        .lightbox-close:hover { background: rgba(255,255,255,0.3); transform: rotate(90deg); }
+        .lightbox-trigger { cursor: pointer; transition: opacity 0.2s ease; }
+        .lightbox-trigger:hover { opacity: 0.85; }
     </style>
 </head>
 
@@ -195,14 +182,14 @@
                 <div class="bg-img-overlay pointer-events-none"></div>
 
                 <!-- Header -->
-                <header class="relative z-20 mb-6 shrink-0">
+                <header class="relative z-20 mb-5 shrink-0">
                     <div class="flex items-center gap-3 mb-1">
                         <span class="text-rpa-red font-bold text-lg">通用场景3：AP+RPA，文件处理助手</span>
                     </div>
                     <div class="flex items-center gap-4">
                         <span class="w-2 h-8 bg-rpa-red rounded"></span>
                         <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
-                            CASE2：超复杂表单识别并填写
+                            超复杂表单识别并填写
                             <span class="text-rpa-red ml-2">（AP智能体）</span>
                         </h1>
                     </div>
@@ -212,13 +199,13 @@
                 <div class="flex gap-8 flex-1 relative z-10 min-h-0">
 
                     <!-- Left Section: Details -->
-                    <div class="w-1/2 flex flex-col gap-4">
+                    <div class="w-1/2 flex flex-col gap-3">
 
                         <!-- Pain Points Card with Background & Business Pains -->
                         <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2">
                             </div>
-                            <div class="flex gap-6">
+                            <div class="flex gap-6 pl-3">
                                 <!-- 需求背景 -->
                                 <div class="flex-1">
                                     <div class="flex items-center gap-2 mb-2">
@@ -254,7 +241,7 @@
                         <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2">
                             </div>
-                            <div class="flex items-center gap-2 mb-3">
+                            <div class="flex items-center gap-2 mb-3 pl-3">
                                 <div
                                     class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
                                     <i class="fa-solid fa-robot text-sm"></i>
@@ -262,70 +249,58 @@
                                 <h3 class="text-sm font-bold text-slate-900 tracking-tight">影刀RPA解决方案</h3>
                             </div>
 
-                            <!-- Workflow Diagram -->
-                            <div class="workflow-box mt-2 !py-4">
+                            <!-- Workflow Diagram - 完整4步 -->
+                            <div class="workflow-box mt-1 !py-4 !px-4">
                                 <div class="flex items-center justify-between px-2">
-                                    <!-- Step 1 -->
+                                    <!-- Step 1: 打开智能体上传pdf/Excel原件 -->
                                     <div class="workflow-step group">
-                                        <div
-                                            class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
                                             <i class="fa-solid fa-cloud-arrow-up"></i>
                                         </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
-                                            打开智能体<br>上传pdf/Excel原件
-                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">打开智能体<br>上传pdf/Excel原件</div>
                                     </div>
 
                                     <div class="connector-arrow text-slate-300">
                                         <i class="fa-solid fa-arrow-right"></i>
                                     </div>
 
-                                    <!-- Step 2 -->
+                                    <!-- Step 2: 调用AI工作流提取数据 -->
                                     <div class="workflow-step group">
-                                        <div
-                                            class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
                                             <i class="fa-solid fa-wand-magic-sparkles"></i>
                                         </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
-                                            调用AI工作流<br>提取数据
-                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">调用AI工作流<br>提取数据</div>
                                     </div>
 
                                     <div class="connector-arrow text-slate-300">
                                         <i class="fa-solid fa-arrow-right"></i>
                                     </div>
 
-                                    <!-- Step 3 -->
+                                    <!-- Step 3: RPA将提取出的数据填入excel模板 -->
                                     <div class="workflow-step group">
-                                        <div
-                                            class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
                                             <i class="fa-solid fa-table-cells"></i>
                                         </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
-                                            RPA将提取出的数据<br>填入excel模板
-                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">RPA将提取出的数<br>据填入excel模板</div>
                                     </div>
 
                                     <div class="connector-arrow text-slate-300">
                                         <i class="fa-solid fa-arrow-right"></i>
                                     </div>
 
-                                    <!-- Step 4 -->
+                                    <!-- Step 4: 业务员下载填写完成的Excel -->
                                     <div class="workflow-step group">
-                                        <div
-                                            class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-download"></i>
+                                        <div class="step-icon transition-all group-hover:bg-emerald-600 group-hover:text-white">
+                                            <i class="fa-solid fa-download text-emerald-600 group-hover:text-white"></i>
                                         </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">
-                                            业务员下载填<br>写完成的Excel
-                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">业务员下载填<br>写完成的Excel</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Benefits / Value -->
-                        <div class="fragment mt-auto">
+                        <div class="fragment mt-auto" animation_step="3">
                             <div class="flex items-center gap-2 mb-3">
                                 <span class="w-1 h-3.5 bg-rpa-red"></span>
                                 <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
@@ -334,23 +309,46 @@
                                 <div class="value-card">
                                     <div class="value-number">95%</div>
                                     <p class="text-[11px] text-slate-600 leading-relaxed mt-2">
-                                        将合同条款比对的<span class="text-rpa-red font-bold">准确率</span>从人工的70%-80%大幅提升至95%以上
+                                        将合同条款比对的<span class="text-rpa-red font-bold">准确率</span>从人工的70%-80% 大幅提升至 95% 以上
                                     </p>
                                 </div>
                                 <div class="value-card">
                                     <div class="value-number">85%</div>
                                     <p class="text-[11px] text-slate-600 leading-relaxed mt-2">
-                                        而AI可在数分钟内完成合同关键信息提取与条款比对，<span class="text-rpa-red font-bold">效率</span>提升85%
+                                        而 AI 可在数分钟内完成合同关键信息提取与条款比对，<span class="text-rpa-red font-bold">效率</span>提升85%
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right Section: Excel Preview & Demo -->
-                    <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
-                        <!-- Excel Template Preview -->
-                        <div class="glass-card p-4 flex-1 flex flex-col">
+                    <!-- Right Section: Preview & Demo -->
+                    <div class="fragment w-1/2 flex flex-col gap-4 min-h-0" animation_step="2">
+
+                        <!-- 技术规格书原件预览 -->
+                        <div class="glass-card p-4 flex-[3] flex flex-col min-h-0">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
+                                        <i class="fa-solid fa-file-pdf text-sm"></i>
+                                    </div>
+                                    <h3 class="text-sm font-bold text-slate-900">技术规格书原件</h3>
+                                </div>
+                            </div>
+
+                            <!-- 技术规格书截图 -->
+                            <div class="flex-1 rounded-xl overflow-hidden border border-slate-200 bg-white min-h-0">
+                                <img src="../../assets/extracted/超复杂表单识别并填写/form_preview_technical.png"
+                                     alt="包含大量细微文字的高复杂度技术规格书 PDF 预览"
+                                     class="w-full h-full object-cover object-top lightbox-trigger rounded-xl"
+                                     onclick="openLightbox(this.src)" />
+                            </div>
+                            <p class="text-[10px] text-slate-400 mt-1.5 text-center">包含大量细微文字的高复杂度技术规格书 PDF 预览 — 点击可放大</p>
+                        </div>
+
+                        <!-- 选型明细表 Excel 预览 -->
+                        <div class="glass-card p-4 flex-[2] flex flex-col min-h-0">
                             <div class="flex items-center justify-between mb-3">
                                 <div class="flex items-center gap-2">
                                     <div
@@ -362,147 +360,41 @@
                                 <a href="#" class="text-rpa-red text-xs font-semibold hover:underline">点我查看更多 →</a>
                             </div>
 
-                            <!-- Excel Preview Table -->
-                            <div class="excel-preview flex-1 overflow-hidden">
-                                <div class="excel-header flex items-center gap-2">
-                                    <i class="fa-solid fa-table text-xs"></i>
-                                    <span>选型明细表.xlsx</span>
-                                </div>
-                                <table class="w-full border-collapse">
-                                    <thead>
-                                        <tr>
-                                            <td class="excel-cell excel-cell-header" style="width: 30px;"></td>
-                                            <td class="excel-cell excel-cell-header">G</td>
-                                            <td class="excel-cell excel-cell-header">H</td>
-                                            <td class="excel-cell excel-cell-header">I</td>
-                                            <td class="excel-cell excel-cell-header">J</td>
-                                            <td class="excel-cell excel-cell-header">K</td>
-                                            <td class="excel-cell excel-cell-header">L</td>
-                                            <td class="excel-cell excel-cell-header">M</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="excel-cell excel-cell-header">1</td>
-                                            <td class="excel-cell" colspan="7"
-                                                style="text-align: right; font-weight: 600; color: #C00000;">选型明细表</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="excel-cell excel-cell-header">2</td>
-                                            <td class="excel-cell"></td>
-                                            <td class="excel-cell"></td>
-                                            <td class="excel-cell"></td>
-                                            <td class="excel-cell"></td>
-                                            <td class="excel-cell"></td>
-                                            <td class="excel-cell"></td>
-                                            <td class="excel-cell"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="excel-cell excel-cell-header">3</td>
-                                            <td class="excel-cell excel-cell-header">公称压力</td>
-                                            <td class="excel-cell excel-cell-header">法兰标准/连接形式</td>
-                                            <td class="excel-cell excel-cell-header">上阀盖形式</td>
-                                            <td class="excel-cell excel-cell-header">阀体材质</td>
-                                            <td class="excel-cell excel-cell-header">阀内件材质</td>
-                                            <td class="excel-cell excel-cell-header">填料材质</td>
-                                            <td class="excel-cell excel-cell-header">额定KV值*</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="excel-cell excel-cell-header">4</td>
-                                            <td class="excel-cell">PN16</td>
-                                            <td class="excel-cell">GB/T 9113</td>
-                                            <td class="excel-cell">标准型</td>
-                                            <td class="excel-cell">WCB</td>
-                                            <td class="excel-cell">304</td>
-                                            <td class="excel-cell">PTFE</td>
-                                            <td class="excel-cell">25</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="excel-cell excel-cell-header">5</td>
-                                            <td class="excel-cell">PN25</td>
-                                            <td class="excel-cell">HG/T 20592</td>
-                                            <td class="excel-cell">散热型</td>
-                                            <td class="excel-cell">CF8</td>
-                                            <td class="excel-cell">316</td>
-                                            <td class="excel-cell">石墨</td>
-                                            <td class="excel-cell">40</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="excel-cell excel-cell-header">6</td>
-                                            <td class="excel-cell">PN40</td>
-                                            <td class="excel-cell">ANSI B16.5</td>
-                                            <td class="excel-cell">长颈型</td>
-                                            <td class="excel-cell">CF8M</td>
-                                            <td class="excel-cell">316L</td>
-                                            <td class="excel-cell">柔性石墨</td>
-                                            <td class="excel-cell">63</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="excel-cell excel-cell-header">7</td>
-                                            <td class="excel-cell">PN63</td>
-                                            <td class="excel-cell">JIS B2220</td>
-                                            <td class="excel-cell">波纹管密封</td>
-                                            <td class="excel-cell">LCB</td>
-                                            <td class="excel-cell">哈氏合金</td>
-                                            <td class="excel-cell">编织填料</td>
-                                            <td class="excel-cell">100</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="excel-cell excel-cell-header">8</td>
-                                            <td class="excel-cell">PN100</td>
-                                            <td class="excel-cell">DIN 2501</td>
-                                            <td class="excel-cell">低温型</td>
-                                            <td class="excel-cell">CF3M</td>
-                                            <td class="excel-cell">蒙乃尔</td>
-                                            <td class="excel-cell">O型圈</td>
-                                            <td class="excel-cell">160</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <!-- Excel 截图预览 -->
+                            <div class="flex-1 rounded-lg overflow-hidden border border-slate-200 bg-white min-h-0">
+                                <img src="../../assets/extracted/超复杂表单识别并填写/excel_preview_selection.png"
+                                     alt="系统自动填入后的选型明细表 Excel 预览"
+                                     class="w-full h-full object-contain lightbox-trigger"
+                                     onclick="openLightbox(this.src)" />
                             </div>
-                        </div>
-
-                        <!-- Document Preview Placeholder -->
-                        <div class="glass-card p-4 h-40">
-                            <div class="flex items-center gap-2 mb-3">
-                                <div
-                                    class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
-                                    <i class="fa-solid fa-file-pdf text-sm"></i>
-                                </div>
-                                <h3 class="text-sm font-bold text-slate-900">原始表单文档</h3>
-                            </div>
-                            <div class="flex gap-3 h-20">
-                                <!-- PDF Preview -->
-                                <div
-                                    class="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400">
-                                    <div class="text-center">
-                                        <i class="fa-solid fa-file-pdf text-3xl mb-1"></i>
-                                        <div class="text-[10px]">采购合同.pdf</div>
-                                    </div>
-                                </div>
-                                <!-- Excel Preview -->
-                                <div
-                                    class="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400">
-                                    <div class="text-center">
-                                        <i class="fa-solid fa-file-excel text-3xl mb-1 text-emerald-400"></i>
-                                        <div class="text-[10px]">供应商报价.xlsx</div>
-                                    </div>
-                                </div>
-                                <!-- Image Preview -->
-                                <div
-                                    class="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400">
-                                    <div class="text-center">
-                                        <i class="fa-solid fa-file-image text-3xl mb-1 text-purple-400"></i>
-                                        <div class="text-[10px]">表单扫描件.png</div>
-                                    </div>
-                                </div>
-                            </div>
+                            <p class="text-[10px] text-slate-400 mt-1.5 text-center">系统自动填入后的选型明细表 Excel 预览 — 点击可放大</p>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox-overlay" id="img-lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <img class="lightbox-img" id="lightbox-img" src="" alt="放大预览" onclick="event.stopPropagation()" />
+    </div>
+
+    <script>
+    function openLightbox(src) {
+        const overlay = document.getElementById('img-lightbox');
+        document.getElementById('lightbox-img').src = src;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        document.getElementById('img-lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+    </script>
 
     <script src="../../js/slide-core.js"></script>
 </body>

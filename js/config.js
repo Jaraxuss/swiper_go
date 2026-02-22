@@ -30,12 +30,13 @@ const slideConfig = [
     "pages/custom/制造业的数字化地图.html",
     "pages/custom/业务挑战_流程断点多海量非结构数据.html",
     "pages/custom/制造业RPA场景地图.html",
-    "pages/custom/RPA+AI文件处理助手_案例1_文件内容对比.html",
+    "pages/custom/文件内容对比.html",
     "pages/custom/RPA+AI文件处理助手_案例2_表单识别填写.html",
 
     // 新增通用场景3 AI文件处理助手详情页
-    "pages/custom/通用场景3_RPA+AI_文件内容对比.html",
+    "pages/custom/通用场景3_RPA+AI_文件处理助手.html",
     "pages/custom/通用场景3_AP+RPA_超复杂表单识别并填写.html",
+    "pages/custom/超复杂表单识别并填写.html",
 
     "pages/custom/制造业RPA场景地图_PMC部.html",
 
@@ -50,7 +51,6 @@ const slideConfig = [
     "pages/custom/生产日报自动化汇总.html",
     "pages/custom/工单自动化批量管理.html",
     // 旧版本（保留备用）
-    // "pages/custom/制造业_文件内容对比.html",
     // "pages/custom/制造业_超复杂表单识别.html",
     // "pages/custom/制造业_采购每日原材料价格获取.html",
     // "pages/custom/制造业_物料到货计划拆分.html",

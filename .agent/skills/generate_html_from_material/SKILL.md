@@ -166,6 +166,13 @@ view_file ./html_style_summary/05_启动会首页风格.md
 
 ## 步骤 3：处理用户资料
 
+### 3.0 🚫 严格完整还原原则（严禁缩减/创意发挥）
+
+当根据用户上传的原始图片资料（尤其是 `full_page_render` 等全页原图）或资料文件（如 `assets_manifest.json`）生成 HTML 页面时，**必须严格、完全地还原**原资料中的所有业务逻辑节点、流程图步骤（Workflow）、痛点列表和价值点。
+1. **禁止缩减与发挥**：不得为了排版简便而随意删除原有步骤，不得使用 AI 擅自概括、省略、缩减或合并原始步骤。
+2. **完整还原工作流**：原始资料或原图工作流中有多少个步骤节点，最终生成的 HTML 页面中的 `.workflow-box` 组件内就必须完整保留多少个 `.workflow-step` 节点，且文字标题与说明必须与原资料一一对应。绝不要因为页面排版或空间问题而自行精简步骤。
+3. **精准提取文字**：痛点、背景、方案价值等文字说明应尽可能与原始材料保持完全一致，切勿由于创意发挥而丢失核心业务数据与专有名词。
+
 ### 3.1 文字内容处理
 
 将用户提供的文字内容结构化：
@@ -176,7 +183,7 @@ view_file ./html_style_summary/05_启动会首页风格.md
 
 ### 3.2 图片资料处理
 
-如果用户上传了图片：
+如果用户上传了图片或提供了 `assets_manifest.json` 资源清单：
 
 1. **分析图片内容**：理解图片中的布局、颜色、元素
 2. **提取关键信息**：文字、图标、数据等
@@ -185,6 +192,125 @@ view_file ./html_style_summary/05_启动会首页风格.md
    - 作为功能展示图
    - 作为图标素材
    - 需要转换为 HTML 元素
+4. **图片嵌入强化规范**：
+   - **支持点击放大（Lightbox 灯箱）**：对于嵌入页面的主要图片资源（如系统截图、应用展示、Excel 截图等），**必须**内置 Lightbox 灯箱功能，**禁止**使用 `window.open(this.src, '_blank')` 这种粗糙的新标签页方式。具体实现要求：
+     1. 在页面 `<body>` 末尾（`slide-core.js` 之前）添加 Lightbox 遮罩容器 `<div id="img-lightbox">`
+     2. 在 `<style>` 中内联 Lightbox 相关的 CSS 样式与动画（`.lightbox-overlay`、`.lightbox-img`、`.lightbox-close`、`@keyframes lightbox-fade-in`、`@keyframes lightbox-zoom-in`）
+     3. 在 `<script>` 中内联 Lightbox 的 JS 逻辑（打开/关闭/ESC 键盘关闭）
+     4. 可点击放大的图片元素统一添加 `class="lightbox-trigger"` 和 `cursor-pointer` 样式
+     5. 灯箱交互规范：
+        - 点击图片 → 弹出半透明黑色遮罩（`rgba(0,0,0,0.85)`），图片居中以 `scale(0.9)→scale(1)` + `opacity(0→1)` 动画放大展示
+        - 右上角显示白色圆形关闭按钮（✕），hover 时旋转90°
+        - 点击遮罩背景或关闭按钮 → 关闭灯箱
+        - 按 ESC 键 → 关闭灯箱
+     6. **完整的 Lightbox 代码模板**如下，直接复制到每个页面中使用：
+     
+     ```html
+     <!-- Lightbox CSS（放入 <style> 标签内） -->
+     .lightbox-overlay {
+         position: fixed; inset: 0; z-index: 9999;
+         background: rgba(0, 0, 0, 0.85);
+         display: flex; align-items: center; justify-content: center;
+         opacity: 0; pointer-events: none;
+         transition: opacity 0.3s ease;
+         cursor: zoom-out;
+     }
+     .lightbox-overlay.active { opacity: 1; pointer-events: auto; }
+     .lightbox-overlay .lightbox-img {
+         max-width: 90vw; max-height: 90vh;
+         border-radius: 12px;
+         box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+         transform: scale(0.9); opacity: 0;
+         transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+     }
+     .lightbox-overlay.active .lightbox-img { transform: scale(1); opacity: 1; }
+     .lightbox-close {
+         position: absolute; top: 20px; right: 24px;
+         width: 40px; height: 40px;
+         background: rgba(255,255,255,0.15);
+         border: 1px solid rgba(255,255,255,0.3);
+         border-radius: 50%; color: white;
+         font-size: 18px; cursor: pointer;
+         display: flex; align-items: center; justify-content: center;
+         transition: all 0.3s ease; backdrop-filter: blur(8px);
+     }
+     .lightbox-close:hover { background: rgba(255,255,255,0.3); transform: rotate(90deg); }
+     .lightbox-trigger { cursor: pointer; transition: opacity 0.2s ease; }
+     .lightbox-trigger:hover { opacity: 0.85; }
+     
+     <!-- Lightbox HTML（放在 </body> 之前） -->
+     <div class="lightbox-overlay" id="img-lightbox" onclick="closeLightbox()">
+         <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+         <img class="lightbox-img" id="lightbox-img" src="" alt="放大预览" onclick="event.stopPropagation()" />
+     </div>
+     
+     <!-- Lightbox JS（放在 Lightbox HTML 之后） -->
+     <script>
+     function openLightbox(src) {
+         const overlay = document.getElementById('img-lightbox');
+         document.getElementById('lightbox-img').src = src;
+         overlay.classList.add('active');
+         document.body.style.overflow = 'hidden';
+     }
+     function closeLightbox() {
+         document.getElementById('img-lightbox').classList.remove('active');
+         document.body.style.overflow = '';
+     }
+     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+     </script>
+     ```
+     
+     图片元素使用方式：`<img src="..." class="lightbox-trigger" onclick="openLightbox(this.src)" />`
+   - **配套图注与说明**：对于有图片资源的区块，必须在图片下方或侧边带有对应的标题或者解释说明文案，具体的文案内容请直接参考 `assets_manifest.json` 里的 `label` 和 `description` 字段。
+   - **Logo类资源免边框处理**：对于 Logo 类的资源图片（如各厂商 Logo 等），由于它们通常是不规则或者是特定长宽比的透明图像，因此嵌入时**不要**在其外部添加类似 `.step-icon` 或其他具有强行统一大小、背景色和边框阴影的容器样式，这会导致显示效果极差。请直接使用纯 `<img>` 标签，并通过适当的宽度/高度类（例如 `h-10 object-contain` 等）来进行样式控制即可。
+
+5. **🚫 Flex 布局防溢出规范（重要）**：
+
+   在 1280×720 固定尺寸的幻灯片布局中，**Flexbox 的子元素默认 `min-height: auto`（即内容的自然高度）**，这意味着即使设置了 `flex-1`，**如果子元素内容（如一张很高的纵向图片）的自然高度超过了分配的空间，它会撑爆父容器，导致其他兄弟元素被挤出视口**。这是一个极其常见的溢出 Bug。
+
+   **必须遵循以下规则：**
+
+   1. **逐层添加 `min-h-0`**：从主内容区域到右栏容器，再到每个卡片及其内部的图片容器，所有使用 `flex` + `flex-col` 布局的层级都必须添加 `min-h-0` 类，打破默认的 `min-height: auto` 行为。
+      ```
+      主内容区（flex-1 min-h-0）
+      └── 右栏（flex flex-col min-h-0）
+          ├── 卡片1（flex-[3] flex flex-col min-h-0）
+          │   └── 图片容器（flex-1 min-h-0 overflow-hidden）
+          └── 卡片2（flex-[2] flex flex-col min-h-0）
+              └── 图片容器（flex-1 min-h-0 overflow-hidden）
+      ```
+
+   2. **用比例 flex 替代固定高度**：当右栏有多个卡片时，不要用 `flex-1` + `h-40` 这种混用方式，应使用 `flex-[3]` / `flex-[2]` 等比例来分配空间，确保不同卡片按合理比例占据可用高度。
+
+   3. **图片容器必须 `overflow-hidden`**：所有包含预览图片的容器必须设置 `overflow-hidden`，确保图片被裁切在容器范围内，而不是撑开容器。
+
+   4. **纵向长图使用 `object-cover object-top`**：对于纵向比例很高的图片（如技术规格书、长表单截图），使用 `object-cover object-top` 展示顶部缩略，用户可点击 Lightbox 查看完整图片。横向图片可继续使用 `object-contain`。
+
+   5. **完整的防溢出右栏模板**：
+      ```html
+      <!-- 右栏容器：必须加 min-h-0 -->
+      <div class="fragment w-1/2 flex flex-col gap-4 min-h-0" animation_step="2">
+          <!-- 卡片1：用 flex-[3] 占60%空间 -->
+          <div class="glass-card p-4 flex-[3] flex flex-col min-h-0">
+              <div class="flex items-center gap-2 mb-3">...</div>
+              <!-- 图片容器：flex-1 + min-h-0 + overflow-hidden -->
+              <div class="flex-1 rounded-xl overflow-hidden border border-slate-200 bg-white min-h-0">
+                  <img src="..." class="w-full h-full object-cover object-top lightbox-trigger"
+                       onclick="openLightbox(this.src)" />
+              </div>
+              <p class="text-[10px] text-slate-400 mt-1.5 text-center">图注 — 点击可放大</p>
+          </div>
+          <!-- 卡片2：用 flex-[2] 占40%空间 -->
+          <div class="glass-card p-4 flex-[2] flex flex-col min-h-0">
+              <div class="flex items-center gap-2 mb-3">...</div>
+              <div class="flex-1 rounded-lg overflow-hidden border border-slate-200 bg-white min-h-0">
+                  <img src="..." class="w-full h-full object-contain lightbox-trigger"
+                       onclick="openLightbox(this.src)" />
+              </div>
+              <p class="text-[10px] text-slate-400 mt-1.5 text-center">图注 — 点击可放大</p>
+          </div>
+      </div>
+      ```
 
 ### 3.3 视频资料处理
 
@@ -400,9 +526,27 @@ view_file ./html_style_summary/05_启动会首页风格.md
           </div>
         </div>
 
-        <!-- 右栏：数据/文件展示（根据内容灵活调整） -->
-        <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
-          <!-- 参考 04_详情页风格.md 中 Excel预览 / 文件占位预览 等组件 -->
+        <!-- 右栏：数据/文件展示（⚠️ 必须加 min-h-0 防溢出，用 flex-[N] 按比例分配卡片空间） -->
+        <div class="fragment w-1/2 flex flex-col gap-4 min-h-0" animation_step="2">
+          <!-- 卡片1：flex-[3] 占 ~60% 空间，min-h-0 防溢出 -->
+          <div class="glass-card p-4 flex-[3] flex flex-col min-h-0">
+            <div class="flex items-center gap-2 mb-3">...</div>
+            <!-- 图片容器：flex-1 + min-h-0 + overflow-hidden；纵向长图用 object-cover object-top -->
+            <div class="flex-1 rounded-xl overflow-hidden border border-slate-200 bg-white min-h-0">
+              <img src="[图片路径]" class="w-full h-full object-cover object-top lightbox-trigger"
+                   onclick="openLightbox(this.src)" />
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1.5 text-center">图注 — 点击可放大</p>
+          </div>
+          <!-- 卡片2：flex-[2] 占 ~40% 空间 -->
+          <div class="glass-card p-4 flex-[2] flex flex-col min-h-0">
+            <div class="flex items-center gap-2 mb-3">...</div>
+            <div class="flex-1 rounded-lg overflow-hidden border border-slate-200 bg-white min-h-0">
+              <img src="[图片路径]" class="w-full h-full object-contain lightbox-trigger"
+                   onclick="openLightbox(this.src)" />
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1.5 text-center">图注 — 点击可放大</p>
+          </div>
         </div>
 
       </div>

@@ -1,0 +1,25 @@
+{
+  "page_name": "超复杂表单识别并填写",
+  "extracted_at": "2026-02-22T20:22:46+08:00",
+  "source_pdf": "/Users/velen/Desktop/Velen/NodeJS/swiper_go/影刀 RPA AI 制造业解决方案_业务 26.02_副本.pdf",
+  "source_page": 2,
+  "full_page_render": "./assets/extracted/超复杂表单识别并填写/full_page.png",
+  "assets": [
+    {
+      "id": "form_preview_technical",
+      "type": "system_screenshot",
+      "path": "./assets/extracted/超复杂表单识别并填写/form_preview_technical.png",
+      "label": "技术规格书原件",
+      "description": "包含大量细微文字的高复杂度技术规格书 PDF 预览",
+      "html_usage": "left_column_preview"
+    },
+    {
+      "id": "excel_preview_selection",
+      "type": "excel_preview",
+      "path": "./assets/extracted/超复杂表单识别并填写/excel_preview_selection.png",
+      "label": "选型明细表",
+      "description": "系统自动填入后的选型明细表 Excel 预览",
+      "html_usage": "right_column_preview"
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 ---
-name: extract_pdf_assets
+name: 从 PDF 提取高质量图片资源
 description: 从 PDF 文件中提取高清整页大图以及无损的原始内嵌图像素材（如 Logo、系统截图），并通过 AI 清洗后生成标准的 assets_manifest.json 供下游使用。
 ---
 
-# 从 PDF 提取高质量图文资源 Skill (extract_pdf_assets)
+# 从 PDF 提取高质量图片资源 Skill (extract_pdf_assets)
 
 本 Skill 用于分析用户提供的原始 PDF 资料，精准、无损地从中提取两类核心资源：
 1. **完整的高清页面大图**（作为整体背景或对照参考）
@@ -28,11 +28,12 @@ description: 从 PDF 文件中提取高清整页大图以及无损的原始内�
 
 ---
 
-## 前置依赖
-
 需要操作系统内安装了 `poppler` 工具集。
 - 检查命令：`pdfimages -v` 和 `pdftoppm -v`
 - 通常在 Mac 下可以使用 `brew install poppler` 安装。
+
+**推荐安装助手**：
+- **ImageMagick**：用于自动合并透明度蒙版（SMask）。安装：`brew install imagemagick`。
 
 ---
 
@@ -80,6 +81,13 @@ pdfimages -png -f [target_page] -l [target_page] "[pdf_path]" "./temp_pdfimages/
 ```
 *这会在临时目录生成一大堆 `img-000.png`、`img-001.png` 等散图文件。*
 
+**进阶技巧：检查透明度蒙版 (SMask)**
+运行以下命令查看图片列表，寻找带有 `smask` 标识的对象：
+```bash
+pdfimages -list -f [target_page] -l [target_page] "[pdf_path]"
+```
+如果看到 `num` 连续的对象（如 16 和 17），且其中一个类型是 `smask`，说明这两个文件分别是**颜色层**和**透明蒙版层**，需要后续合并。
+
 ### 步骤 4：AI 智能分拣与清洗 (核心环节)
 
 这一步你需要作为 AI Agent 发挥“大脑”的作用，对 `temp_pdfimages/[page_name]` 内的散图进行地毯式审查（可以使用 `view_file` 人肉看，或是写临时 Python 脚本调用 `PIL / OpenAI Vision API` 来批量看）：
@@ -92,9 +100,19 @@ pdfimages -png -f [target_page] -l [target_page] "[pdf_path]" "./temp_pdfimages/
    - 如果图像是 **某个公司/产品的应用图标、Logo**，则保留，归类为 `workflow_icon`。
    - 其他背景色块、被切掉一半的残缺元素、毫无意义的点缀块全部丢弃！
 
+#### 透明度处理 (针对 Logo)：
+如果发现 Logo 呈现“黑底”且有一个对应的灰度蒙版图，**必须合并**以还原透明效果：
+
+- **使用 ImageMagick (推荐)**：
+  ```bash
+  magick [颜色图].png [蒙版图].png -alpha off -compose copy_opacity -composite [输出文件名].png
+  ```
+- **使用 Python (PIL) 备选方案**：
+  编写简单脚本将蒙版转换为 Alpha 通道：`img.putalpha(mask.convert("L"))`。
+
 #### 转移重命名：
-将成功甄别为有效素材的图片，**拷贝并重命名** 到正式目录：
-- 从 `./temp_pdfimages/[page_name]/img-016.png` 移动变成 
+将成功甄别（并修复透明度）为有效素材的图片，**拷贝并重命名** 到正式目录：
+- 从 `./temp_pdfimages/[page_name]/img-016_merged.png` 移动变成 
 - `./assets/extracted/[page_name]/workflow_icon_smm.png` （需自己根据认出的 Logo 定义英文后缀）
 
 *完成识别与转移后，可安全删除 `temp_pdfimages/[page_name]` 这个临时目录。*

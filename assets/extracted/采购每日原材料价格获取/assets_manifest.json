@@ -1,73 +1,57 @@
 {
   "page_name": "采购每日原材料价格获取",
-  "extracted_at": "2026-02-22T13:58:00Z",
+  "extracted_at": "2026-02-22T15:18:51+08:00",
   "source_pdf": "/Users/velen/Desktop/Velen/NodeJS/swiper_go/影刀 RPA AI 制造业解决方案_业务 26.02_副本.pdf",
   "source_page": 2,
   "full_page_render": "./assets/extracted/采购每日原材料价格获取/full_page.png",
   "assets": [
     {
-      "id": "page_background_city",
-      "type": "background_image",
-      "path": "./assets/extracted/采购每日原材料价格获取/page_background_city.png",
-      "label": "城市背景图",
-      "description": "高质量城市全景底图素材",
-      "html_usage": "background"
-    },
-    {
-      "id": "excel_preview_price_trend",
-      "type": "excel_preview",
-      "path": "./assets/extracted/采购每日原材料价格获取/excel_preview_price_trend.png",
-      "label": "价格趋势表",
-      "description": "2024年大宗原材料价格趋势 Excel 截图",
-      "html_usage": "data_preview"
-    },
-    {
-      "id": "workflow_icon_baotai",
+      "id": "workflow_icon_sci99",
       "type": "workflow_icon",
-      "path": "./assets/extracted/采购每日原材料价格获取/workflow_icon_baotai.png",
-      "label": "保太集团 Logo",
-      "description": "保太集团官方 Logo",
-      "html_usage": "partner_logo"
-    },
-    {
-      "id": "workflow_icon_fubao",
-      "type": "workflow_icon",
-      "path": "./assets/extracted/采购每日原材料价格获取/workflow_icon_fubao.png",
-      "label": "富宝资讯 Logo",
-      "description": "富宝资讯官方 Logo",
-      "html_usage": "partner_logo"
-    },
-    {
-      "id": "workflow_icon_wechat_mini_program",
-      "type": "workflow_icon",
-      "path": "./assets/extracted/采购每日原材料价格获取/workflow_icon_wechat_mini_program.png",
-      "label": "微信小程序 图标",
-      "description": "微信小程序标准图标",
-      "html_usage": "workflow_step_icon"
-    },
-    {
-      "id": "workflow_icon_zhaocicai",
-      "type": "workflow_icon",
-      "path": "./assets/extracted/采购每日原材料价格获取/workflow_icon_zhaocicai.png",
-      "label": "找磁材 Logo",
-      "description": "找磁材官方 Logo",
-      "html_usage": "partner_logo"
+      "path": "./assets/extracted/采购每日原材料价格获取/workflow_icon_sci99.png",
+      "label": "卓创资讯",
+      "description": "SCI99.COM 卓创资讯 Logo",
+      "html_usage": "workflow_partner"
     },
     {
       "id": "workflow_icon_smm",
       "type": "workflow_icon",
       "path": "./assets/extracted/采购每日原材料价格获取/workflow_icon_smm.png",
-      "label": "上海有色网 Logo",
-      "description": "上海有色网 (SMM) 官方 Logo",
-      "html_usage": "partner_logo"
+      "label": "上海有色网",
+      "description": "SMM 上海有色网 Logo",
+      "html_usage": "workflow_partner"
     },
     {
-      "id": "workflow_icon_yingdao_logo",
+      "id": "workflow_icon_fubao",
       "type": "workflow_icon",
-      "path": "./assets/extracted/采购每日原材料价格获取/workflow_icon_yingdao_logo.png",
-      "label": "影刀RPA Logo",
-      "description": "影刀RPA 官方 Logo",
-      "html_usage": "header_logo"
+      "path": "./assets/extracted/采购每日原材料价格获取/workflow_icon_fubao.png",
+      "label": "富宝资讯",
+      "description": "fubao 富宝资讯 Logo",
+      "html_usage": "workflow_partner"
+    },
+    {
+      "id": "workflow_icon_zhaocicai",
+      "type": "workflow_icon",
+      "path": "./assets/extracted/采购每日原材料价格获取/workflow_icon_zhaocicai.png",
+      "label": "找磁材",
+      "description": "找磁材 ZHAOCICAI.COM Logo",
+      "html_usage": "workflow_partner"
+    },
+    {
+      "id": "workflow_icon_baotai_large",
+      "type": "workflow_icon",
+      "path": "./assets/extracted/采购每日原材料价格获取/workflow_icon_baotai.png",
+      "label": "保太集团",
+      "description": "保太集团 Logo",
+      "html_usage": "workflow_partner"
+    },
+    {
+      "id": "excel_preview_summary",
+      "type": "excel_preview",
+      "path": "./assets/extracted/采购每日原材料价格获取/excel_preview_summary.png",
+      "label": "汇总成表",
+      "description": "价格汇总 Excel 表格无损原切截图",
+      "html_usage": "right_column_preview"
     }
   ]
 }

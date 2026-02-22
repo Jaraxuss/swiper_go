@@ -38,7 +38,6 @@
             pointer-events: auto;
         }
 
-        /* Glassmorphism Cards */
         .glass-card {
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(12px);
@@ -47,7 +46,6 @@
             border-radius: 16px;
         }
 
-        /* Workflow Connector */
         .workflow-box {
             border: 2px dashed #cbd5e1;
             border-radius: 20px;
@@ -62,7 +60,7 @@
             align-items: center;
             text-align: center;
             z-index: 10;
-            width: 90px;
+            width: 100px;
         }
 
         .step-icon {
@@ -84,7 +82,6 @@
             font-size: 0.875rem;
         }
 
-        /* Background Graphic */
         .bg-img-overlay {
             position: absolute;
             bottom: -50px;
@@ -95,7 +92,6 @@
             z-index: 1;
         }
 
-        /* Pain Point List Item */
         .pain-point-item {
             position: relative;
             padding-left: 1rem;
@@ -115,7 +111,6 @@
             background-color: #64748b;
         }
 
-        /* Value Card */
         .value-card {
             background: linear-gradient(135deg, #fff 0%, #fef2f2 100%);
             border: 1px solid rgba(192, 0, 0, 0.1);
@@ -139,28 +134,37 @@
             background-clip: text;
         }
 
-        /* AI Workflow Node */
-        .ai-workflow-node {
-            background: white;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e2e8f0;
+        /* Lightbox */
+        .lightbox-overlay {
+            position: fixed; inset: 0; z-index: 9999;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+            cursor: zoom-out;
         }
-
-        .ai-workflow-node.input {
-            border-left: 3px solid #3b82f6;
+        .lightbox-overlay.active { opacity: 1; pointer-events: auto; }
+        .lightbox-overlay .lightbox-img {
+            max-width: 90vw; max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transform: scale(0.9); opacity: 0;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
         }
-
-        .ai-workflow-node.ai {
-            border-left: 3px solid #C00000;
-            background: #fef2f2;
+        .lightbox-overlay.active .lightbox-img { transform: scale(1); opacity: 1; }
+        .lightbox-close {
+            position: absolute; top: 20px; right: 24px;
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%; color: white;
+            font-size: 18px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease; backdrop-filter: blur(8px);
         }
-
-        .ai-workflow-node.output {
-            border-left: 3px solid #10b981;
-        }
+        .lightbox-close:hover { background: rgba(255,255,255,0.3); transform: rotate(90deg); }
+        .lightbox-trigger { cursor: pointer; transition: opacity 0.2s ease; }
+        .lightbox-trigger:hover { opacity: 0.85; }
     </style>
 </head>
 
@@ -173,7 +177,7 @@
                 <div class="bg-img-overlay pointer-events-none"></div>
 
                 <!-- Header -->
-                <header class="relative z-20 mb-6 shrink-0">
+                <header class="relative z-20 mb-5 shrink-0">
                     <div class="flex items-center gap-3 mb-1">
                         <span class="text-rpa-red font-bold text-lg">通用场景3：RPA+AI，文件处理助手</span>
                     </div>
@@ -189,10 +193,10 @@
                 <!-- Content Layout -->
                 <div class="flex gap-8 flex-1 relative z-10 min-h-0">
 
-                    <!-- Left Section: Details -->
-                    <div class="w-1/2 flex flex-col gap-4">
+                    <!-- Left Section -->
+                    <div class="w-1/2 flex flex-col gap-3">
 
-                        <!-- Pain Points Card with Background & Business Pains -->
+                        <!-- Pain Points Card -->
                         <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2">
                             </div>
@@ -207,7 +211,7 @@
                                         <h3 class="text-sm font-bold text-slate-900 tracking-tight">需求背景：</h3>
                                     </div>
                                     <p class="text-[11px] text-slate-600 leading-relaxed">
-                                        制造业采购业务离频、品类多、跨地域，合同条款复杂且模版多样，市场变化快，传统人工管理难以满足需求。
+                                        制造业采购业务高频、品类多、跨地域，合同条款复杂且模板多样，市场变化快，传统人工管理难以满足需求。
                                     </p>
                                 </div>
                                 <!-- 业务痛点 -->
@@ -220,7 +224,7 @@
                                         <h3 class="text-sm font-bold text-slate-900 tracking-tight">业务痛点：</h3>
                                     </div>
                                     <div class="space-y-1.5">
-                                        <div class="pain-point-item">1. 人工比对合同效率低，准确性差</div>
+                                        <div class="pain-point-item">1. 人工比对合同效率低、准确性差</div>
                                         <div class="pain-point-item">2. 缺乏风险预警且管理成本高</div>
                                     </div>
                                 </div>
@@ -239,7 +243,7 @@
                                 <h3 class="text-sm font-bold text-slate-900 tracking-tight">影刀RPA解决方案</h3>
                             </div>
 
-                            <!-- Workflow Diagram -->
+                            <!-- Workflow -->
                             <div class="workflow-box mt-2 !py-4">
                                 <div class="flex items-center justify-between px-2">
                                     <!-- Step 1 -->
@@ -249,7 +253,7 @@
                                             <i class="fa-solid fa-cloud-arrow-up"></i>
                                         </div>
                                         <div class="text-[10px] font-bold text-slate-800 leading-tight">
-                                            上传本次合同<br>格式不限<br>(PDF/Word...)
+                                            上传本次合同<br>格式不限(PDF/Word...)
                                         </div>
                                     </div>
 
@@ -261,10 +265,10 @@
                                     <div class="workflow-step group">
                                         <div
                                             class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-upload"></i>
+                                            <i class="fa-solid fa-file-import"></i>
                                         </div>
                                         <div class="text-[10px] font-bold text-slate-800 leading-tight">
-                                            上传参考合同<br>格式不限<br>(PDF/Word...)
+                                            上传参考合同<br>格式不限(PDF/Word...)
                                         </div>
                                     </div>
 
@@ -290,11 +294,11 @@
                                     <!-- Step 4 -->
                                     <div class="workflow-step group">
                                         <div
-                                            class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-table-list"></i>
+                                            class="step-icon transition-all group-hover:bg-emerald-600 group-hover:text-white !text-emerald-600">
+                                            <i class="fa-solid fa-check-double"></i>
                                         </div>
                                         <div class="text-[10px] font-bold text-slate-800 leading-tight">
-                                            查看AP输出的<br>最后对比结果
+                                            查看AP给出的<br>最后对比结果
                                         </div>
                                     </div>
                                 </div>
@@ -303,7 +307,7 @@
 
                         <!-- Benefits / Value -->
                         <div class="fragment mt-auto" animation_step="3">
-                            <div class="flex items-center gap-2 mb-3">
+                            <div class="flex items-center gap-2 mb-2">
                                 <span class="w-1 h-3.5 bg-rpa-red"></span>
                                 <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
                             </div>
@@ -324,101 +328,72 @@
                         </div>
                     </div>
 
-                    <!-- Right Section: Preview & Demo -->
-                    <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
-                        <!-- AI Power Workflow Preview -->
-                        <div class="glass-card p-4 flex-1 flex flex-col">
-                            <div class="flex items-center justify-between mb-3">
+                    <!-- Right Section -->
+                    <div class="fragment w-1/2 flex flex-col gap-3 min-h-0" animation_step="2">
+                        <!-- 合同对比截图 -->
+                        <div class="glass-card p-3 flex flex-col min-h-0" style="flex: 5;">
+                            <div class="flex items-center justify-between mb-2 shrink-0">
                                 <div class="flex items-center gap-2">
                                     <div
-                                        class="w-7 h-7 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 shadow-sm">
-                                        <i class="fa-solid fa-diagram-project text-sm"></i>
+                                        class="w-6 h-6 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
+                                        <i class="fa-solid fa-file-contract text-xs"></i>
                                     </div>
-                                    <h3 class="text-sm font-bold text-slate-900">AI Power 工作流</h3>
+                                    <h3 class="text-xs font-bold text-slate-900">合同内容对比</h3>
                                 </div>
+                                <span class="text-[10px] text-slate-400">WPS AI 合同对比功能截图</span>
                             </div>
-
-                            <!-- AI Workflow Diagram -->
-                            <div class="flex-1 bg-slate-50 rounded-xl p-4 overflow-hidden">
-                                <div class="flex flex-col gap-3 h-full justify-center">
-                                    <!-- 输入节点行 -->
-                                    <div class="flex items-center gap-3">
-                                        <div class="ai-workflow-node input flex items-center gap-2">
-                                            <i class="fa-solid fa-file-word text-blue-500"></i>
-                                            <span>本次合同文件</span>
-                                        </div>
-                                        <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
-                                        <div class="ai-workflow-node ai flex items-center gap-2">
-                                            <i class="fa-solid fa-wand-magic-sparkles text-rpa-red"></i>
-                                            <span>文本提取(本次)</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- AI处理节点 -->
-                                    <div class="flex items-center justify-center gap-3">
-                                        <div class="ai-workflow-node ai flex items-center gap-2 px-6">
-                                            <i class="fa-solid fa-brain text-rpa-red"></i>
-                                            <span>AI智能对比分析</span>
-                                        </div>
-                                        <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
-                                        <div class="ai-workflow-node output flex items-center gap-2">
-                                            <i class="fa-solid fa-file-lines text-emerald-500"></i>
-                                            <span>差异报告输出</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- 输入节点行 -->
-                                    <div class="flex items-center gap-3">
-                                        <div class="ai-workflow-node input flex items-center gap-2">
-                                            <i class="fa-solid fa-file-pdf text-blue-500"></i>
-                                            <span>参考合同文件</span>
-                                        </div>
-                                        <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
-                                        <div class="ai-workflow-node ai flex items-center gap-2">
-                                            <i class="fa-solid fa-wand-magic-sparkles text-rpa-red"></i>
-                                            <span>文本提取(参考)</span>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="flex-1 rounded-lg overflow-hidden border border-slate-200 shadow-sm min-h-0">
+                                <img src="../../assets/extracted/通用场景3_RPA+AI_文件处理助手/system_screenshot_contract_diff.png"
+                                    alt="合同内容对比 - WPS AI 合同对比功能截图"
+                                    class="w-full h-full object-cover lightbox-trigger"
+                                    onclick="openLightbox(this.src)" />
                             </div>
                         </div>
 
-                        <!-- Comparison Result Preview -->
-                        <div class="glass-card p-4 h-44">
-                            <div class="flex items-center gap-2 mb-3">
-                                <div
-                                    class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
-                                    <i class="fa-solid fa-balance-scale text-sm"></i>
+                        <!-- AI Power 工作流截图 -->
+                        <div class="glass-card p-3 flex flex-col min-h-0" style="flex: 4;">
+                            <div class="flex items-center justify-between mb-2 shrink-0">
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="w-6 h-6 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600 shadow-sm">
+                                        <i class="fa-solid fa-diagram-project text-xs"></i>
+                                    </div>
+                                    <h3 class="text-xs font-bold text-slate-900">AI Power工作流</h3>
                                 </div>
-                                <h3 class="text-sm font-bold text-slate-900">对比结果预览</h3>
+                                <span class="text-[10px] text-slate-400">影刀 AI Power 工作流编排界面截图</span>
                             </div>
-                            <div class="flex gap-3 h-24">
-                                <div
-                                    class="flex-1 bg-slate-50 rounded-lg border border-slate-200 p-3 overflow-hidden">
-                                    <div class="text-[9px] text-slate-500 mb-1">本次合同</div>
-                                    <div class="text-[10px] text-slate-700 leading-relaxed">
-                                        第三条：付款方式<br>
-                                        <span class="bg-red-100 text-rpa-red">预付款30%</span>，货到付款70%
-                                    </div>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fa-solid fa-arrows-left-right text-slate-400"></i>
-                                </div>
-                                <div
-                                    class="flex-1 bg-slate-50 rounded-lg border border-slate-200 p-3 overflow-hidden">
-                                    <div class="text-[9px] text-slate-500 mb-1">参考合同</div>
-                                    <div class="text-[10px] text-slate-700 leading-relaxed">
-                                        第三条：付款方式<br>
-                                        <span class="bg-green-100 text-green-700">预付款20%</span>，货到付款80%
-                                    </div>
-                                </div>
+                            <div class="flex-1 rounded-lg overflow-hidden border border-slate-200 shadow-sm min-h-0">
+                                <img src="../../assets/extracted/通用场景3_RPA+AI_文件处理助手/system_screenshot_workflow_orchestration.png"
+                                    alt="AI Power工作流 - 影刀 AI Power 工作流编排界面截图"
+                                    class="w-full h-full object-cover lightbox-trigger"
+                                    onclick="openLightbox(this.src)" />
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox-overlay" id="img-lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <img class="lightbox-img" id="lightbox-img" src="" alt="放大预览" onclick="event.stopPropagation()" />
+    </div>
+    <script>
+    function openLightbox(src) {
+        const overlay = document.getElementById('img-lightbox');
+        document.getElementById('lightbox-img').src = src;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        document.getElementById('img-lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+    </script>
     <script src="../../js/slide-core.js"></script>
 </body>
 
