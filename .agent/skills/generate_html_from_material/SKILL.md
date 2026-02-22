@@ -357,14 +357,25 @@ view_file ./html_style_summary/05_启动会首页风格.md
             </div>
             <div class="workflow-box mt-2 !py-4">
               <div class="flex items-center justify-between px-2">
-                <!-- 工作流步骤（按实际步骤数复制） -->
+                <!-- 工作流步骤（根据图标类型选择：样式图标或真实截图图标） -->
+
+                <!-- 模式1：样式图标（CSS 图标） -->
                 <div class="workflow-step group">
                   <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
                     <i class="fa-solid fa-[图标名]"></i>
                   </div>
                   <div class="text-[10px] font-bold text-slate-800 leading-tight">[步骤名称]<br>[说明]</div>
                 </div>
+                
                 <div class="connector-arrow text-slate-300"><i class="fa-solid fa-arrow-right"></i></div>
+                
+                <!-- 模式2：真实截图图标（图片） -->
+                <div class="workflow-step group">
+                  <div class="step-icon transition-all group-hover:shadow-md p-1 overflow-hidden">
+                    <img src="[图片路径]" alt="[步骤名称]" class="w-full h-full object-contain rounded-lg" />
+                  </div>
+                  <div class="text-[10px] font-bold text-slate-800 leading-tight">[步骤名称]<br>[说明]</div>
+                </div>
                 <!-- 更多步骤... -->
               </div>
             </div>

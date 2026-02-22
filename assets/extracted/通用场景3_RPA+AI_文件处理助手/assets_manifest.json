@@ -1,0 +1,33 @@
+{
+  "page_name": "通用场景3_RPA+AI_文件处理助手",
+  "extracted_at": "2026-02-22T13:55:00Z",
+  "source_pdf": "/Users/velen/Desktop/Velen/NodeJS/swiper_go/影刀 RPA AI 制造业解决方案_业务 26.02_副本.pdf",
+  "source_page": 1,
+  "full_page_render": "./assets/extracted/通用场景3_RPA+AI_文件处理助手/full_page.png",
+  "assets": [
+    {
+      "id": "workflow_icon_yingdao_logo",
+      "type": "workflow_icon",
+      "path": "./assets/extracted/通用场景3_RPA+AI_文件处理助手/workflow_icon_yingdao_logo.png",
+      "label": "影刀RPA Logo",
+      "description": "影刀RPA 官方Logo素材",
+      "html_usage": "header_logo"
+    },
+    {
+      "id": "system_screenshot_contract_diff",
+      "type": "system_screenshot",
+      "path": "./assets/extracted/通用场景3_RPA+AI_文件处理助手/system_screenshot_contract_diff.png",
+      "label": "合同内容对比",
+      "description": "WPS AI 合同对比功能截图",
+      "html_usage": "feature_preview"
+    },
+    {
+      "id": "system_screenshot_workflow_orchestration",
+      "type": "system_screenshot",
+      "path": "./assets/extracted/通用场景3_RPA+AI_文件处理助手/system_screenshot_workflow_orchestration.png",
+      "label": "Ai Power工作流",
+      "description": "影刀 Ai Power 工作流编排界面截图",
+      "html_usage": "workflow_preview"
+    }
+  ]
+}
