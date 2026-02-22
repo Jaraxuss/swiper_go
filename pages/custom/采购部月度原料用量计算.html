@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,229 +8,99 @@
     <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
     <link href="../../lib/fonts.css" rel="stylesheet" />
     <style>
-        .font-sans { font-family: 'Inter', 'Noto Sans SC', sans-serif; }
-        ::-webkit-scrollbar { display: none; }
-        .text-rpa-red { color: #C00000; }
-        .bg-rpa-red { background-color: #C00000; }
-        .fragment { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none; }
-        .fragment.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-        .glass-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 8px 32px rgba(0,0,0,0.04); border-radius: 16px; }
-        .workflow-box { border: 2px dashed #cbd5e1; border-radius: 20px; position: relative; padding: 1rem 0.5rem; background: rgba(255,255,255,0.4); }
-        .workflow-step { display: flex; flex-direction: column; align-items: center; text-align: center; z-index: 10; width: 70px; }
-        .step-icon { width: 40px; height: 40px; border-radius: 12px; background: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 0.35rem; color: #3b82f6; font-size: 1rem; }
-        .connector-arrow { color: #94a3b8; font-size: 0.65rem; }
-        .bg-img-overlay { position: absolute; bottom: -50px; left: -50px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(192,0,0,0.05) 0%, transparent 70%); z-index: 1; }
-        .value-card { background: linear-gradient(135deg, #fff 0%, #fef2f2 100%); border: 1px solid rgba(192,0,0,0.1); border-radius: 16px; padding: 1rem; text-align: center; transition: all 0.3s ease; }
-        .value-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(192,0,0,0.1); }
-        .value-number { font-size: 2.2rem; font-weight: 900; background: linear-gradient(135deg,#C00000 0%,#ff4444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .info-badge { display: inline-flex; align-items: center; gap: 4px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; padding: 3px 8px; font-size: 10px; color: #475569; }
-        .info-badge .label { font-weight: 700; color: #0f172a; }
+        .font-sans{font-family:'Inter','Noto Sans SC',sans-serif}::-webkit-scrollbar{display:none}.text-rpa-red{color:#C00000}.bg-rpa-red{background-color:#C00000}.fragment{opacity:0;transform:translateY(30px);transition:all .8s cubic-bezier(.16,1,.3,1);pointer-events:none}.fragment.visible{opacity:1;transform:translateY(0);pointer-events:auto}.glass-card{background:rgba(255,255,255,.8);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.5);box-shadow:0 8px 32px rgba(0,0,0,.04);border-radius:16px}.workflow-box{border:2px dashed #cbd5e1;border-radius:20px;position:relative;padding:1rem .5rem;background:rgba(255,255,255,.4)}.workflow-step{display:flex;flex-direction:column;align-items:center;text-align:center;z-index:10;width:70px}.step-icon{width:40px;height:40px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.08);margin-bottom:.35rem;color:#3b82f6;font-size:1rem}.connector-arrow{color:#94a3b8;font-size:.65rem}.bg-img-overlay{position:absolute;bottom:-50px;left:-50px;width:600px;height:600px;background:radial-gradient(circle,rgba(192,0,0,.05) 0%,transparent 70%);z-index:1}.value-card{background:linear-gradient(135deg,#fff 0%,#fef2f2 100%);border:1px solid rgba(192,0,0,.1);border-radius:16px;padding:1rem;text-align:center;transition:all .3s ease}.value-card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(192,0,0,.1)}.value-number{font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,#C00000 0%,#ff4444 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.info-badge{display:inline-flex;align-items:center;gap:4px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:3px 8px;font-size:10px;color:#475569}.info-badge .label{font-weight:700;color:#0f172a}
     </style>
 </head>
-
 <body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
-    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
-        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
-            <div id="slide-container" class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
-                <div class="bg-img-overlay pointer-events-none"></div>
-
-                <!-- Header -->
-                <header class="relative z-20 mb-5 shrink-0">
-                    <div class="flex items-center gap-4">
-                        <span class="w-2 h-8 bg-rpa-red rounded"></span>
-                        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">采购部月度原料用量计算</h1>
-                        <div class="flex items-center gap-2 ml-4">
-                            <span class="text-[11px] px-3 py-1 rounded-full bg-rpa-red text-white font-semibold">采购</span>
-                            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
-                            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">生产管理</span>
-                            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
-                            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">销售</span>
-                            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
-                            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">仓储物流</span>
-                        </div>
+<div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+<div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+<div id="slide-container" class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+<div class="bg-img-overlay pointer-events-none"></div>
+<header class="relative z-20 mb-5 shrink-0">
+    <div class="flex items-center gap-4">
+        <span class="w-2 h-8 bg-rpa-red rounded"></span>
+        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">采购部月度原料用量计算</h1>
+        <div class="flex items-center gap-2 ml-4">
+            <span class="text-[11px] px-3 py-1 rounded-full bg-rpa-red text-white font-semibold">采购</span>
+            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
+            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">生产管理</span>
+            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
+            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">销售</span>
+            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
+            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">仓储物流</span>
+        </div>
+    </div>
+</header>
+<div class="flex gap-8 flex-1 relative z-10 min-h-0">
+    <div class="w-1/2 flex flex-col gap-4">
+        <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
+            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2"></div>
+            <div class="flex gap-5">
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-content text-slate-800 shadow-sm"><i class="fa-solid fa-file-lines text-sm"></i></div>
+                        <h3 class="text-sm font-bold text-slate-900">需求背景：</h3>
                     </div>
-                </header>
-
-                <!-- Content Layout -->
-                <div class="flex gap-8 flex-1 relative z-10 min-h-0">
-
-                    <!-- Left Section -->
-                    <div class="w-1/2 flex flex-col gap-4">
-
-                        <!-- Background Card -->
-                        <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
-                            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2"></div>
-                            <div class="flex gap-5">
-                                <div class="flex-1">
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 shadow-sm">
-                                            <i class="fa-solid fa-file-lines text-sm"></i>
-                                        </div>
-                                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">需求背景：</h3>
-                                    </div>
-                                    <p class="text-[11px] text-slate-600 leading-relaxed">
-                                        某原料市场价格波动大，<strong>不走ERP的自动测算和备货</strong>，由采购每月手动计算下月用量，进行议价、采购备货，人力成本高。适合的场景：企业有特殊的采购需求，需要单独测算和备货。
-                                    </p>
-                                </div>
-                                <div class="flex-shrink-0 flex flex-col gap-1.5">
-                                    <div class="info-badge"><span class="label">部门：</span>采购部</div>
-                                    <div class="info-badge"><span class="label">频率：</span>每月</div>
-                                    <div class="info-badge"><span class="label">耗时：</span>1人，2小时</div>
-                                    <div class="info-badge"><span class="label">系统：</span>用友U8、BOM表</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Solution -->
-                        <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
-                            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2"></div>
-                            <div class="flex items-center gap-2 mb-2">
-                                <div class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
-                                    <i class="fa-solid fa-robot text-sm"></i>
-                                </div>
-                                <h3 class="text-sm font-bold text-slate-900 tracking-tight">影刀RPA解决方案</h3>
-                            </div>
-                            <div class="workflow-box mt-1">
-                                <div class="flex items-center justify-between">
-                                    <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-file-excel"></i>
-                                        </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">整理月度销售<br>订单明细</div>
-                                    </div>
-                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                                    <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-desktop"></i>
-                                        </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">登录ERP<br>（用友U8）</div>
-                                    </div>
-                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                                    <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-table"></i>
-                                        </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">导出每个订单<br>对应的BOM表</div>
-                                    </div>
-                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                                    <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-sitemap"></i>
-                                        </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">导出每个母件<br>结构表</div>
-                                    </div>
-                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                                    <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-calculator"></i>
-                                        </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">计算漆包线<br>直接&间接<br>的用量</div>
-                                    </div>
-                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                                    <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-green-600 group-hover:text-white" style="color:#059669">
-                                            <i class="fa-solid fa-boxes-stacked"></i>
-                                        </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">匹配库存和<br>在途数据</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Value -->
-                        <div class="fragment" animation_step="3">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="w-1 h-3.5 bg-rpa-red"></span>
-                                <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="value-card">
-                                    <div class="value-number">100%</div>
-                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">机器计算采购用量，数据<span class="text-rpa-red font-bold">准确率100%</span></p>
-                                </div>
-                                <div class="value-card">
-                                    <div class="value-number">30人天</div>
-                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1"><span class="text-rpa-red font-bold">全年节省</span>30人天工作时间</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right Section -->
-                    <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
-                        <div class="glass-card p-4 flex-1 flex flex-col">
-                            <div class="flex items-center gap-2 mb-3">
-                                <div class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
-                                    <i class="fa-solid fa-sitemap text-sm"></i>
-                                </div>
-                                <h3 class="text-sm font-bold text-slate-900">BOM 用量计算流程</h3>
-                            </div>
-                            <div class="flex-1 flex flex-col gap-3 justify-center">
-                                <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3 border border-slate-200">
-                                    <div class="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
-                                        <i class="fa-solid fa-file-excel text-sm"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="text-xs font-bold text-slate-800">月度销售订单</div>
-                                        <div class="text-[10px] text-slate-500">获取全部产品型号及数量</div>
-                                    </div>
-                                    <i class="fa-solid fa-arrow-right text-slate-300 text-sm"></i>
-                                </div>
-                                <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3 border border-slate-200">
-                                    <div class="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600">
-                                        <i class="fa-solid fa-sitemap text-sm"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="text-xs font-bold text-slate-800">BOM展开计算</div>
-                                        <div class="text-[10px] text-slate-500">直接用量 + 间接用量 + 损耗</div>
-                                    </div>
-                                    <i class="fa-solid fa-arrow-right text-slate-300 text-sm"></i>
-                                </div>
-                                <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3 border border-slate-200">
-                                    <div class="w-9 h-9 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600">
-                                        <i class="fa-solid fa-warehouse text-sm"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="text-xs font-bold text-slate-800">库存&在途匹配</div>
-                                        <div class="text-[10px] text-slate-500">计算实际净需求，生成采购建议</div>
-                                    </div>
-                                    <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center">
-                                        <i class="fa-solid fa-check text-emerald-600 text-xs"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="glass-card p-4 h-44 flex flex-col">
-                            <div class="flex items-center gap-2 mb-2">
-                                <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
-                                    <i class="fa-solid fa-desktop text-sm"></i>
-                                </div>
-                                <h3 class="text-sm font-bold text-slate-900">系统对接</h3>
-                            </div>
-                            <div class="flex gap-3 flex-1 items-center">
-                                <div class="flex-1 bg-blue-50 rounded-lg border border-blue-200 p-3 flex flex-col items-center justify-center">
-                                    <i class="fa-solid fa-building-columns text-2xl text-blue-500 mb-1"></i>
-                                    <div class="text-[10px] font-bold text-blue-700">用友U8 ERP</div>
-                                    <div class="text-[9px] text-blue-400 mt-0.5">BOM & 库存数据</div>
-                                </div>
-                                <div class="flex-1 bg-emerald-50 rounded-lg border border-emerald-200 p-3 flex flex-col items-center justify-center">
-                                    <i class="fa-solid fa-file-excel text-2xl text-emerald-500 mb-1"></i>
-                                    <div class="text-[10px] font-bold text-emerald-700">BOM用量表</div>
-                                    <div class="text-[9px] text-emerald-400 mt-0.5">母件结构展开</div>
-                                </div>
-                                <div class="flex-1 bg-orange-50 rounded-lg border border-orange-200 p-3 flex flex-col items-center justify-center">
-                                    <i class="fa-solid fa-calculator text-2xl text-orange-500 mb-1"></i>
-                                    <div class="text-[10px] font-bold text-orange-700">采购需求表</div>
-                                    <div class="text-[9px] text-orange-400 mt-0.5">月度备货计划</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <p class="text-[11px] text-slate-600 leading-relaxed">某原料市场价格波动大，<strong>不走ERP的自动测算和备货</strong>，由采购每月手动计算下月用量，进行议价、采购备货，人力成本高。</p>
+                </div>
+                <div class="flex-shrink-0 flex flex-col gap-1.5">
+                    <div class="info-badge"><span class="label">部门：</span>采购部</div>
+                    <div class="info-badge"><span class="label">频率：</span>每月</div>
+                    <div class="info-badge"><span class="label">耗时：</span>1人，2小时</div>
+                    <div class="info-badge"><span class="label">系统：</span>用友U8、BOM表</div>
                 </div>
             </div>
         </div>
+        <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
+            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2"></div>
+            <div class="flex items-center gap-2 mb-2">
+                <div class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm"><i class="fa-solid fa-robot text-sm"></i></div>
+                <h3 class="text-sm font-bold text-slate-900">影刀RPA解决方案</h3>
+            </div>
+            <div class="workflow-box mt-1">
+                <div class="flex items-center justify-between">
+                    <div class="workflow-step group"><div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white"><i class="fa-solid fa-file-excel"></i></div><div class="text-[10px] font-bold text-slate-800 leading-tight">整理月度销售<br>订单明细</div></div>
+                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="workflow-step group"><div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white"><i class="fa-solid fa-desktop"></i></div><div class="text-[10px] font-bold text-slate-800 leading-tight">登录ERP<br>（用友U8）</div></div>
+                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="workflow-step group"><div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white"><i class="fa-solid fa-table"></i></div><div class="text-[10px] font-bold text-slate-800 leading-tight">导出每个订单<br>对应的BOM表</div></div>
+                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="workflow-step group"><div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white"><i class="fa-solid fa-sitemap"></i></div><div class="text-[10px] font-bold text-slate-800 leading-tight">导出每个母件<br>结构表</div></div>
+                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="workflow-step group"><div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white"><i class="fa-solid fa-calculator"></i></div><div class="text-[10px] font-bold text-slate-800 leading-tight">计算漆包线<br>直接&amp;间接<br>的用量</div></div>
+                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="workflow-step group"><div class="step-icon transition-all group-hover:bg-green-600 group-hover:text-white" style="color:#059669"><i class="fa-solid fa-boxes-stacked"></i></div><div class="text-[10px] font-bold text-slate-800 leading-tight">匹配库存和<br>在途数据</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="fragment" animation_step="3">
+            <div class="flex items-center gap-2 mb-2"><span class="w-1 h-3.5 bg-rpa-red"></span><h3 class="text-sm font-bold text-slate-900">方案价值：</h3></div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="value-card"><div class="value-number">100%</div><p class="text-[11px] text-slate-600 leading-relaxed mt-1">机器计算采购用量，数据<span class="text-rpa-red font-bold">准确率100%</span></p></div>
+                <div class="value-card"><div class="value-number">30人天</div><p class="text-[11px] text-slate-600 leading-relaxed mt-1"><span class="text-rpa-red font-bold">全年节省</span>30人天工作时间</p></div>
+            </div>
+        </div>
     </div>
-    <script src="../../js/slide-core.js"></script>
+    <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
+        <div class="glass-card p-4 flex-1 flex flex-col">
+            <div class="flex items-center gap-2 mb-3"><div class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm"><i class="fa-solid fa-sitemap text-sm"></i></div><h3 class="text-sm font-bold text-slate-900">BOM 用量计算流程</h3></div>
+            <div class="flex-1 flex flex-col gap-3 justify-center">
+                <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3 border border-slate-200"><div class="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600"><i class="fa-solid fa-file-excel text-sm"></i></div><div class="flex-1"><div class="text-xs font-bold text-slate-800">月度销售订单</div><div class="text-[10px] text-slate-500">获取全部产品型号及数量</div></div><i class="fa-solid fa-arrow-right text-slate-300 text-sm"></i></div>
+                <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3 border border-slate-200"><div class="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600"><i class="fa-solid fa-sitemap text-sm"></i></div><div class="flex-1"><div class="text-xs font-bold text-slate-800">BOM展开计算</div><div class="text-[10px] text-slate-500">直接用量 + 间接用量 + 损耗</div></div><i class="fa-solid fa-arrow-right text-slate-300 text-sm"></i></div>
+                <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3 border border-slate-200"><div class="w-9 h-9 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600"><i class="fa-solid fa-warehouse text-sm"></i></div><div class="flex-1"><div class="text-xs font-bold text-slate-800">库存&amp;在途匹配</div><div class="text-[10px] text-slate-500">计算实际净需求，生成采购建议</div></div><div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center"><i class="fa-solid fa-check text-emerald-600 text-xs"></i></div></div>
+            </div>
+        </div>
+        <div class="glass-card p-4 h-44 flex flex-col">
+            <div class="flex items-center gap-2 mb-2"><div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm"><i class="fa-solid fa-desktop text-sm"></i></div><h3 class="text-sm font-bold text-slate-900">系统对接</h3></div>
+            <div class="flex gap-3 flex-1 items-center">
+                <div class="flex-1 bg-blue-50 rounded-lg border border-blue-200 p-3 flex flex-col items-center justify-center"><i class="fa-solid fa-building-columns text-2xl text-blue-500 mb-1"></i><div class="text-[10px] font-bold text-blue-700">用友U8 ERP</div><div class="text-[9px] text-blue-400">BOM &amp; 库存数据</div></div>
+                <div class="flex-1 bg-emerald-50 rounded-lg border border-emerald-200 p-3 flex flex-col items-center justify-center"><i class="fa-solid fa-file-excel text-2xl text-emerald-500 mb-1"></i><div class="text-[10px] font-bold text-emerald-700">BOM用量表</div><div class="text-[9px] text-emerald-400">母件结构展开</div></div>
+                <div class="flex-1 bg-orange-50 rounded-lg border border-orange-200 p-3 flex flex-col items-center justify-center"><i class="fa-solid fa-calculator text-2xl text-orange-500 mb-1"></i><div class="text-[10px] font-bold text-orange-700">采购需求表</div><div class="text-[9px] text-orange-400">月度备货计划</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div></div></div>
+<script src="../../js/slide-core.js"></script>
 </body>
-
 </html>

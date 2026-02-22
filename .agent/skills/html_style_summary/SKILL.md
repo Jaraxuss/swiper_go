@@ -98,7 +98,7 @@ cd /Users/velen/Desktop/Velen/NodeJS/swiper_go && python3 -m http.server 8000
 
 ## 步骤 3：输出风格总结
 
-分析完成后，根据用户指定的**页面类型名称**和**输出文件名**，将风格总结保存到 `.agent/skills/html_style_summary/` 目录。
+分析完成后，根据用户指定的**页面类型名称**和**输出文件名**，将风格总结保存到 `/html_style_summary/` 目录。
 
 ### 输出文件命名规则
 
@@ -109,7 +109,7 @@ cd /Users/velen/Desktop/Velen/NodeJS/swiper_go && python3 -m http.server 8000
 ### 输出文件路径
 
 ```
-.agent/skills/html_style_summary/{输出文件名}.md
+/html_style_summary/{输出文件名}.md
 ```
 
 ### 总结内容模板

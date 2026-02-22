@@ -17,8 +17,8 @@
         .fragment.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
         .glass-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 8px 32px rgba(0,0,0,0.04); border-radius: 16px; }
         .workflow-box { border: 2px dashed #cbd5e1; border-radius: 20px; position: relative; padding: 1rem 0.5rem; background: rgba(255,255,255,0.4); }
-        .workflow-step { display: flex; flex-direction: column; align-items: center; text-align: center; z-index: 10; width: 66px; }
-        .step-icon { width: 40px; height: 40px; border-radius: 12px; background: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 0.3rem; color: #3b82f6; font-size: 1rem; }
+        .workflow-step { display: flex; flex-direction: column; align-items: center; text-align: center; z-index: 10; width: 70px; }
+        .step-icon { width: 40px; height: 40px; border-radius: 12px; background: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 0.35rem; color: #3b82f6; font-size: 1rem; }
         .connector-arrow { color: #94a3b8; font-size: 0.65rem; }
         .bg-img-overlay { position: absolute; bottom: -50px; left: -50px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(192,0,0,0.05) 0%, transparent 70%); z-index: 1; }
         .value-card { background: linear-gradient(135deg, #fff 0%, #fef2f2 100%); border: 1px solid rgba(192,0,0,0.1); border-radius: 16px; padding: 1rem; text-align: center; transition: all 0.3s ease; }
@@ -40,7 +40,6 @@
                     <div class="flex items-center gap-4">
                         <span class="w-2 h-8 bg-rpa-red rounded"></span>
                         <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">采购每日原材料价格获取</h1>
-                        <!-- 流程标签 -->
                         <div class="flex items-center gap-2 ml-4">
                             <span class="text-[11px] px-3 py-1 rounded-full bg-rpa-red text-white font-semibold">采购</span>
                             <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
@@ -71,14 +70,14 @@
                                         <h3 class="text-sm font-bold text-slate-900 tracking-tight">需求背景：</h3>
                                     </div>
                                     <p class="text-[11px] text-slate-600 leading-relaxed">
-                                        采购部每周一到周五的工作日，需获取铝、铜、钢材等原材的当日单价，更新当日单价，并掌握市场价格动向。信息来源头多且复杂，包括：各类行情网站、咨询网站、二手大宗商品公司官网、小程序等各式各样渠道。
+                                        采购部每周一到周五的工作日，需获取铝、铜、钢材等原材的当日单价。更新当日单价，并掌握市场价格动向。信息源头多且复杂，包括：各类行情网站、咨询网站、二手大宗商品公司官网、小程序等各式各样渠道。
                                     </p>
                                 </div>
                                 <div class="flex-shrink-0 flex flex-col gap-1.5">
                                     <div class="info-badge"><span class="label">部门：</span>采购部</div>
                                     <div class="info-badge"><span class="label">频率：</span>每天</div>
                                     <div class="info-badge"><span class="label">耗时：</span>1人，1小时</div>
-                                    <div class="info-badge"><span class="label">系统对接：</span>各B2B门户网站</div>
+                                    <div class="info-badge"><span class="label">系统：</span>各B2B门户网站</div>
                                 </div>
                             </div>
                         </div>
@@ -96,42 +95,42 @@
                                 <div class="flex items-center justify-between">
                                     <div class="workflow-step group">
                                         <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-chart-line"></i>
-                                        </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">卓创咨询<br>导出当日价格</div>
-                                    </div>
-                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                                    <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
                                             <i class="fa-solid fa-globe"></i>
                                         </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">上海有色<br>导出当日价格</div>
-                                    </div>
-                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                                    <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-building"></i>
-                                        </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">富宝咨询<br>获取钢铁价格</div>
-                                    </div>
-                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                                    <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-mobile-screen-button"></i>
-                                        </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">小程序：找磁材<br>获取当日价格</div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">卓创咨询，导出<br>当日价格</div>
                                     </div>
                                     <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
                                     <div class="workflow-step group">
                                         <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
                                             <i class="fa-solid fa-industry"></i>
                                         </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">保太集团<br>获取当日价格</div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">上海有色，导出<br>当日价格</div>
                                     </div>
                                     <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
                                     <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-green-600 group-hover:text-white" style="color:#059669">
-                                            <i class="fa-solid fa-table"></i>
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-chart-line"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">富宝咨询，获取<br>当日钢铁价格</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-magnet"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">小程序：找磁材<br>获取当日价格</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                                            <i class="fa-solid fa-building"></i>
+                                        </div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">保太集团，获取<br>当日价格</div>
+                                    </div>
+                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                                    <div class="workflow-step group">
+                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white" style="color:#059669">
+                                            <i class="fa-solid fa-table-list"></i>
                                         </div>
                                         <div class="text-[10px] font-bold text-slate-800 leading-tight">汇总成表</div>
                                     </div>
@@ -148,74 +147,75 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="value-card">
                                     <div class="value-number">100%</div>
-                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">效率100%，<span class="text-rpa-red font-bold">上班即可</span>直接看到价格数据</p>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1"><span class="text-rpa-red font-bold">效率100%</span>，上班即可直接看到价格数据</p>
                                 </div>
                                 <div class="value-card">
                                     <div class="value-number">1H/天</div>
-                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">每天节省采购同学<span class="text-rpa-red font-bold">1小时</span>人力成本</p>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">每天<span class="text-rpa-red font-bold">节省采购同学1h</span>人力成本</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right Section: 数据源展示 -->
+                    <!-- Right Section -->
                     <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
                         <div class="glass-card p-4 flex-1 flex flex-col">
                             <div class="flex items-center gap-2 mb-3">
-                                <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
-                                    <i class="fa-solid fa-database text-sm"></i>
+                                <div class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
+                                    <i class="fa-solid fa-chart-bar text-sm"></i>
                                 </div>
-                                <h3 class="text-sm font-bold text-slate-900">多渠道数据源</h3>
+                                <h3 class="text-sm font-bold text-slate-900">数据源全景</h3>
                             </div>
-                            <div class="flex-1 grid grid-cols-2 gap-3">
-                                <div class="bg-slate-50 rounded-xl border border-slate-200 p-3 flex flex-col items-center justify-center hover:border-blue-300 transition-colors">
-                                    <div class="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center mb-2">
-                                        <i class="fa-solid fa-chart-bar text-white text-sm"></i>
-                                    </div>
-                                    <div class="text-[11px] font-bold text-slate-800">卓创资讯</div>
-                                    <div class="text-[9px] text-slate-500 mt-0.5">sci99.com</div>
+                            <div class="flex-1 grid grid-cols-3 gap-3 content-center">
+                                <div class="bg-slate-50 rounded-xl border border-slate-200 p-3 flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-globe text-xl text-blue-500 mb-1"></i>
+                                    <div class="text-[10px] font-bold text-slate-800">卓创资讯</div>
+                                    <div class="text-[9px] text-slate-400">SCI99.COM</div>
                                 </div>
-                                <div class="bg-slate-50 rounded-xl border border-slate-200 p-3 flex flex-col items-center justify-center hover:border-blue-300 transition-colors">
-                                    <div class="w-10 h-10 rounded-lg bg-orange-500 flex items-center justify-center mb-2">
-                                        <i class="fa-solid fa-coins text-white text-sm"></i>
-                                    </div>
-                                    <div class="text-[11px] font-bold text-slate-800">上海有色网</div>
-                                    <div class="text-[9px] text-slate-500 mt-0.5">SMM行情</div>
+                                <div class="bg-slate-50 rounded-xl border border-slate-200 p-3 flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-industry text-xl text-orange-500 mb-1"></i>
+                                    <div class="text-[10px] font-bold text-slate-800">上海有色网</div>
+                                    <div class="text-[9px] text-slate-400">SMM</div>
                                 </div>
-                                <div class="bg-slate-50 rounded-xl border border-slate-200 p-3 flex flex-col items-center justify-center hover:border-blue-300 transition-colors">
-                                    <div class="w-10 h-10 rounded-lg bg-green-600 flex items-center justify-center mb-2">
-                                        <i class="fa-solid fa-building text-white text-sm"></i>
-                                    </div>
-                                    <div class="text-[11px] font-bold text-slate-800">富宝资讯</div>
-                                    <div class="text-[9px] text-slate-500 mt-0.5">钢铁价格</div>
+                                <div class="bg-slate-50 rounded-xl border border-slate-200 p-3 flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-chart-line text-xl text-emerald-500 mb-1"></i>
+                                    <div class="text-[10px] font-bold text-slate-800">富宝资讯</div>
+                                    <div class="text-[9px] text-slate-400">fubao</div>
                                 </div>
-                                <div class="bg-slate-50 rounded-xl border border-slate-200 p-3 flex flex-col items-center justify-center hover:border-blue-300 transition-colors">
-                                    <div class="w-10 h-10 rounded-lg bg-purple-600 flex items-center justify-center mb-2">
-                                        <i class="fa-solid fa-magnet text-white text-sm"></i>
-                                    </div>
-                                    <div class="text-[11px] font-bold text-slate-800">找磁材/保太集团</div>
-                                    <div class="text-[9px] text-slate-500 mt-0.5">小程序+官网</div>
+                                <div class="bg-slate-50 rounded-xl border border-slate-200 p-3 flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-magnet text-xl text-purple-500 mb-1"></i>
+                                    <div class="text-[10px] font-bold text-slate-800">找磁材</div>
+                                    <div class="text-[9px] text-slate-400">小程序</div>
+                                </div>
+                                <div class="bg-slate-50 rounded-xl border border-slate-200 p-3 flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-building text-xl text-red-500 mb-1"></i>
+                                    <div class="text-[10px] font-bold text-slate-800">保太集团</div>
+                                    <div class="text-[9px] text-slate-400">BAOTAIGROUP</div>
+                                </div>
+                                <div class="bg-emerald-50 rounded-xl border border-emerald-200 p-3 flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-table-list text-xl text-emerald-600 mb-1"></i>
+                                    <div class="text-[10px] font-bold text-emerald-700">汇总报表</div>
+                                    <div class="text-[9px] text-emerald-500">每日更新</div>
                                 </div>
                             </div>
                         </div>
-                        <!-- 汇总结果 -->
                         <div class="glass-card p-4 h-36">
-                            <div class="flex items-center gap-2 mb-2">
-                                <div class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
                                     <i class="fa-solid fa-file-excel text-sm"></i>
                                 </div>
-                                <h3 class="text-sm font-bold text-slate-900">每日价格汇总表</h3>
+                                <h3 class="text-sm font-bold text-slate-900">价格汇总表预览</h3>
                             </div>
-                            <div class="flex gap-3 h-20">
-                                <div class="flex-1 bg-emerald-50 rounded-lg border border-emerald-200 flex items-center justify-center">
+                            <div class="flex gap-3 h-16">
+                                <div class="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400">
                                     <div class="text-center">
-                                        <i class="fa-solid fa-file-excel text-2xl text-emerald-500 mb-1"></i>
-                                        <div class="text-[10px] font-semibold text-emerald-700">原料价格汇总.xlsx</div>
+                                        <i class="fa-solid fa-file-excel text-2xl mb-1 text-emerald-400"></i>
+                                        <div class="text-[10px]">原材料价格汇总.xlsx</div>
                                     </div>
                                 </div>
                                 <div class="flex-1 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400">
                                     <div class="text-center">
-                                        <i class="fa-solid fa-chart-line text-2xl mb-1"></i>
+                                        <i class="fa-solid fa-chart-pie text-2xl mb-1 text-blue-400"></i>
                                         <div class="text-[10px]">价格趋势分析</div>
                                     </div>
                                 </div>

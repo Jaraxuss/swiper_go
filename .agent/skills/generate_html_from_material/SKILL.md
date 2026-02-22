@@ -19,13 +19,20 @@ description: 根据用户上传的资料（文字、图片、视频等）和指�
 
 1. 用户需要提供：
    - **资料内容**：文字描述、图片、视频等素材
-   - **页面风格类型**：章节页 / 标准含视频详情页 / 一般详情页
+   - **页面风格类型**：从以下五种中选择一种
+     - 章节页
+     - 标准含视频详情页
+     - 一般详情页
+     - 详情页_背景_痛点_方案_价值_细节（适合业务案例场景，含左右分栏、工作流、价值卡片）
+     - 启动会首页风格（适合项目首页/封面页，含大标题、副标题、底部特性卡片）
    - **页面文件名**：目标 HTML 文件的名称
 
 2. 确保 `html_style_summary/` 目录下存在对应的风格总结文件：
    - `01_章节页风格.md`
    - `02_标准含视频详情页风格.md`
    - `03_一般详情页风格.md`
+   - `04_详情页_背景_痛点_方案_价值_细节.md`
+   - `05_启动会首页风格.md`
 
 ---
 
@@ -37,10 +44,19 @@ description: 根据用户上传的资料（文字、图片、视频等）和指�
 
 | 信息项 | 说明 | 示例 |
 |--------|------|------|
-| **页面风格** | 三种类型之一 | 标准含视频详情页 |
-| **页面标题** | 主标题文字 | 直播自动化 |
-| **副标题** | 可选，辅助说明 | 实现直播间智能互动 |
-| **功能要点** | 核心功能列表 | 1. 自动回复 2. 数据统计 |
+| **页面风格** | 五种类型之一 | 详情页_背景_痛点_方案_价值_细节 |
+| **页面标题** | 主标题文字 | 超复杂表单识别并填写 |
+| **场景分类（副标题）** | 场景所属分类，04风格专用 | 财务自动化 |
+| **需求背景** | 业务场景描述，04风格左栏内容 | 财务部门每月需手工处理... |
+| **业务痛点** | 痛点列表（一般3条左右，依据素材内容而定），04风格 | 1. 手工操作耗时 2. 容易出错 |
+| **解决方案** | 工作流步骤（一般3-5步，依据素材内容而定），04风格 | 上传→识别→填写→导出 |
+| **方案价值** | 关键指标数据（2-4个），04风格 | 95% 准确率、节省80%时间 |
+| **右侧展示内容** | 数据预览/文件展示，04风格 | Excel表格数据/PDF文件 |
+| **客户名称** | 项目客户名，05风格专用 | 某某科技 |
+| **项目标语（Slogan）** | 核心价值主张，05风格 | 构建自动化内容流水线 |
+| **底部特性卡片** | 三张核心特性卡（标题+描述），05风格 | 内容矩阵/自动化流水线/飞书协同 |
+| **联系人信息** | 姓名+电话，05风格右下角 | 图南 / 199-5165-6379 |
+| **功能要点** | 核心功能列表，其他风格 | 1. 自动回复 2. 数据统计 |
 | **视频路径** | 仅视频详情页需要 | ./assets/videos/demo.mp4 |
 | **图片素材** | 用户上传的图片 | [用户上传图片] |
 | **文字描述** | 详细内容描述 | [用户提供文字] |
@@ -49,9 +65,11 @@ description: 根据用户上传的资料（文字、图片、视频等）和指�
 
 根据用户指定的风格类型，确定要参考的风格总结文件：
 
-- **章节页** → 查看 `./html_style_summary/01_章节页风格.md`
-- **标准含视频详情页** → 查看 `./html_style_summary/02_标准含视频详情页风格.md`
-- **一般详情页** → 查看 `./html_style_summary/03_一般详情页风格.md`
+- **章节页** → 查看 `/html_style_summary/01_章节页风格.md`
+- **标准含视频详情页** → 查看 `/html_style_summary/02_标准含视频详情页风格.md`
+- **一般详情页** → 查看 `/html_style_summary/03_一般详情页风格.md`
+- **详情页_背景_痛点_方案_价值_细节** → 查看 `/html_style_summary/04_详情页_背景_痛点_方案_价值_细节.md`
+- **启动会首页风格** → 查看 `/html_style_summary/05_启动会首页风格.md`
 
 ---
 
@@ -103,6 +121,46 @@ view_file ./html_style_summary/03_一般详情页风格.md
 - 工作流视图组件
 - 数据展示区块样式
 - 可复用组件清单
+
+### 2.4 详情页_背景_痛点_方案_价值_细节风格
+
+如果用户选择「详情页_背景_痛点_方案_价值_细节」风格，执行：
+
+```
+view_file ./html_style_summary/04_详情页_背景_痛点_方案_价值_细节.md
+```
+
+重点关注：
+- **整体布局**：固定 1280×720，`px-14 py-10`，深蓝外壳 `#0f172a`，页面背景 `#fcfdfe`
+- **Header 结构**：场景分类（红色副标题）+ 红色竖条 + 主标题
+- **左右分栏**：左栏（50%）放背景/痛点/方案/价值，右栏（50%）放数据/文件预览
+- **毛玻璃卡片**（`.glass-card`）：`rgba(255,255,255,0.8)` + `backdrop-filter: blur(12px)`
+- **带侧边条卡片**：深色条用于背景/痛点，红色条用于解决方案
+- **工作流组件**（`.workflow-box` + `.workflow-step`）：虚线边框 + 步骤图标 + 箭头连接
+- **价值卡片**（`.value-card` + `.value-number`）：渐变红色数字 + 悬停上浮
+- **Excel/文件预览组件**：右栏常用展示元素
+- **动画系统**：`.fragment` + `animation_step` 属性控制分步入场
+- **CSS 资源引入**：`../../lib/tailwind@4.js` + `../../lib/font-awesome/all.min.css` + `../../lib/fonts.css`
+
+### 2.5 启动会首页风格
+
+如果用户选择「启动会首页风格」，执行：
+
+```
+view_file ./html_style_summary/05_启动会首页风格.md
+```
+
+重点关注：
+- **整体布局**：固定 1280×720，居中对称，全屏背景 `#F8F9FA`
+- **背景层**：右上角红色光晕 + 左下角飞书蓝光晕 + 网格点阵纹理
+- **顶部标签（Pill Badge）**：圆角全椭圆，红色渐变背景，闪电图标 + 大写品牌文字
+- **主标题组合**：主标题 `76px font-bold` + 副标题 `64px` + Slogan（含左右渐变装饰线）
+- **底部特性卡片**：三列玻璃拟态卡片（`.glass-card`），高度 `128px`，图标 `64×64px`
+  - 卡片配色：橙色（内容矩阵）/ 红色强调（自动化） / 蓝色（飞书协同/其他系统）
+- **右下角联系信息**：固定绝对定位，默认 `opacity-60`，hover 渐显
+- **入场动画**：`@keyframes fade-in-up` + `.animate-enter`，底部卡片延迟 `0.2s`
+- **CSS 资源引入**：`../lib/tailwind@4.js` + `../lib/fonts.css`（注意路径层级）
+- **变量占位符**：`{{CLIENT_NAME}}` 替换为实际客户名
 
 ---
 
@@ -219,6 +277,233 @@ view_file ./html_style_summary/03_一般详情页风格.md
 
 根据内容类型选择合适的布局变体，参考 `03_一般详情页风格.md` 中的具体模板。
 
+#### 详情页_背景_痛点_方案_价值_细节模板
+
+> 完整模板请参考 `04_详情页_背景_痛点_方案_价值_细节.md` 第 6 章「固化 HTML 片段」。以下为关键结构速查：
+
+```html
+<!-- 资源引入（页面目录层级为 pages/custom/） -->
+<script src="../../lib/tailwind@4.js"></script>
+<link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+<link href="../../lib/fonts.css" rel="stylesheet" />
+
+<!-- 页面外壳 -->
+<div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+  <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+    <div id="slide-container" class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+
+      <!-- 背景装饰光晕 -->
+      <div class="bg-img-overlay pointer-events-none"></div>
+
+      <!-- Header：场景分类 + 主标题 -->
+      <header class="relative z-20 mb-6 shrink-0">
+        <div class="flex items-center gap-3 mb-1">
+          <span class="text-rpa-red font-bold text-lg">[场景分类]：[副标题]</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="w-2 h-8 bg-rpa-red rounded"></span>
+          <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
+            [主标题]
+            <span class="text-rpa-red ml-2">（[技术标签]）</span>
+          </h1>
+        </div>
+      </header>
+
+      <!-- 主内容：左右各50% -->
+      <div class="flex gap-8 flex-1 relative z-10 min-h-0">
+
+        <!-- 左栏 -->
+        <div class="w-1/2 flex flex-col gap-4">
+
+          <!-- 背景+痛点卡片 -->
+          <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
+            <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2"></div>
+            <div class="flex gap-6">
+              <!-- 需求背景 -->
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-2">
+                  <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 shadow-sm">
+                    <i class="fa-solid fa-file-lines text-sm"></i>
+                  </div>
+                  <h3 class="text-sm font-bold text-slate-900 tracking-tight">需求背景：</h3>
+                </div>
+                <p class="text-[11px] text-slate-600 leading-relaxed">[需求背景描述]</p>
+              </div>
+              <!-- 业务痛点 -->
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-2">
+                  <div class="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm">
+                    <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                  </div>
+                  <h3 class="text-sm font-bold text-slate-900 tracking-tight">业务痛点：</h3>
+                </div>
+                <div class="space-y-1.5">
+                  <div class="pain-point-item">1. [痛点一]</div>
+                  <div class="pain-point-item">2. [痛点二]</div>
+                  <div class="pain-point-item">3. [痛点三]</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 解决方案（含工作流）-->
+          <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
+            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2"></div>
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
+                <i class="fa-solid fa-robot text-sm"></i>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900 tracking-tight">影刀RPA解决方案</h3>
+            </div>
+            <div class="workflow-box mt-2 !py-4">
+              <div class="flex items-center justify-between px-2">
+                <!-- 工作流步骤（按实际步骤数复制） -->
+                <div class="workflow-step group">
+                  <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
+                    <i class="fa-solid fa-[图标名]"></i>
+                  </div>
+                  <div class="text-[10px] font-bold text-slate-800 leading-tight">[步骤名称]<br>[说明]</div>
+                </div>
+                <div class="connector-arrow text-slate-300"><i class="fa-solid fa-arrow-right"></i></div>
+                <!-- 更多步骤... -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 方案价值 -->
+          <div class="fragment mt-auto" animation_step="3">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="w-1 h-3.5 bg-rpa-red"></span>
+              <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="value-card">
+                <div class="value-number">[数字]%</div>
+                <p class="text-[11px] text-slate-600 leading-relaxed mt-2">[价值描述]</p>
+              </div>
+              <div class="value-card">
+                <div class="value-number">[数字]%</div>
+                <p class="text-[11px] text-slate-600 leading-relaxed mt-2">[价值描述]</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右栏：数据/文件展示（根据内容灵活调整） -->
+        <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
+          <!-- 参考 04_详情页风格.md 中 Excel预览 / 文件占位预览 等组件 -->
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../../js/slide-core.js"></script>
+```
+
+#### 启动会首页模板
+
+> 完整模板请参考 `05_启动会首页风格.md` 第 6 章「固化 HTML 片段」。以下为关键结构速查：
+
+```html
+<!-- 资源引入（页面目录层级为 pages/） -->
+<script src="../lib/tailwind@4.js"></script>
+<link href="../lib/fonts.css" rel="stylesheet" />
+
+<!-- 页面外壳 -->
+<body class="bg-gray-900 flex items-center justify-center h-screen w-screen font-sans">
+<div id="page-shell" class="w-full h-full flex items-center justify-center">
+  <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+    <div id="slide-container" class="w-[1280px] h-[720px] flex flex-col relative overflow-hidden bg-[#F8F9FA]">
+
+      <!-- 背景层（光晕 + 网格） -->
+      <!-- 右上角红色光晕 -->
+      <div class='absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-[#C00000]/5 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 z-0 pointer-events-none'></div>
+      <!-- 左下角蓝色光晕 -->
+      <div class="absolute bottom-0 left-0 w-[800px] h-[800px] bg-[#3370FF]/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 z-0 pointer-events-none"></div>
+      <!-- 网格纹理 -->
+      <div class="absolute inset-0 z-0 opacity-30" style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 40px 40px;"></div>
+
+      <!-- 右下角联系信息 -->
+      <div class="absolute bottom-6 right-8 z-30 flex flex-col items-end opacity-60 hover:opacity-100 transition-opacity duration-500 cursor-default group">
+        <div class="flex items-center gap-2 text-xs text-gray-500 font-medium">
+          <span>影刀客户成功</span>
+          <span class="w-px h-3 bg-gray-300"></span>
+          <span class="text-gray-800 font-bold">[姓名]</span>
+        </div>
+        <div class="text-[10px] text-gray-600 font-mono tracking-wider mt-0.5 group-hover:text-[#C00000] transition-colors duration-300">[电话]</div>
+      </div>
+
+      <!-- 主内容区 -->
+      <div class="relative z-20 w-full h-full flex flex-col items-center justify-center px-20 pt-8 pb-32">
+
+        <!-- 标题组合 -->
+        <div class="text-center space-y-8 max-w-6xl animate-enter">
+          <!-- 顶部标签 -->
+          <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-[#C00000]/5 to-[#C00000]/10 border border-[#C00000]/10 mb-2">
+            <svg class="w-4 h-4 text-[#C00000]" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M7 2v11h3v9l7-12h-4l4-8z" />
+            </svg>
+            <span class="text-[#C00000] font-bold text-sm tracking-wide uppercase">[标签文字，如：核心价值主张]</span>
+          </div>
+
+          <!-- 主标题 -->
+          <h1 class="text-[76px] font-bold text-[#1F2937] tracking-tight leading-[1.15]">
+            {{CLIENT_NAME}} &amp; 影刀RPA<br>
+            <span class="text-[64px] font-bold text-[#374151]">项目启动宣讲会</span>
+          </h1>
+
+          <!-- Slogan -->
+          <div class="flex items-center justify-center gap-6 mt-6">
+            <div class="h-px w-20 bg-gradient-to-r from-transparent to-gray-300"></div>
+            <p class="text-2xl text-[#4B5563] font-medium tracking-wide">
+              [Slogan前半段]<span class="text-[#C00000] font-bold mx-1">[核心关键词]</span>[Slogan后半段]
+            </p>
+            <div class="h-px w-20 bg-gradient-to-l from-transparent to-gray-300"></div>
+          </div>
+        </div>
+
+        <!-- 底部三列特性卡片 -->
+        <div class="absolute bottom-16 flex gap-10 w-full justify-center px-20 animate-enter" style="animation-delay: 0.2s;">
+          <!-- 卡片1（橙色）-->
+          <div class="glass-card flex-1 h-32 rounded-2xl flex items-center p-6 gap-5 group cursor-default">
+            <div class="w-16 h-16 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-500 shrink-0 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><!-- SVG 图标 --></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-gray-800 mb-1">[特性名称1]</h3>
+              <p class="text-xs text-gray-500 leading-relaxed">[描述行1]<br>[描述行2]</p>
+            </div>
+          </div>
+          <!-- 卡片2（红色强调）-->
+          <div class="glass-card flex-1 h-32 rounded-2xl flex items-center p-6 gap-5 group cursor-default border-red-100 bg-white/70">
+            <div class="w-16 h-16 rounded-xl bg-red-50 border border-red-100 flex items-center justify-center text-[#C00000] shrink-0 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><!-- SVG 图标 --></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-[#C00000] mb-1">[特性名称2]</h3>
+              <p class="text-xs text-gray-500 leading-relaxed">[描述行1]<br>[描述行2]</p>
+            </div>
+          </div>
+          <!-- 卡片3（蓝色）-->
+          <div class="glass-card flex-1 h-32 rounded-2xl flex items-center p-6 gap-5 group cursor-default">
+            <div class="w-16 h-16 rounded-xl bg-[#3370FF]/10 border border-[#3370FF]/20 flex items-center justify-center text-[#3370FF] shrink-0 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><!-- SVG 图标 --></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-gray-800 mb-1">[特性名称3]</h3>
+              <p class="text-xs text-gray-500 leading-relaxed">[描述行1]<br>[描述行2]</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../js/slide-core.js"></script>
+```
+
 ### 4.3 填充具体内容
 
 1. 替换占位符为实际内容
@@ -270,6 +555,8 @@ view_file ./html_style_summary/03_一般详情页风格.md
 | 痛点分析、方案对比 | 一般详情页 | `03_一般详情页风格.md` |
 | 场景列表、功能矩阵 | 一般详情页 | `03_一般详情页风格.md` |
 | 价值展示、数据统计 | 一般详情页 | `03_一般详情页风格.md` |
+| 业务案例（背景+痛点+方案+价值+数据预览） | 详情页_背景_痛点_方案_价值_细节 | `04_详情页_背景_痛点_方案_价值_细节.md` |
+| 项目启动会首页、封面页、演示文稿首页 | 启动会首页风格 | `05_启动会首页风格.md` |
 
 ---
 
@@ -277,38 +564,53 @@ view_file ./html_style_summary/03_一般详情页风格.md
 
 ### 关键颜色
 
-| 颜色名称 | 色值 | 用途 |
-|----------|------|------|
-| 品牌红 | `#C00000` | 标题装饰、强调色 |
-| 背景色 | `#F8F9FA` | 页面背景 |
-| 主文字 | `#1F2937` | 标题、正文 |
-| 辅助文字 | `#6B7280` | 副标题、说明 |
-| 卡片背景 | `rgba(255,255,255,0.7)` | 毛玻璃卡片 |
+| 颜色名称 | 色值 | 用途 | 适用风格 |
+|----------|------|------|----------|
+| 品牌红 | `#C00000` | 标题装饰、强调色 | 全部 |
+| 飞书蓝 | `#3370FF` | 辅助强调色、蓝色光晕 | 05启动会 |
+| 浅灰背景 | `#F8F9FA` | 页面背景 | 05启动会 |
+| 极浅蓝灰 | `#fcfdfe` | 页面背景 | 04详情页 |
+| 深蓝外壳 | `#0f172a` | 幻灯片外层壳 | 04详情页 |
+| 主文字 | `#1F2937` | 标题、正文 | 05启动会 |
+| 主文字（深） | `#0f172a` | 标题、正文 | 04详情页 |
+| 辅助文字 | `#475569` (`slate-600`) | 正文说明 | 04详情页 |
+| 辅助文字 | `#6B7280` | 副标题、说明 | 其他风格 |
+| 毛玻璃卡片 | `rgba(255,255,255,0.8)` + blur(12px) | 信息承载卡片 | 04详情页 |
+| 毛玻璃卡片 | `rgba(255,255,255,0.6)` + blur(10px) | 特性展示卡片 | 05启动会 |
 
 ### 关键间距
 
-| 间距类型 | 数值 | Tailwind 类 |
-|----------|------|-------------|
-| 页面边距 | 48px | `p-12` |
-| 卡片内边距 | 24px | `p-6` |
-| 元素间距 | 16px | `gap-4` |
+| 间距类型 | 数值 | Tailwind 类 | 适用风格 |
+|----------|------|-------------|----------|
+| 页面边距（横） | 56px | `px-14` | 04详情页 |
+| 页面边距（纵） | 40px | `py-10` | 04详情页 |
+| 页面边距（横） | 80px | `px-20` | 05启动会 |
+| 页面边距（上） | 32px | `pt-8` | 05启动会 |
+| 页面边距（下） | 128px | `pb-32` | 05启动会 |
+| 页面边距 | 48px | `p-12` | 其他风格 |
+| 卡片内边距（04） | 16px | `p-4` | 04详情页 |
+| 卡片内边距（05） | 24px | `p-6` | 05启动会 |
+| 栏间距 | 32px | `gap-8` | 04详情页 |
 
 ### 关键圆角
 
 | 元素类型 | 数值 | Tailwind 类 |
 |----------|------|-------------|
 | 卡片圆角 | 16px | `rounded-2xl` |
-| 小元素圆角 | 12px | `rounded-xl` |
+| 图标容器 | 12px | `rounded-xl` |
+| 标签/Pill | 全圆 | `rounded-full` |
 | 按钮圆角 | 8px | `rounded-lg` |
 
 ### 标准动画
 
-| 动画名称 | 效果 | 常用场景 |
-|----------|------|----------|
-| `animate-fadeInUp` | 从下往上淡入 | 卡片入场 |
-| `animate-fadeInDown` | 从上往下淡入 | 标题入场 |
-| `animate-fadeInLeft` | 从左往右淡入 | 左侧内容 |
-| `animate-fadeInRight` | 从右往左淡入 | 右侧内容 |
+| 动画名称 | 效果 | 常用场景 | 适用风格 |
+|----------|------|----------|----------|
+| `animate-fadeInUp` | 从下往上淡入 | 卡片入场 | 01/02/03 |
+| `animate-fadeInDown` | 从上往下淡入 | 标题入场 | 01/02/03 |
+| `animate-fadeInLeft` | 从左往右淡入 | 左侧内容 | 01/02/03 |
+| `animate-fadeInRight` | 从右往左淡入 | 右侧内容 | 01/02/03 |
+| `.fragment` + `animation_step` | 分步入场（点击触发） | 渐进式信息展示 | 04详情页 |
+| `.animate-enter` (`fade-in-up`) | 自动淡入上浮 | 首页整体入场 | 05启动会 |
 
 ---
 
@@ -329,17 +631,41 @@ view_file ./html_style_summary/03_一般详情页风格.md
 
 A: 根据内容类型判断：
 - 有视频演示 → 标准含视频详情页
-- 痛点+方案分析 → 一般详情页（对比布局）
+- 痛点+方案分析（简单对比） → 一般详情页（对比布局）
 - 多个场景/功能列表 → 一般详情页（卡片网格布局）
 - 数据/价值展示 → 一般详情页（统计卡片布局）
+- **完整业务案例**（背景+痛点+工作流方案+价值数据+文件预览）→ **详情页_背景_痛点_方案_价值_细节**
+- **项目首页/封面** → **启动会首页风格**
+
+### Q: 04风格的右栏应该放什么内容？
+
+A: 右栏（50%）用于展示「细节/实现效果」，常见内容：
+1. **Excel/表格数据预览**：使用 `.excel-preview` 组件展示结构化数据
+2. **文件占位预览**：使用文件图标卡片展示 PDF、图片等文件
+3. **截图/效果图**：如有实际截图，用 `<img>` 内嵌在 `.glass-card` 中
+4. **工作流/流程图**：复杂流程可用 `.workflow-box` 展示在右栏
+
+### Q: 04风格的 animation_step 怎么分配？
+
+A: 通常按以下顺序分配：
+- `animation_step="1"`：背景+痛点卡片（最先展示）
+- `animation_step="2"`：解决方案卡片 + 右栏内容（同步展示）
+- `animation_step="3"`：方案价值区域（最后展示）
+
+### Q: 05风格底部三张卡片的配色怎么选？
+
+A: 遵循「橙/红/蓝」三色平衡原则：
+- **第1张**：橙色系（`bg-orange-50` + `text-orange-500`）- 通常是内容/数据相关
+- **第2张**：红色强调（`bg-red-50` + `text-[#C00000]`，卡片加 `border-red-100 bg-white/70`）- 通常是核心自动化功能
+- **第3张**：蓝色系（`bg-[#3370FF]/10` + `text-[#3370FF]`）- 通常是协同/平台相关
 
 ### Q: 图片素材如何处理？
 
-A: 
+A:
 1. 如果是展示用途，保存到 `./assets/images/` 目录
 2. 如果是设计参考，分析后转换为 HTML/CSS 实现
 3. 确保使用相对路径引用
 
 ### Q: 页面需要添加到配置吗？
 
-A: 是的，新页面需要添加到 `./config.js` 的 slides 数组中才能在幻灯片中展示。
+A: 是的，新页面需要添加到 `./js/config.js` 的 slides 数组中才能在幻灯片中展示。
