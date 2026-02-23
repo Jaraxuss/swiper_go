@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>电商/跨境行业解决方案 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .text-rpa-red {
+            color: #C00000;
+        }
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            border-radius: 16px;
+        }
+        /* Phase Card */
+        .phase-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .phase-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--phase-color, #C00000);
+        }
+        /* Timeline connector */
+        .timeline-connector {
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 24px;
+            height: 2px;
+            background: linear-gradient(90deg, #cbd5e1 0%, #e2e8f0 100%);
+        }
+        .timeline-connector::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -3px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #C00000;
+        }
+        /* Background Graphic */
+        .bg-img-overlay {
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(192, 0, 0, 0.05) 0%, transparent 70%);
+            z-index: 1;
+        }
+        /* Task item */
+        .task-item {
+            position: relative;
+            padding-left: 1rem;
+            font-size: 10px;
+            line-height: 1.5;
+            color: #475569;
+        }
+        .task-item::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #C00000;
+            font-weight: bold;
+        }
+        /* Success badge */
+        .success-badge {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container"
+                class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+                <!-- Background Graphic -->
+                <div class="bg-img-overlay pointer-events-none"></div>
+                <!-- Header -->
+                <header class="relative z-20 mb-6 shrink-0">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="px-3 py-1 bg-red-50 text-rpa-red text-sm font-bold rounded-full border border-red-100">重点项目规划</span>
+                        <span class="text-slate-400 text-sm">为小客续约</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="w-2 h-10 bg-rpa-red rounded"></span>
+                        <div>
+                            <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
+                                电商/跨境行业解决方案
+                            </h1>
+                            <p class="text-slate-500 mt-1 text-sm">
+                                通过打造开箱即用的 RPA"速赢包"，将服务模式从"被动响应"转为"线上标准化、批量化服务"
+                            </p>
+                        </div>
+                    </div>
+                </header>
+                <!-- Core Objective Banner -->
+                <div class="fragment glass-card p-4 mb-6 relative z-10 flex items-center gap-4" animation_step="1">
+                    <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-rpa-red shadow-sm border border-red-100">
+                        <i class="fa-solid fa-bullseye text-xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-sm font-bold text-slate-900 mb-1">核心目标</h3>
+                        <p class="text-xs text-slate-600">针对江苏区域 2/3 星客户（占新签 70%）续约率过低的显性风险，确保客户快速看到 RPA 带来的营收价值</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="text-center px-4 py-2 bg-slate-50 rounded-lg">
+                            <div class="text-lg font-black text-slate-800">55%+</div>
+                            <div class="text-[10px] text-slate-500">2星续费目标</div>
+                        </div>
+                        <div class="text-center px-4 py-2 bg-red-50 rounded-lg border border-red-100">
+                            <div class="text-lg font-black text-rpa-red">83.5%+</div>
+                            <div class="text-[10px] text-slate-500">3星续费目标</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Phase Timeline -->
+                <div class="fragment flex-1 grid grid-cols-4 gap-5 relative z-10 min-h-0" animation_step="2">
+                    
+                    <!-- Phase 1 -->
+                    <div class="phase-card p-4 flex flex-col" style="--phase-color: #ef4444;">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center text-red-600 font-bold text-sm">1</div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-900">第一阶段</div>
+                                <div class="text-[10px] text-slate-500">2月 - 3月</div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="text-sm font-bold text-slate-800 mb-2 pb-2 border-b border-slate-100">高价值场景筛选与"速赢包"定义</h4>
+                        
+                        <div class="flex-1 space-y-2 mb-3">
+                            <div class="text-[10px] font-semibold text-slate-700 mb-1">核心任务：</div>
+                            <p class="text-[10px] text-slate-600 leading-relaxed">从海量需求中识别出能让小客"快速见效"的 RPA 刚需场景</p>
+                            
+                            <div class="text-[10px] font-semibold text-slate-700 mt-2 mb-1">关键行动：</div>
+                            <div class="space-y-1">
+                                <div class="task-item">痛点归类：复盘2025年电商/跨境客户最高频RPA场景</div>
+                                <div class="task-item">定义"速赢"标准：运行稳定性高、ROI易量化</div>
+                            </div>
+                        </div>
+                        
+                        <div class="success-badge mt-auto">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <i class="fa-solid fa-flag-checkered text-emerald-600 text-xs"></i>
+                                <span class="text-[10px] font-bold text-emerald-700">成功标志</span>
+                            </div>
+                            <p class="text-[10px] text-emerald-800">确定 3-5 个首批"速赢包"主题</p>
+                        </div>
+                        
+                        <div class="timeline-connector hidden xl:block"></div>
+                    </div>
+                    <!-- Phase 2 -->
+                    <div class="phase-card p-4 flex flex-col" style="--phase-color: #f97316;">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-sm">2</div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-900">第二阶段</div>
+                                <div class="text-[10px] text-slate-500">4月 - 5月</div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="text-sm font-bold text-slate-800 mb-2 pb-2 border-b border-slate-100">RPA方案标准化与"工具箱"封装</h4>
+                        
+                        <div class="flex-1 space-y-2 mb-3">
+                            <div class="text-[10px] font-semibold text-slate-700 mb-1">核心任务：</div>
+                            <p class="text-[10px] text-slate-600 leading-relaxed">将非标方案转化为标准化产品，降低交付难度</p>
+                            
+                            <div class="text-[10px] font-semibold text-slate-700 mt-2 mb-1">关键行动：</div>
+                            <div class="space-y-1">
+                                <div class="task-item">标准化脚本开发：确保高兼容性</div>
+                                <div class="task-item">配套交付文档：极简安装视频和使用指南</div>
+                                <div class="task-item">价值量化模型："收益看板"模板</div>
+                            </div>
+                        </div>
+                        
+                        <div class="success-badge mt-auto">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <i class="fa-solid fa-flag-checkered text-emerald-600 text-xs"></i>
+                                <span class="text-[10px] font-bold text-emerald-700">成功标志</span>
+                            </div>
+                            <p class="text-[10px] text-emerald-800">完成首批"速赢包"工具箱</p>
+                        </div>
+                        
+                        <div class="timeline-connector hidden xl:block"></div>
+                    </div>
+                    <!-- Phase 3 -->
+                    <div class="phase-card p-4 flex flex-col" style="--phase-color: #3b82f6;">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">3</div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-900">第三阶段</div>
+                                <div class="text-[10px] text-slate-500">6月 - 8月</div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="text-sm font-bold text-slate-800 mb-2 pb-2 border-b border-slate-100">线上化批量分发与试点推进</h4>
+                        
+                        <div class="flex-1 space-y-2 mb-3">
+                            <div class="text-[10px] font-semibold text-slate-700 mb-1">核心任务：</div>
+                            <p class="text-[10px] text-slate-600 leading-relaxed">实施"线上标准化、批量化服务"，提高人效</p>
+                            
+                            <div class="text-[10px] font-semibold text-slate-700 mt-2 mb-1">关键行动：</div>
+                            <div class="space-y-1">
+                                <div class="task-item">分级治理：2星线上批量推送，3星专属CSM引导</div>
+                                <div class="task-item">效能监控：监控账号活跃度(DAU)变化</div>
+                            </div>
+                        </div>
+                        
+                        <div class="success-badge mt-auto">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <i class="fa-solid fa-flag-checkered text-emerald-600 text-xs"></i>
+                                <span class="text-[10px] font-bold text-emerald-700">成功标志</span>
+                            </div>
+                            <p class="text-[10px] text-emerald-800">试点客户RPA运行成功率和日活明显提升</p>
+                        </div>
+                        
+                        <div class="timeline-connector hidden xl:block"></div>
+                    </div>
+                    <!-- Phase 4 -->
+                    <div class="phase-card p-4 flex flex-col" style="--phase-color: #10b981;">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-sm">4</div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-900">第四阶段</div>
+                                <div class="text-[10px] text-slate-500">9月 - 12月</div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="text-sm font-bold text-slate-800 mb-2 pb-2 border-b border-slate-100">反馈迭代与存量激活</h4>
+                        
+                        <div class="flex-1 space-y-2 mb-3">
+                            <div class="text-[10px] font-semibold text-slate-700 mb-1">核心任务：</div>
+                            <p class="text-[10px] text-slate-600 leading-relaxed">固化成果，形成区域内的标准化作业模式</p>
+                            
+                            <div class="text-[10px] font-semibold text-slate-700 mt-2 mb-1">关键行动：</div>
+                            <div class="space-y-1">
+                                <div class="task-item">方案迭代：修正RPA脚本中的bug或易错点</div>
+                                <div class="task-item">以点带面：总结成功案例，二轮推广</div>
+                            </div>
+                        </div>
+                        
+                        <div class="success-badge mt-auto">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <i class="fa-solid fa-flag-checkered text-emerald-600 text-xs"></i>
+                                <span class="text-[10px] font-bold text-emerald-700">成功标志</span>
+                            </div>
+                            <p class="text-[10px] text-emerald-800">产出 5 个以上可复制的行业速赢案例</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/slide-core.js"></script>
+</body>
+</html>

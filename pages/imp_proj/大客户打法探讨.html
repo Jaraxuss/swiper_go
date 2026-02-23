@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>大客户"打法"探讨 - 影刀RPA</title>
+    <script src="../../lib/tailwind@4.js"></script>
+    <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
+    <link href="../../lib/fonts.css" rel="stylesheet" />
+    <style>
+        .font-sans {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .text-rpa-red {
+            color: #C00000;
+        }
+        .bg-rpa-red {
+            background-color: #C00000;
+        }
+        .fragment {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            border-radius: 16px;
+        }
+        /* Phase Card */
+        .phase-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .phase-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--phase-color, #C00000);
+        }
+        /* Background Graphic */
+        .bg-img-overlay {
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(192, 0, 0, 0.04) 0%, transparent 70%);
+            z-index: 1;
+        }
+        /* Task item */
+        .task-item {
+            position: relative;
+            padding-left: 1rem;
+            font-size: 10px;
+            line-height: 1.5;
+            color: #475569;
+        }
+        .task-item::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #C00000;
+            font-weight: bold;
+        }
+        /* Success badge */
+        .success-badge {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+        }
+        /* Value layer card */
+        .layer-card {
+            background: white;
+            border-radius: 10px;
+            padding: 0.625rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+        .layer-card:hover {
+            border-color: #C00000;
+            box-shadow: 0 4px 12px rgba(192, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
+    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+        <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
+            <div id="slide-container"
+                class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+                <!-- Background Graphic -->
+                <div class="bg-img-overlay pointer-events-none"></div>
+                <!-- Header -->
+                <header class="relative z-20 mb-5 shrink-0">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="px-3 py-1 bg-red-50 text-rpa-red text-sm font-bold rounded-full border border-red-100">重点项目规划</span>
+                        <span class="text-slate-400 text-sm">为大客增购</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="w-2 h-10 bg-rpa-red rounded"></span>
+                        <div>
+                            <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
+                                大客户"打法"探讨
+                            </h1>
+                            <p class="text-slate-500 mt-1 text-sm">
+                                利用AI深度挖掘业务场景与痛点，通过构建"战略级价值传递方案"实现深度渗透
+                            </p>
+                        </div>
+                    </div>
+                </header>
+                <!-- Core Objective Banner -->
+                <div class="fragment glass-card p-4 mb-5 relative z-10 flex items-center gap-4" animation_step="1">
+                    <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-rpa-red shadow-sm border border-red-100">
+                        <i class="fa-solid fa-crown text-xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-sm font-bold text-slate-900 mb-1">核心目标</h3>
+                        <p class="text-xs text-slate-600">针对4-5星大客（尤其是制造+零售一体化企业），从单点场景向全链路业务串联深度渗透</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="text-center px-4 py-2 bg-amber-50 rounded-lg border border-amber-100">
+                            <div class="text-lg font-black text-amber-600">30家</div>
+                            <div class="text-[10px] text-slate-500">5星客户</div>
+                        </div>
+                        <div class="text-center px-4 py-2 bg-slate-50 rounded-lg">
+                            <div class="text-lg font-black text-slate-700">71家</div>
+                            <div class="text-[10px] text-slate-500">4星客户</div>
+                        </div>
+                        <div class="text-center px-4 py-2 bg-red-50 rounded-lg border border-red-100">
+                            <div class="text-lg font-black text-rpa-red">100%</div>
+                            <div class="text-[10px] text-slate-500">5星续约目标</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Phase Timeline - 3 columns -->
+                <div class="fragment flex-1 grid grid-cols-3 gap-5 relative z-10 min-h-0" animation_step="2">
+                    
+                    <!-- Phase 1 -->
+                    <div class="phase-card p-4 flex flex-col" style="--phase-color: #8b5cf6;">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center text-violet-600 font-bold text-sm">1</div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-900">第一阶段</div>
+                                <div class="text-[10px] text-slate-500">2月 - 4月</div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="text-sm font-bold text-slate-800 mb-2 pb-2 border-b border-slate-100">大客画像深度建模与潜力识别</h4>
+                        
+                        <div class="flex-1 space-y-2 mb-3">
+                            <div class="text-[10px] font-semibold text-slate-700 mb-1">核心任务：</div>
+                            <p class="text-[10px] text-slate-600 leading-relaxed">利用AI技术对现有大客进行"全量扫描"，精准识别增购机会点</p>
+                            
+                            <div class="text-[10px] font-semibold text-slate-700 mt-2 mb-1">关键行动：</div>
+                            <div class="space-y-1">
+                                <div class="task-item">AI全量洞察：历史沟通、工单、流程数据输入AI模型</div>
+                                <div class="task-item">生成《大客业务健康度与增购潜力报告》</div>
+                                <div class="task-item">增购路径规划：输出一客一策的定制推动策略</div>
+                            </div>
+                        </div>
+                        
+                        <div class="success-badge mt-auto">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <i class="fa-solid fa-flag-checkered text-emerald-600 text-xs"></i>
+                                <span class="text-[10px] font-bold text-emerald-700">成功标志</span>
+                            </div>
+                            <p class="text-[10px] text-emerald-800">筛选出10家高增购潜力标杆大客名单</p>
+                        </div>
+                    </div>
+                    <!-- Phase 2 -->
+                    <div class="phase-card p-4 flex flex-col" style="--phase-color: #f59e0b;">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center text-amber-600 font-bold text-sm">2</div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-900">第二阶段</div>
+                                <div class="text-[10px] text-slate-500">5月 - 10月</div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="text-sm font-bold text-slate-800 mb-2 pb-2 border-b border-slate-100">AI驱动的"战略语言"价值方案构建</h4>
+                        
+                        <div class="flex-1 space-y-2 mb-3">
+                            <div class="text-[10px] font-semibold text-slate-700 mb-1">核心任务：</div>
+                            <p class="text-[10px] text-slate-600 leading-relaxed">解决"高层不重视、基层不接受"的痛点</p>
+                            
+                            <div class="text-[10px] font-semibold text-slate-700 mt-2 mb-1">三层价值映射：</div>
+                            <div class="space-y-1.5">
+                                <div class="layer-card flex items-center gap-2">
+                                    <div class="w-6 h-6 rounded bg-rose-100 flex items-center justify-center">
+                                        <i class="fa-solid fa-chess-king text-rose-500 text-[10px]"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-[10px] font-bold text-slate-800">高层</div>
+                                        <div class="text-[9px] text-slate-500">ROI、行业趋势及风险规避</div>
+                                    </div>
+                                </div>
+                                <div class="layer-card flex items-center gap-2">
+                                    <div class="w-6 h-6 rounded bg-blue-100 flex items-center justify-center">
+                                        <i class="fa-solid fa-user-tie text-blue-500 text-[10px]"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-[10px] font-bold text-slate-800">中层</div>
+                                        <div class="text-[9px] text-slate-500">向上邀功、向下减负的执行工具包</div>
+                                    </div>
+                                </div>
+                                <div class="layer-card flex items-center gap-2">
+                                    <div class="w-6 h-6 rounded bg-emerald-100 flex items-center justify-center">
+                                        <i class="fa-solid fa-user text-emerald-500 text-[10px]"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-[10px] font-bold text-slate-800">基层</div>
+                                        <div class="text-[9px] text-slate-500">操作简化、个人效能提升</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="task-item mt-2">AI内容工厂：Gamma、ChatGPT快速生成视觉化PPT</div>
+                        </div>
+                        
+                        <div class="success-badge mt-auto">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <i class="fa-solid fa-flag-checkered text-emerald-600 text-xs"></i>
+                                <span class="text-[10px] font-bold text-emerald-700">成功标志</span>
+                            </div>
+                            <p class="text-[10px] text-emerald-800">产出3套核心行业"大客价值共鸣方案模板"</p>
+                        </div>
+                    </div>
+                    <!-- Phase 3 -->
+                    <div class="phase-card p-4 flex flex-col" style="--phase-color: #10b981;">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-sm">3</div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-900">第三阶段</div>
+                                <div class="text-[10px] text-slate-500">11月 - 12月</div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="text-sm font-bold text-slate-800 mb-2 pb-2 border-b border-slate-100">标杆复制与区域资产沉淀</h4>
+                        
+                        <div class="flex-1 space-y-2 mb-3">
+                            <div class="text-[10px] font-semibold text-slate-700 mb-1">核心任务：</div>
+                            <p class="text-[10px] text-slate-600 leading-relaxed">将成功的大客打法标准化，形成区域内的增长飞轮</p>
+                            
+                            <div class="text-[10px] font-semibold text-slate-700 mt-2 mb-1">关键行动：</div>
+                            <div class="space-y-1">
+                                <div class="task-item">增购经验知识库：总结成功话术和策略</div>
+                                <div class="task-item">AI封装成"大客增购智能助手"供全员调用</div>
+                                <div class="task-item">价值传递闭环：成功案例反哺AI素材库</div>
+                            </div>
+                            
+                            <div class="mt-3 p-2 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg border border-amber-100">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-lightbulb text-amber-500 text-sm"></i>
+                                    <span class="text-[10px] font-semibold text-amber-700">增长飞轮效应</span>
+                                </div>
+                                <p class="text-[9px] text-amber-600 mt-1">以点带面，持续丰富行业数据</p>
+                            </div>
+                        </div>
+                        
+                        <div class="success-badge mt-auto">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <i class="fa-solid fa-flag-checkered text-emerald-600 text-xs"></i>
+                                <span class="text-[10px] font-bold text-emerald-700">成功标志</span>
+                            </div>
+                            <p class="text-[10px] text-emerald-800">产出1个具有全公司影响力的大客深度运营标杆案例</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/slide-core.js"></script>
+</body>
+</html>
