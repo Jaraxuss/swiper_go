@@ -377,7 +377,7 @@ html_style_summary/
 
 比如**图生图**的场景，专业的玩家用 ComfyUI、LiblibAI，但这些有一定的上手门槛，一般需要专业的设计师操作，可能还需要本地算力。如果要求不是非常苛刻，用 Agent Skill 结合 Nano Banana，也可以实现：
 
-![image.png](%E4%BB%8E%20%E8%83%BD%E7%94%A8%20%E5%88%B0%20%E5%A5%BD%E7%94%A8%20%EF%BC%9AAgent%20Skill%20%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E6%89%B9%E9%87%8F%20HTML%20%E7%94%9F%E6%88%90%E7%93%B6%E9%A2%88/image%2015.png)
+![image-20260224201051311](assets/image-20260224201051311.png)
 
 
 # 五、不同 AI 测试输出稳定性（抗厂商锁定）
