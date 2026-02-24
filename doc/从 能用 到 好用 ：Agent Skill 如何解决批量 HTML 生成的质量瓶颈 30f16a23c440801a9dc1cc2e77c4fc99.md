@@ -382,25 +382,32 @@ html_style_summary/
 
 ![image.png](%E4%BB%8E%20%E8%83%BD%E7%94%A8%20%E5%88%B0%20%E5%A5%BD%E7%94%A8%20%EF%BC%9AAgent%20Skill%20%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E6%89%B9%E9%87%8F%20HTML%20%E7%94%9F%E6%88%90%E7%93%B6%E9%A2%88/image%2015.png)
 
-## 现成的 Skill 可以复用吗？
+## 有现成的 Agent Skill 可以直接用吗？
 
-其实除了在具体项目中自己摸索编写 Skill 外，开源社区已经跑在前面，为我们总结了大量开箱即用、经过千锤百炼的通用 Skill（在不同工具里由于生态不同，可能被称为 Patterns、Rules 或 Workflows）。
+答案是肯定的。为了少走弯路，建议按「**官方仓库 → 垂直场景能力 → 社区合集**」的顺序来选型：
 
-这里为大家推荐一个在 GitHub 上拥有数万 Star 的重磅项目 —— **Fabric**（一个基于 Markdown 固化 AI 专家提示词的开源框架），里面有非常多适合不同岗位的现成的成熟“技能模板”，尤其适合我们做技术支持、交付实施和客户成功的同学：
+1. **官方入口（优先）**
+   - OpenAI 官方 Codex Skills 总仓库（覆盖 Codex 生态，适合先看标准结构与写法）：  
+     [https://github.com/openai/skills](https://github.com/openai/skills)
+   - Anthropic 官方 Skills 仓库（文档、PDF、PPT 等能力比较集中）：  
+     [https://github.com/anthropics/skills](https://github.com/anthropics/skills)
 
-### 1. 深度会议与诉求萃取 (Pattern: `extract_wisdom`)
-**痛点**：开完两小时的冗长产品交付会，或者是拿到一份极长的客户诉求文档，需要快速提炼关键信息。
-**固化效果**：这个著名的开源 Skill 被调教得极为严苛。你只要把会议录音转录稿或聊天记录扔给它，它定会严格按照设定的思考框架，产出毫无废话的：核心总结、极简事实、待办事项（Action Items）和深层洞察。让 CS 同学的总结与交付瞬间具备专家范。
+2. **与本文最相关的现成能力（可直接参考）**
+   - PDF 相关 Skill：  
+     [https://github.com/anthropics/skills/tree/main/skills/pdf](https://github.com/anthropics/skills/tree/main/skills/pdf)
+   - PPTX 相关 Skill：  
+     [https://github.com/anthropics/skills/tree/main/skills/pptx](https://github.com/anthropics/skills/tree/main/skills/pptx)
+   - 图像增强/处理流程 Skill：  
+     [https://github.com/ComposioHQ/awesome-claude-skills/tree/master/image-enhancer](https://github.com/ComposioHQ/awesome-claude-skills/tree/master/image-enhancer)
+   - Web 页面测试与质检 Skill：  
+     [https://github.com/ComposioHQ/awesome-claude-skills/tree/master/webapp-testing](https://github.com/ComposioHQ/awesome-claude-skills/tree/master/webapp-testing)
 
-### 2. 事故根因分析器 (Pattern: `analyze_logs` / `analyze_incident`)
-**痛点**：客户抛来难以识别的报错信息、运行日志或者复杂的故障工单，排查耗时耗力。
-**固化效果**：遇到乱码或长串代码日志，这类 Skill 预设了排查专家（SRE）的分析链路。它会自动按照“时间线梳理 -> 异常指标捕获 -> 潜在网络拦截/冲突猜测 -> 修复验证动作”的标准操作指导书（SOP）给出高价值的诊断回复，极大提升一线排查效率。
+3. **社区大合集（找“成熟/火爆”技能最快）**
+   - [https://github.com/ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills)
+   - [https://github.com/intellectronica/awesome-skills](https://github.com/intellectronica/awesome-skills)
+   - [https://github.com/numman-ali/n-skills](https://github.com/numman-ali/n-skills)
 
-### 3. 项目初始化与架构脚手架 (例如 Cline 社区的高赞 `.clinerules`)
-**痛点**：实施工程师或技术支持同学准备给客户二次开发一个小工具或环境监测脚本，缺乏统一架构标准。
-**固化效果**：你可以直接把开源社区沉淀的高赞 `.clinerules`（等同于项目级全局 Skill，比如专门要求使用 "Python 最佳实践"、强调 "必须写详尽异常捕获" 以及 "符合安全合规" 的规则文档）扔到项目根目录。后续交给大模型写代码时，它就会犹如一个自带代码洁癖的高级技术审查员，保障交付给客户的工具兼具扩展性与高鲁棒性。
-
-> 这个生态还在飞速繁荣。未来我们很多时候甚至不需要自己写 Skill，而是在类似 "Skill 商店"（比如 GitHub）里寻找高分模板，直接 Copy 下来，变成自己和团队的自动化数字员工。
+建议做法是：先从官方仓库挑一个最接近你场景的 Skill 跑通，再从社区合集补齐增强能力，最后按你的目录规范和品牌风格做二次封装。
 
 # 七、使用 Agent Skill 进一步完善
 
