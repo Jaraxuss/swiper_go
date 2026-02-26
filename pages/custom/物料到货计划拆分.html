@@ -1,67 +1,113 @@
 <!DOCTYPE html>
-<html lang="zh">
-
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>物料到货计划拆分 - 影刀RPA</title>
     <script src="../../lib/tailwind@4.js"></script>
     <link href="../../lib/font-awesome/all.min.css" rel="stylesheet" />
     <link href="../../lib/fonts.css" rel="stylesheet" />
     <style>
-        .font-sans { font-family: 'Inter', 'Noto Sans SC', sans-serif; }
-        ::-webkit-scrollbar { display: none; }
-        .text-rpa-red { color: #C00000; }
-        .bg-rpa-red { background-color: #C00000; }
-        .fragment { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none; }
-        .fragment.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-        .glass-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 8px 32px rgba(0,0,0,0.04); border-radius: 16px; }
-        .workflow-box { border: 2px dashed #cbd5e1; border-radius: 20px; position: relative; padding: 1rem 0.5rem; background: rgba(255,255,255,0.4); }
-        .workflow-step { display: flex; flex-direction: column; align-items: center; text-align: center; z-index: 10; width: 70px; }
-        .step-icon { width: 40px; height: 40px; border-radius: 12px; background: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 0.35rem; color: #3b82f6; font-size: 1rem; }
-        .connector-arrow { color: #94a3b8; font-size: 0.65rem; }
-        .bg-img-overlay { position: absolute; bottom: -50px; left: -50px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(192,0,0,0.05) 0%, transparent 70%); z-index: 1; }
-        .value-card { background: linear-gradient(135deg, #fff 0%, #fef2f2 100%); border: 1px solid rgba(192,0,0,0.1); border-radius: 16px; padding: 1rem; text-align: center; transition: all 0.3s ease; }
-        .value-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(192,0,0,0.1); }
-        .value-number { font-size: 2.2rem; font-weight: 900; background: linear-gradient(135deg,#C00000 0%,#ff4444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .info-badge { display: inline-flex; align-items: center; gap: 4px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; padding: 3px 8px; font-size: 10px; color: #475569; }
-        .info-badge .label { font-weight: 700; color: #0f172a; }
+        /* Lightbox CSS */
+        .lightbox-overlay {
+            position: fixed; inset: 0; z-index: 9999;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+            cursor: zoom-out;
+        }
+        .lightbox-overlay.active { opacity: 1; pointer-events: auto; }
+        .lightbox-overlay .lightbox-img {
+            max-width: 90vw; max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transform: scale(0.9); opacity: 0;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+        .lightbox-overlay.active .lightbox-img { transform: scale(1); opacity: 1; }
+        .lightbox-close {
+            position: absolute; top: 20px; right: 24px;
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%; color: white;
+            font-size: 18px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease; backdrop-filter: blur(8px);
+        }
+        .lightbox-close:hover { background: rgba(255,255,255,0.3); transform: rotate(90deg); }
+        .lightbox-trigger { cursor: pointer; transition: opacity 0.2s ease; }
+        .lightbox-trigger:hover { opacity: 0.85; }
+
+        /* Excel 预览专用样式 */
+        .excel-preview {
+            font-family: 'Inter', sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 10px;
+        }
+        .excel-preview th {
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            padding: 4px 6px;
+            text-align: left;
+            font-weight: 500;
+            color: #4b5563;
+        }
+        .excel-preview td {
+            border: 1px solid #d1d5db;
+            padding: 4px 6px;
+            color: #1f2937;
+        }
+        .excel-preview tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        
+        .pain-point-item { color: #475569; font-size: 11px; margin-bottom: 4px; }
+        .glass-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border-radius: 12px; border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .workflow-box { border: 1px dashed #cbd5e1; border-radius: 8px; padding: 12px; position: relative; }
+        .workflow-step { flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 8px; }
+        .step-icon { width: 40px; height: 40px; border-radius: 10px; background: white; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #475569; z-index: 10; margin: 0 auto; transition: all 0.2s; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); }
+        .connector-arrow { color: #cbd5e1; font-size: 12px; margin: 0 4px; }
+        .value-card { background: linear-gradient(135deg, #fff5f5 0%, #fff 100%); border: 1px solid #fee2e2; border-radius: 8px; padding: 12px; transition: transform 0.3s; }
+        .value-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.1); }
+        .value-number { font-size: 28px; font-weight: 800; color: #dc2626; display: flex; align-items: baseline; gap: 4px; }
+        .bg-img-overlay { position: absolute; inset: 0; background: radial-gradient(circle at 10% 10%, rgba(192,0,0,0.03) 0%, transparent 40%), radial-gradient(circle at 90% 90%, rgba(15,23,42,0.03) 0%, transparent 40%); pointer-events: none; }
     </style>
 </head>
-
-<body class="font-sans text-gray-800 antialiased selection:bg-red-100 selection:text-red-800">
-    <div id="page-shell" class="w-screen h-screen flex items-center justify-center bg-[#0f172a]">
+<body class="page-wrapper bg-[#0f172a] m-0 p-0 w-screen h-screen flex text-slate-800">
+    <div id="page-shell" class="w-full h-full flex items-center justify-center">
         <div id="slide-scale-wrapper" class="relative w-[1280px] h-[720px]">
             <div id="slide-container" class="w-full h-full bg-[#fcfdfe] relative overflow-hidden flex flex-col px-14 py-10">
+                <!-- 背景装饰光晕 -->
                 <div class="bg-img-overlay pointer-events-none"></div>
 
-                <!-- Header -->
-                <header class="relative z-20 mb-5 shrink-0">
+                <!-- Header：场景分类 + 主标题 -->
+                <header class="relative z-20 mb-6 shrink-0">
+                    <div class="flex items-center gap-3 mb-1">
+                        <span class="text-[#dc2626] font-bold text-lg">仓储物流 · 供应链管理</span>
+                    </div>
                     <div class="flex items-center gap-4">
-                        <span class="w-2 h-8 bg-rpa-red rounded"></span>
-                        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">物料到货计划拆分</h1>
-                        <div class="flex items-center gap-2 ml-4">
-                            <span class="text-[11px] px-3 py-1 rounded-full bg-rpa-red text-white font-semibold">采购</span>
-                            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
-                            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">生产管理</span>
-                            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
-                            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">销售</span>
-                            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
-                            <span class="text-[11px] px-3 py-1 rounded-full bg-slate-200 text-slate-600 font-semibold">仓储物流</span>
-                        </div>
+                        <span class="w-2 h-8 bg-[#dc2626] rounded"></span>
+                        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
+                            物料到货计划拆分
+                            <span class="text-[#dc2626] ml-2">（自动化分发）</span>
+                        </h1>
                     </div>
                 </header>
 
-                <!-- Content Layout -->
+                <!-- 主内容：左右各50% -->
                 <div class="flex gap-8 flex-1 relative z-10 min-h-0">
 
-                    <!-- Left Section -->
+                    <!-- 左栏 -->
                     <div class="w-1/2 flex flex-col gap-4">
 
-                        <!-- Background Card -->
+                        <!-- 背景+痛点卡片 -->
                         <div class="fragment glass-card p-4 relative overflow-hidden group" animation_step="1">
                             <div class="absolute top-0 left-0 w-1.5 h-full bg-slate-800 transition-all group-hover:w-2"></div>
-                            <div class="flex gap-5">
+                            <div class="flex gap-6">
+                                <!-- 需求背景 -->
                                 <div class="flex-1">
                                     <div class="flex items-center gap-2 mb-2">
                                         <div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 shadow-sm">
@@ -70,156 +116,271 @@
                                         <h3 class="text-sm font-bold text-slate-900 tracking-tight">需求背景：</h3>
                                     </div>
                                     <p class="text-[11px] text-slate-600 leading-relaxed">
-                                        供应商发送周到货计划，采购需拆分发给相关PMC计划员，以便经过后续工作确认是否允许到货。需要<strong>打开邮件下载附件，分析数据，筛选对应PMC计划员的数据，生成拆分后的到货计划表，通过邮件发送</strong>。
+                                        为保障物料供给，每周向供应商邮件发送物料（采购）到货计划。<br><br>
+                                        涉及94家供应商，1090颗物料，需要从总的物料需求表拆分到各供应商，再逐个邮件发送。
                                     </p>
                                 </div>
-                                <div class="flex-shrink-0 flex flex-col gap-1.5">
-                                    <div class="info-badge"><span class="label">部门：</span>采购部</div>
-                                    <div class="info-badge"><span class="label">频率：</span>每周</div>
-                                    <div class="info-badge"><span class="label">耗时：</span>1人，3小时</div>
-                                    <div class="info-badge"><span class="label">系统：</span>邮件、Excel</div>
+                                <!-- 业务痛点 -->
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm">
+                                            <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-slate-900 tracking-tight">业务痛点：</h3>
+                                    </div>
+                                    <div class="space-y-1.5 mt-2">
+                                        <div class="pain-point-item">1. <span class="font-semibold">工作量大</span>：需手工分离94家供应商子表格</div>
+                                        <div class="pain-point-item">2. <span class="font-semibold">耗时长</span>：专职3名物流部人员，每周耗费6小时时间处理</div>
+                                        <div class="pain-point-item">3. <span class="font-semibold">繁琐易错</span>：通过系统对接Outlook邮箱人工发送极易漏发</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Solution -->
-                        <div class="fragment glass-card p-4 relative overflow-hidden group flex-1" animation_step="2">
-                            <div class="absolute top-0 left-0 w-1.5 h-full bg-rpa-red transition-all group-hover:w-2"></div>
-                            <div class="flex items-center gap-2 mb-2">
-                                <div class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-rpa-red shadow-sm">
+                        <!-- 解决方案（含工作流）-->
+                        <div class="fragment glass-card p-4 relative overflow-hidden group flex-[1.5] flex flex-col" animation_step="2">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-[#dc2626] transition-all group-hover:w-2"></div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center text-[#dc2626] shadow-sm">
                                     <i class="fa-solid fa-robot text-sm"></i>
                                 </div>
                                 <h3 class="text-sm font-bold text-slate-900 tracking-tight">影刀RPA解决方案</h3>
                             </div>
-                            <div class="workflow-box mt-1">
-                                <div class="flex items-center justify-between">
-                                    <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-envelope-open-text"></i>
+                            
+                            <div class="workflow-box mt-2 flex-1 flex flex-col justify-center bg-white/50">
+                                <div class="flex items-start justify-between px-1">
+                                    <div class="workflow-step group/step">
+                                        <div class="step-icon group-hover/step:bg-blue-600 group-hover/step:text-white group-hover/step:border-blue-600">
+                                            <i class="fa-regular fa-file-excel"></i>
                                         </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">打开邮件<br>下载附件</div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">打开总表<br><span class="font-normal text-slate-500 scale-90 inline-block mt-1">读取到货计划</span></div>
                                     </div>
-                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                                    <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-magnifying-glass-chart"></i>
+                                    <div class="connector-arrow mt-3"><i class="fa-solid fa-arrow-right"></i></div>
+                                    
+                                    <div class="workflow-step group/step">
+                                        <div class="step-icon group-hover/step:bg-orange-600 group-hover/step:text-white group-hover/step:border-orange-600 border-orange-200">
+                                            <i class="fa-solid fa-code text-orange-500 group-hover/step:text-white"></i>
                                         </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">分析数据-<br>筛选PMC</div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">拆分子表<br><span class="font-normal text-slate-500 scale-90 inline-block mt-1">按供应商分组</span></div>
                                     </div>
-                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                                    <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-scissors"></i>
+                                    <div class="connector-arrow mt-3"><i class="fa-solid fa-arrow-right"></i></div>
+                                    
+                                    <div class="workflow-step group/step">
+                                        <div class="step-icon group-hover/step:bg-indigo-600 group-hover/step:text-white group-hover/step:border-indigo-600 border-indigo-200">
+                                            <i class="fa-solid fa-user-group text-indigo-500 group-hover/step:text-white"></i>
                                         </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">拆分到货<br>计划数据</div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">发起解密<br><span class="font-normal text-slate-500 scale-90 inline-block mt-1">对子表申请权限</span></div>
                                     </div>
-                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                                    <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white">
-                                            <i class="fa-solid fa-file-export"></i>
+                                    <div class="connector-arrow mt-3"><i class="fa-solid fa-arrow-right"></i></div>
+                                    
+                                    <div class="workflow-step group/step">
+                                        <div class="step-icon group-hover/step:bg-blue-600 group-hover/step:text-white group-hover/step:border-blue-600">
+                                            <i class="fa-solid fa-download"></i>
                                         </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">生成拆分<br>后的计划表</div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">保存临时文件<br><span class="font-normal text-slate-500 scale-90 inline-block mt-1">下载已解密文件</span></div>
                                     </div>
-                                    <div class="connector-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                                    <div class="workflow-step group">
-                                        <div class="step-icon transition-all group-hover:bg-blue-600 group-hover:text-white" style="color:#059669">
-                                            <i class="fa-solid fa-paper-plane"></i>
+                                    <div class="connector-arrow mt-3"><i class="fa-solid fa-arrow-right"></i></div>
+                                    
+                                    <div class="workflow-step group/step">
+                                        <div class="step-icon group-hover/step:bg-red-600 group-hover/step:text-white group-hover/step:border-red-600 border-red-200">
+                                            <i class="fa-solid fa-headset text-red-500 group-hover/step:text-white"></i>
                                         </div>
-                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">邮件发送给<br>对应PMC</div>
+                                        <div class="text-[10px] font-bold text-slate-800 leading-tight">邮件发送<br><span class="font-normal text-slate-500 scale-90 inline-block mt-1">循环逐个发送</span></div>
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div class="px-2 mt-2">
+                                <p class="text-[11px] text-slate-500 bg-slate-50 p-2 rounded-lg border border-slate-100 italic flex items-start gap-1">
+                                    <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5"></i>
+                                    <span>注：最耗费人力的是<strong class="text-slate-700">第2、5步</strong>，人工逐个拆分保存表格，逐个进行邮箱发送。</span>
+                                </p>
+                            </div>
                         </div>
 
-                        <!-- Value -->
-                        <div class="fragment" animation_step="3">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="w-1 h-3.5 bg-rpa-red"></span>
+                        <!-- 方案价值 -->
+                        <div class="fragment mt-auto shrink-0" animation_step="3">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="w-1 h-3.5 bg-[#dc2626]"></span>
                                 <h3 class="text-sm font-bold text-slate-900">方案价值：</h3>
                             </div>
                             <div class="grid grid-cols-2 gap-4">
-                                <div class="value-card">
-                                    <div class="value-number">100%</div>
-                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1">原材料价格<span class="text-rpa-red font-bold">自动化获取率100%</span></p>
+                                <div class="value-card h-full flex flex-col justify-center">
+                                    <div class="value-number">75<span class="text-xl">%</span></div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1 font-medium">每周到货计划下达效率提高75%</p>
                                 </div>
-                                <div class="value-card">
-                                    <div class="value-number">3H/周</div>
-                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1"><span class="text-rpa-red font-bold">每周节省</span>3小时人工拆分时间</p>
+                                <div class="value-card h-full flex flex-col justify-center">
+                                    <div class="value-number">18<span class="text-xl">H/周</span></div>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed mt-1 font-medium">每周节省3名业务员共18h工作时间</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right Section -->
-                    <div class="fragment w-1/2 flex flex-col gap-4" animation_step="2">
-                        <div class="glass-card p-4 flex-1 flex flex-col">
-                            <div class="flex items-center gap-2 mb-3">
-                                <div class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
-                                    <i class="fa-solid fa-diagram-project text-sm"></i>
+                    <!-- 右栏：数据展示拟态界面 -->
+                    <div class="fragment w-1/2 flex flex-col gap-4 min-h-0" animation_step="2">
+                        
+                        <!-- 卡片1：总表展示 -->
+                        <div class="glass-card p-4 flex-[2] flex flex-col min-h-0 relative">
+                            <div class="flex items-center justify-between mb-3 shrink-0">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-table-list text-slate-400"></i>
+                                    <span class="text-sm font-bold text-slate-800">到货计划总表 (处理前)</span>
                                 </div>
-                                <h3 class="text-sm font-bold text-slate-900">计划拆分全流程</h3>
+                                <span class="text-[10px] bg-red-100 text-red-600 px-2.5 py-1 rounded-full font-bold">1090颗物料数据</span>
                             </div>
-                            <div class="flex-1 flex flex-col gap-3 justify-center">
-                                <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3 border border-slate-200">
-                                    <div class="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
-                                        <i class="fa-solid fa-envelope text-sm"></i>
+                            
+                            <div class="flex-1 rounded-xl overflow-hidden border border-slate-200 bg-white min-h-0 flex flex-col shadow-sm">
+                                <div class="bg-green-50 px-3 py-2 border-b border-green-200 flex items-center justify-between shrink-0">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fa-solid fa-file-excel text-green-600 text-lg shadow-sm"></i>
+                                        <span class="text-[11px] font-bold text-slate-700">【生产部】每周物料到货计划总表.xlsx</span>
                                     </div>
-                                    <div class="flex-1">
-                                        <div class="text-xs font-bold text-slate-800">接收供应商邮件</div>
-                                        <div class="text-[10px] text-slate-500">自动读取周到货计划附件</div>
-                                    </div>
-                                    <i class="fa-solid fa-arrow-right text-slate-300 text-sm"></i>
+                                    <span class="text-[9px] text-slate-400">最后更新: 刚刚</span>
                                 </div>
-                                <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3 border border-slate-200">
-                                    <div class="w-9 h-9 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600">
-                                        <i class="fa-solid fa-filter text-sm"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="text-xs font-bold text-slate-800">智能数据拆分</div>
-                                        <div class="text-[10px] text-slate-500">根据PMC计划员维度筛选分组</div>
-                                    </div>
-                                    <i class="fa-solid fa-arrow-right text-slate-300 text-sm"></i>
-                                </div>
-                                <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3 border border-slate-200">
-                                    <div class="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600">
-                                        <i class="fa-solid fa-paper-plane text-sm"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="text-xs font-bold text-slate-800">自动分发通知</div>
-                                        <div class="text-[10px] text-slate-500">邮件发送至对应PMC确认到货</div>
-                                    </div>
-                                    <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center">
-                                        <i class="fa-solid fa-check text-emerald-600 text-xs"></i>
-                                    </div>
+                                <div class="p-0 overflow-hidden relative flex-1">
+                                    <table class="excel-preview pb-10">
+                                        <thead>
+                                            <tr>
+                                                <th class="w-10 text-center text-slate-400">#</th>
+                                                <th>物料编码</th>
+                                                <th>物料描述</th>
+                                                <th>供应商编码</th>
+                                                <th>供应商名称</th>
+                                                <th>交货数量</th>
+                                                <th>要求到货日</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td class="text-center text-slate-300">1</td><td>A304-X99</td><td>高通量传感器主板</td><td class="font-mono text-blue-600">V-0012</td><td>极点电子科技</td><td>50,000</td><td>03/05</td></tr>
+                                            <tr><td class="text-center text-slate-300">2</td><td>K112-L88</td><td>散热装甲外壳组件</td><td class="font-mono text-blue-600">V-0045</td><td>苏州机械厂</td><td>20,000</td><td>03/06</td></tr>
+                                            <tr><td class="text-center text-slate-300">3</td><td>P902-M01</td><td>聚合物电池组(2000mAh)</td><td class="font-mono text-blue-600">V-0012</td><td>极点电子科技</td><td>50,000</td><td>03/06</td></tr>
+                                            <tr><td class="text-center text-slate-300">4</td><td>X334-N12</td><td>连接器排线</td><td class="font-mono text-blue-600">V-0089</td><td>信达精密电子</td><td>100,000</td><td>03/07</td></tr>
+                                            <tr><td class="text-center text-slate-300">...</td><td>...</td><td>...</td><td class="font-mono text-blue-600">...</td><td>...</td><td>...</td><td>...</td></tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- 底部渐进消失效果 -->
+                                    <div class="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-white to-transparent"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="glass-card p-4 h-36">
-                            <div class="flex items-center gap-2 mb-3">
-                                <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
-                                    <i class="fa-solid fa-desktop text-sm"></i>
+
+                        <!-- 卡片2：自动拆分与邮件发送 -->
+                        <div class="glass-card p-4 flex-[2.5] flex flex-col min-h-0 relative">
+                            <div class="flex items-center justify-between mb-3 shrink-0">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-paper-plane text-slate-400"></i>
+                                    <span class="text-sm font-bold text-slate-800">按供应商自动拆分发送 (处理后)</span>
                                 </div>
-                                <h3 class="text-sm font-bold text-slate-900">系统对接</h3>
+                                <span class="text-[10px] bg-green-100 text-green-700 px-2.5 py-1 rounded-full font-bold flex items-center gap-1">
+                                    <i class="fa-solid fa-check-circle"></i> 94家自动归档并发送
+                                </span>
                             </div>
-                            <div class="flex gap-3 h-16">
-                                <div class="flex-1 bg-blue-50 rounded-lg border border-blue-200 flex flex-col items-center justify-center">
-                                    <i class="fa-solid fa-envelope text-2xl text-blue-500 mb-1"></i>
-                                    <div class="text-[10px] font-bold text-blue-700">邮件系统</div>
-                                    <div class="text-[9px] text-blue-400">收发到货计划</div>
+                            
+                            <div class="flex-1 rounded-xl overflow-hidden border border-slate-200 bg-white min-h-0 flex shadow-sm">
+                                <!-- Outlook 侧边栏模拟 -->
+                                <div class="w-1/3 bg-slate-50 border-r border-slate-200 flex flex-col">
+                                    <div class="h-8 border-b border-slate-200 flex items-center px-3 bg-white shrink-0">
+                                        <span class="text-[10px] font-bold text-slate-600"><i class="fa-brands fa-microsoft text-blue-500 mr-1"></i> 已发送邮件</span>
+                                    </div>
+                                    <div class="flex-1 overflow-y-auto p-2 space-y-1">
+                                        <!-- 选中状态的邮件 -->
+                                        <div class="bg-blue-50 border border-blue-200 rounded p-2 cursor-pointer relative">
+                                            <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-l"></div>
+                                            <div class="text-[10px] font-bold text-slate-800 flex justify-between">
+                                                <span>To: 极点电子软...</span>
+                                                <span class="text-[8px] text-slate-400 font-normal">10:45 AM</span>
+                                            </div>
+                                            <div class="text-[9px] text-blue-600 font-medium mt-0.5 truncate">【自动发】本周到货计划</div>
+                                            <div class="text-[9px] text-slate-500 flex items-center gap-1 mt-1">
+                                                <i class="fa-solid fa-paperclip"></i> V-0012明细.xlsx
+                                            </div>
+                                        </div>
+                                        <!-- 其它邮件 -->
+                                        <div class="bg-white hover:bg-slate-100 border border-transparent rounded p-2 cursor-pointer">
+                                            <div class="text-[10px] font-bold text-slate-800 flex justify-between">
+                                                <span>To: 苏州机械...</span>
+                                                <span class="text-[8px] text-slate-400 font-normal">10:45 AM</span>
+                                            </div>
+                                            <div class="text-[9px] text-slate-600 font-medium mt-0.5 truncate">【自动发】本周到货计划</div>
+                                            <div class="text-[9px] text-slate-500 flex items-center gap-1 mt-1">
+                                                <i class="fa-solid fa-paperclip"></i> V-0045明细.xlsx
+                                            </div>
+                                        </div>
+                                        <div class="bg-white hover:bg-slate-100 border border-transparent rounded p-2 cursor-pointer">
+                                            <div class="text-[10px] font-bold text-slate-800 flex justify-between">
+                                                <span>To: 信达精密...</span>
+                                                <span class="text-[8px] text-slate-400 font-normal">10:44 AM</span>
+                                            </div>
+                                            <div class="text-[9px] text-slate-600 font-medium mt-0.5 truncate">【自动发】本周到货计划</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="flex-1 bg-emerald-50 rounded-lg border border-emerald-200 flex flex-col items-center justify-center">
-                                    <i class="fa-solid fa-file-excel text-2xl text-emerald-500 mb-1"></i>
-                                    <div class="text-[10px] font-bold text-emerald-700">Excel处理</div>
-                                    <div class="text-[9px] text-emerald-400">数据拆分&成表</div>
+                                
+                                <!-- 邮件详情内容 -->
+                                <div class="flex-1 flex flex-col bg-white">
+                                    <div class="p-4 border-b border-slate-100 shrink-0">
+                                        <h4 class="text-[13px] font-bold text-slate-800 mb-1">【系统自动发送】本周采购到货计划明细（极点电子科技）</h4>
+                                        <div class="flex items-center justify-between text-[10px] text-slate-500">
+                                            <div class="flex items-center gap-1">
+                                                <span class="text-slate-400">发件人:</span>
+                                                <span class="text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded">RPA物流机器人助手</span>
+                                            </div>
+                                            <span>2026年3月1日 10:45 AM</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="p-4 text-[11px] text-slate-600 leading-relaxed flex-1 flex flex-col justify-between">
+                                        <div>
+                                            <p>尊敬的供应商伙伴：</p>
+                                            <p class="mt-2 text-justify">您好！为保障生产物料供给，现发送贵司最新的物料（采购）到货计划，请查阅附件。</p>
+                                            <p class="mt-2 text-slate-400 italic">（此邮件由系统自动拆分并发出，如遇任何问题请联系物流部。）</p>
+                                        </div>
+                                        
+                                        <!-- 附件组件 -->
+                                        <div class="mt-4 border border-slate-200 bg-slate-50 rounded-lg p-3 flex flex-col gap-2 w-max">
+                                            <div class="text-[10px] font-bold text-slate-500 mb-1">1 个附件</div>
+                                            <div class="flex items-center gap-3 bg-white p-2 border border-slate-200 rounded cursor-pointer hover:border-slate-300">
+                                                <i class="fa-solid fa-file-excel text-green-600 text-2xl shadow-sm"></i>
+                                                <div>
+                                                    <div class="text-[11px] font-bold text-slate-700">V-0012_极点电子科技_到货计划.xlsx</div>
+                                                    <div class="text-[9px] text-slate-500 flex items-center gap-1 mt-0.5">
+                                                        <span><i class="fa-solid fa-lock text-green-600"></i> 已解密</span>
+                                                        <span class="mx-1">·</span> 18 KB
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox-overlay" id="img-lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <img class="lightbox-img" id="lightbox-img" src="" alt="放大预览" onclick="event.stopPropagation()" />
+    </div>
+
+    <script>
+        function openLightbox(src) {
+            const overlay = document.getElementById('img-lightbox');
+            document.getElementById('lightbox-img').src = src;
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            document.getElementById('img-lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+    </script>
     <script src="../../js/slide-core.js"></script>
 </body>
-
 </html>
